@@ -1,0 +1,148 @@
+<html>
+<head>
+    <title>OWIN &mdash; Open Web Interface for .NET, v1.0 Draft</title>
+    <style>
+    body
+    {
+        font-family: Helvetica, sans-serif;
+    }
+    </style>
+</head>
+<body>
+
+<h1>OWIN &mdash; Open Web Interface for .NET, v1.0 Draft</h1>
+<ul>
+    <li>Author: <a href="http://bvanderveen.com">Benjamin van der Veen</a></li>
+    <li>Last updated: 9 December 2010</li>
+    <li>Discussion: <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a></li>
+</ul>
+
+
+<h2>Overview</h2>
+
+<p>This document defines a standard interface between .NET web servers and web applications. The goal of the OWIN interface is to decouple server and application, encourage the development of simple modules for .NET web development, and, by being an open standard, stimulate the open source ecosystem of .NET web development tools.</p>
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119. For readability, these words do not appear in all uppercase letters in this specification.</p>
+
+<h2>Definition</h2>
+
+<p>OWIN comprises three core interfaces: <code>IApplication</code>, <code>IRequest</code>, and <code>IResponse</code>. Broadly speaking, hosts provide application objects with request objects, and application objects provide response objects back to the server. In this document, an OWIN-compatible web server is referred to as a "host", and an object implementing <code>IApplication</code> is referred to as an "application". How an application is provided to a host is outside the scope of this specification.</p>
+
+<a name="IApplication"></a>
+<h3>IApplication</h3>
+
+<pre><code>public interface IApplication
+{
+    IAsyncResult BeginInvoke(IRequest request, AsyncCallback callback, object state);
+    IResponse EndInvoke(IAsyncResult result);
+}
+</code></pre>
+
+<p>Applications generate responses to requests received by a host by implementing the <code>IApplication</code> interface, which defines single asynchronous operation returning IResponse. The asynchronous operation uses the IAsyncResult pattern (see: <a href="http://msdn.microsoft.com/en-us/library/ms228963.aspx">MSDN Asynchronous Programming Overview</a>). Applications must invoke the <code>AsyncCallback</code> and return a non-null response object or throw an exception from <code>EndInvoke</code>, or throw an exception from <code>BeginInvoke</code>. </p> 
+
+<a name="IRequest"></a>
+<h3>IRequest</h3>
+
+<pre><code>public interface IRequest
+{
+    string Method { get; }
+    string Uri { get; }
+    IDictionary&lt;string, IEnumerable&lt;string&gt;&gt; Headers { get; }
+
+    IAsyncResult BeginReadBody(byte[] buffer, int offset, int count, AsyncCallback callback, object state);
+    int EndReadBody(IAsyncResult result);
+
+    IDictionary&lt;string, object&gt; Items { get; }
+}
+</code></pre>
+
+<p>The <code>Method</code> property is the HTTP request method string of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</p>
+
+<p>The <code>Uri</code> property is the HTTP request URI string of the request, relative to the application object. See <a href="#Paths">Paths</a>. The value of the <code>Uri</code> property includes the query string of the request URI (e.g., <code>"/path/and?query=string"</code>).</p>
+
+<p>The <code>Headers</code> property is a dictionary whose items correspond to HTTP headers in the request. Keys must be header names without <code>':'</code> or whitespace, and the keys must be case-insensitive. Values are <code>IEnumerable&lt;string&gt;</code> sequences containing the corresponding header value strings, without newlines. If a header appears in a request multiple times, the sequence value for that key must contain a number of elements corresponding to the number of times the header appears in the request, with each element being a value of a single header.</p>
+
+<p>The methods <code>BeginReadBody</code> and <code>EndReadBody</code> define an asynchronous operation which reads body data of the request into a destination buffer. Hosts must return from the <code>EndReadBody</code> method the number of bytes copied into the destination as a result of the read operation. Hosts must signal the end of the request body by returning 0 from <code>EndReadBody</code>.</p>
+
+<p>The <code>Items</code> property is a bag in which the host, application, or user can store arbitrary data associated with the request. Hosts should provide the following keys in <code>Items</code>:</p>
+
+<ul>
+<li><code>owin.BaseUri</code> &mdash; The portion of the request URI's path corresponding to the "root" of the application object. See <a href="#Paths">Paths</a>.</li>
+<li><code>owin.ServerName</code>, <code>owin.ServerPort</code> &mdash; Hosts should provide values can be used to reconstruct the full URL of the request in absence of the HTTP <code>Host</code> header of the request.</li>
+<li><code>owin.UriScheme</code> &mdash; <code>"http"</code> or <code>"https"</code></li>
+<li><code>owin.RemoteEndPoint</code> &mdash; A <code>System.Net.IPEndPoint</code> representing the connected client.</li>
+</ul>
+
+<a name="IResponse"></a>
+<h3>IResponse</h3>
+
+<pre><code>public interface IResponse
+{
+    string Status { get; }
+    IDictionary&lt;string, IEnumerable&lt;string&gt;&gt; Headers { get; }
+    IEnumerable&lt;object&gt; GetBody();
+}
+</code></pre>
+
+<p>The <code>Status</code> property is a string containing the integer status of the response followed by a space and a reason phrase without a newline (e.g., <code>"200 OK"</code>). All characters in the status string provided by an application should be within the ASCII codepage.</p>
+
+<p>The <code>Headers</code> property is a dictionary representing the headers to be sent with the request. Keys must be header names without <code>':'</code> or whitespace. Values must be <code>IEnumerable&lt;string&gt;</code> sequences containing the corresponding header value strings, without newlines. If the sequence value for a header name contains multiple elements, the host must write a header name-value line with that name once for each value in the sequence. All characters in header name and value strings should be within the ASCII codepage.</p>
+
+<p>The <code>GetBody</code> method may an enumerable which represents the body data or null. Each element in the enumerable must be of one of the following types:</p>
+
+<ul>
+<li><code>byte[]</code></li>
+<li><code>ArraySegment&lt;byte&gt;</code></li>
+<li><code>FileInfo</code></li>
+<li><code>Task&lt;T&gt;</code>, where <code>T</code> is one of the above types.</li>
+</ul>
+
+<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification. After all of the items have been enumerated or if an error occurs during enumeration, the host must call the <code>Dispose</code> of the enumerator.</p>
+
+<p>[TODO] Discuss <code>Task&lt;T&gt;</code>.</p>
+
+<a name="Paths"></a>
+<h2>Paths</h2>
+
+<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application object configured to respond to requests beginning with <code>"/my-app"</code>, in which case it must set the value of <code>"owin.BaseUri"</code> in <code>IRequest.Items</code> to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>Uri</code> property of the <code>IRequest</code> object provided to the application at <code>"/my-app"</code> must be <code>"/foo"</code>. The value of <code>"owin.BaseUri"</code> may be an empty string and must not end with a trailing slash; the value of the <code>URI</code> property must not be an empty string and must start with a slash.</p>
+
+<a name="ErrorHandling"></a>
+<h2>Error Handling</h2>
+
+<a name="ApplicationErrors"></a>
+<h3>Application Errors</h3>
+
+<p>Applications may throw exceptions in the following places:</p>
+
+<ul>
+<li>The <code>IApplication.BeginInvoke</code> method</li>
+<li>The <code>IApplication.EndInvoke</code> method</li>
+<li>The <code>IResponse.GetBody</code> method</li>
+<li>The <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
+<li>The <code>MoveNext</code> method of the enumerator returned by the <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
+<li>The <code>Current</code> property of the enumerator returned by the <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
+<li>[TODO] Discuss Task&lt;T&gt; exceptions</li>
+</ul>
+
+<p>Host implementations should strive to write response data to the network as "late" as possible, so as to be able to handle as many errors from the application as possible and cleanly send the client a 500-level response. Generally, this means invoking the application and enumerating the first object from its response body, if any, before writing any header or body data to the network. If an exception is thrown from the application before data is written to the network, the server should provide a 500-level response. If an exception is thrown while enumerating subsequent items from the response body enumerable, the host may append a textual description of the error to the response data which it has already sent and close the connection.</p>
+
+<p>If an uncaught error occurs during the <code>Invoke</code> operation of an application, the application must invoke the <code>AsyncCallback</code> provided by the host and throw an exception from <code>EndInvoke</code>, effectively propagating the exception back to the host.</p>
+
+<a name="HostErrors"></a>
+<h3>Host Errors</h3>
+
+<p>Hosts may throw exceptions in the following places:</p>
+
+<ul>
+<li>The <code>IRequest.BeginReadBody</code> method</li>
+<li>The <code>IRequest.EndReadBody</code> method</li>
+</ul>
+
+<p>An exception from either of these methods may indicates that the client has closed or dropped the connection, or another transport-layer error has occurred. The application should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the calls described in <a href="#ApplicationErrors">Application Errors</a>.</p>
+
+<h2>Acknowledgments</h2>
+
+<p>This specification draws heavily on the wonderful <a href="http://www.python.org/dev/peps/pep-0333/">PEP 333 (WSGI)</a>. Many thanks to everyone participating in the discussion at <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a>, and in particular <a href="http://twitter.com/panesofglass">Ryan Riley</a> and <a href="http://twitter.com/serialseb">Sebastien Lambla</a>.</p>
+
+</body>
+</html>
