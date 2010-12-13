@@ -15,6 +15,7 @@
     <li>Author: <a href="http://bvanderveen.com">Benjamin van der Veen</a></li>
     <li>Last updated: 11 December 2010</li>
     <li>Discussion: <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a></li>
+    <li>Source: <a href="https://github.com/owin/owin">OWIN on GitHub</a></li>
 </ul>
 
 <h2>Contents</h2>
@@ -61,7 +62,7 @@
 
 <p>An application generates a response to a request received by a host by implementing the <code>IApplication</code> interface. This interface defines a single asynchronous operation returning IResponse. The asynchronous operation uses the IAsyncResult pattern (see: <a href="http://msdn.microsoft.com/en-us/library/ms228963.aspx">MSDN Asynchronous Programming Overview</a>).</p>
 	
-<p>The hosts must call the <code>BeginInvoke</code> method with a non-null <code>IResponse</code> object and a non-null <code>AsyncCallback</code>. The application must either throw an exception from <code>BeginInvoke</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginInvoke</code>. The host must call <code>EndInvoke</code> in response to the <code>AsyncCallback</code>. The <code>EndInvoke</code> method must return a non-null response object or throw an exception.</p> 
+<p>The hosts must call the <code>BeginInvoke</code> method with a non-null <code>IRequest</code> object and a non-null <code>AsyncCallback</code>. The application must either throw an exception from <code>BeginInvoke</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginInvoke</code>. The host must call <code>EndInvoke</code> in response to the <code>AsyncCallback</code>. The <code>EndInvoke</code> method must return a non-null response object or throw an exception.</p> 
 
 <a name="IRequest"></a>
 <h3>IRequest</h3>
@@ -111,7 +112,7 @@
 
 <p>The <code>Headers</code> property is a dictionary representing the headers to be sent with the request. Keys must be header names without <code>':'</code> or whitespace. Values must be <code>IEnumerable&lt;string&gt;</code> sequences containing the corresponding header value strings, without newlines. If the sequence value for a header name contains multiple elements, the host must write a header name-value line with that name once for each value in the sequence. All characters in header name and value strings should be within the ASCII codepage.</p>
 
-<p>The <code>GetBody</code> method may an enumerable which represents the body data, or null. Each element in the enumerable must be of one of the following types:</p>
+<p>The <code>GetBody</code> method may return an enumerable which represents the body data, or null. Each element in the enumerable must be of one of the following types:</p>
 
 <ul>
 <li><code>byte[]</code></li>
