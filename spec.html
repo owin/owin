@@ -62,7 +62,7 @@
 
 <p>An application generates a response to a request received by a host by implementing the <code>IApplication</code> interface. This interface defines a single asynchronous operation returning IResponse. The asynchronous operation uses the IAsyncResult pattern (see: <a href="http://msdn.microsoft.com/en-us/library/ms228963.aspx">MSDN Asynchronous Programming Overview</a>).</p>
 	
-<p>The host must call the <code>BeginInvoke</code> method with a non-null <code>IRequest</code> object and a non-null <code>AsyncCallback</code>. The application must either throw an exception from <code>BeginInvoke</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginInvoke</code>. The host must call <code>EndInvoke</code> in response to the <code>AsyncCallback</code>. The <code>EndInvoke</code> method must return a non-null <code>IResponse</code> object or throw an exception.</p> 
+<p>The host must call the <code>BeginInvoke</code> method with a non-null <code>IRequest</code> object and a non-null <code>AsyncCallback</code>. The application must either throw an exception from <code>BeginInvoke</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginInvoke</code>. The host must call <code>EndInvoke</code> in response to the <code>AsyncCallback</code>. The <code>EndInvoke</code> method may return null or throw an exception.</p>
 
 <a name="IRequest"></a>
 <h3>IRequest</h3>
