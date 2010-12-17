@@ -121,7 +121,7 @@
 <li><code>Task&lt;T&gt;</code>, where <code>T</code> is one of the above types.</li>
 </ul>
 
-<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor. After all of the items have been enumerated or if an error occurs during enumeration, the host must call the <code>Dispose</code> of the enumerator.</p>
+<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor. Hosts must enumerate the enumerable to completion (i.e., until <code>MoveNext</code> returns false) or until an exception is thrown by <code>MoveNext()</code> or the <code>Current</code> property. After all of the items have been enumerated or if an exception occurs during enumeration, the host must call <code>Dispose</code> on the enumerator.</p>
 
 <p>[TODO] Discuss <code>Task&lt;T&gt;</code>.</p>
 
@@ -150,8 +150,7 @@
 </ul>
 
 <p>An application should make every attempt to trap its own internal errors and generate an appropriate (possibly 500-level) response rather than throwing an exception up to the host. Before writing the response headers to the underlying transport, the host must call <code>GetBody</code> and if the return value is a non-null enumerable containing at least one item, the host must enumerate at least one item from the enumerable. This allows the application to guarantee that it has caught as many of its internal errors as possible; that the host can begin the response without further buffering. If an exception is thrown by the application while enumerating subsequent items from the response body enumerable, the host may write a textual description of the error to the underlying transport, and/or close the connection.</p>
-	
-	
+
 <a name="HostErrors"></a>
 <h3>Host Errors</h3>
 
@@ -167,7 +166,7 @@
 <p>An exception from either of these methods may indicate that the client has closed or dropped the connection, or another transport-layer error has occurred. The application should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the calls described in <a href="#ApplicationErrors">Application Errors</a>.</p>
 
 <a name="Examples"></a>
-<h2>Examples</h2>
+<h2>Example</h2>
 
 <pre><code>public class HelloApp : IApplication
 {
