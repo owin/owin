@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>OWIN &mdash; Open Web Interface for .NET, v1.0 Draft</title>
+    <title>OWIN &mdash; Open Web Server Interface for .NET, v1.0 Draft 2</title>
     <style>
     body
     {
@@ -10,12 +10,11 @@
 </head>
 <body>
 
-<h1>OWIN &mdash; Open Web Interface for .NET, v1.0 Draft</h1>
+<h1>OWIN &mdash; Open Web Server Interface for .NET, v1.0 Draft 2</h1>
 <ul>
     <li>Author: <a href="http://bvanderveen.com">Benjamin van der Veen</a></li>
-    <li>Last updated: 11 December 2010</li>
+    <li>Last updated: 3 January 2011</li>
     <li>Discussion: <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a></li>
-    <li>Source: <a href="https://github.com/owin/owin">OWIN on GitHub</a></li>
 </ul>
 
 <h2>Contents</h2>
@@ -23,9 +22,9 @@
 	<li><a href="#Overview">Overview</a></li>
 	<li><a href="#Definition">Definition</a>
 		<ul>
-			<li><a href="#IApplication"><code>IApplication</code></a></li>
-			<li><a href="#IRequest"><code>IRequest</code></a></li>
-			<li><a href="#IResponse"><code>IResponse</code></a></li>
+			<li><a href="#ApplicationDelegate">Application Delegate</a></li>
+			<li><a href="#EnvironmentDictionary">Environment Dictionary</a></li>
+			<li><a href="#ResponseCallback">Response Callback</a></li>
 		</ul>
 	</li>
 	<li><a href="#Paths">Paths</a></li>
@@ -48,87 +47,77 @@
 <a name="Definition"></a>
 <h2>Definition</h2>
 
-<p>OWIN comprises three core interfaces: <code>IApplication</code>, <code>IRequest</code>, and <code>IResponse</code>. In this document, an OWIN-compatible web server is referred to as a "host", and an object implementing <code>IApplication</code> is referred to as an "application". Broadly speaking, hosts provide application objects with request objects, and application objects provide response objects back to the host. How an application is provided to a host is outside the scope of this specification and must be documented by the host implementor.</p>
+<p>The OWIN interface is expressed as a single raw .NET delegate (the <em>application delegate</em>).</p>
 
-<a name="IApplication"></a>
-<h3>IApplication</h3>
+<pre><code>Action&lt;
+    // an environment dictionary containing server and request data
+    IDictionary&lt;string, object&gt;, 
+    
+    // response callback
+    Action&lt;string, Dictionary&lt;string, IList&lt;string&gt;&gt;, IEnumerable&lt;object&gt;&gt;,
+    
+    // error callback
+    Action&lt;Exception&gt;
+&gt;</code></pre>
 
-<pre><code>public interface IApplication
-{
-    IAsyncResult BeginInvoke(IRequest request, AsyncCallback callback, object state);
-    IResponse EndInvoke(IAsyncResult result);
-}
-</code></pre>
+<p>In this document, an OWIN-compatible web server is referred to as a "host", and an instance of the above delegate is referred to as an "application". Broadly speaking, hosts invoke applications (providing as arguments an environment dictionary, and response and error callbacks), and the application either provides a response to the host by invoking the response callback with response information, or indicates an error by invoking the error callback with an exception. How an application is provided to a host is outside the scope of this specification and must be documented by the host implementor.</p>
 
-<p>An application generates a response to a request received by a host by implementing the <code>IApplication</code> interface. This interface defines a single asynchronous operation returning IResponse. The asynchronous operation uses the IAsyncResult pattern (see: <a href="http://msdn.microsoft.com/en-us/library/ms228963.aspx">MSDN Asynchronous Programming Overview</a>).</p>
-	
-<p>The host must call the <code>BeginInvoke</code> method with a non-null <code>IRequest</code> object and a non-null <code>AsyncCallback</code>. The application must either throw an exception from <code>BeginInvoke</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginInvoke</code>. The host must call <code>EndInvoke</code> in response to the <code>AsyncCallback</code>. The <code>EndInvoke</code> method may return null or throw an exception.</p>
+<p>Because OWIN is defined in terms of a raw delegate, there is no need for an assembly called "OWIN.dll" or similar. Implementing either the host or application side the OWIN spec does not introduce a dependency to a project.
 
-<a name="IRequest"></a>
-<h3>IRequest</h3>
+<a name="ApplicationDelegate"></a>
+<h3>Application Delegate</h3>
 
-<pre><code>public interface IRequest
-{
-    string Method { get; }
-    string Uri { get; }
-    IDictionary&lt;string, IEnumerable&lt;string&gt;&gt; Headers { get; }
+<p>An application delegate takes an environment, a response callback, and an error callback. When an application delegate is invoked, it must invoke either the response callback or the error callback exactly once, or throw an exception. A callback provided to an application by a host must not throw an exception.</p>
 
-    IAsyncResult BeginReadBody(byte[] buffer, int offset, int count, AsyncCallback callback, object state);
-    int EndReadBody(IAsyncResult result);
+<a name="EnvironmentDictionary"></a>
+<h3>Environment Dictionary</h3>
 
-    IDictionary&lt;string, object&gt; Items { get; }
-}
-</code></pre>
-
-<p>The <code>Method</code> property is the HTTP request method string of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</p>
-
-<p>The <code>Uri</code> property is the HTTP request URI string of the request, relative to the application object. See <a href="#Paths">Paths</a>. The value of the <code>Uri</code> property includes the query string of the request URI (e.g., <code>"/path/and?query=string"</code>).</p>
-
-<p>The <code>Headers</code> property is a dictionary whose items correspond to HTTP headers in the request. Keys must be header names without <code>':'</code> or whitespace, and the keys must be case-insensitive. Values are <code>IEnumerable&lt;string&gt;</code> sequences containing the corresponding header value strings, without newlines. If a header appears in a request multiple times, the sequence value for that key must contain a number of elements corresponding to the number of times the header appears in the request, with each element being a value of a single header.</p>
-
-<p>The <code>BeginReadBody</code> and <code>EndReadBody</code> methods define an asynchronous operation which reads body data of the request into a destination buffer. Applications must provide a valid destination buffer and a non-null <code>AsyncCallback</code> to the <code>BeginReadBody</code> method. Hosts must either throw an exception from <code>BeginReadBody</code>, or invoke the <code>AsyncCallback</code> in response to the call to <code>BeginReadBody</code>. The application must call <code>EndReadBody</code> in response to the <code>AsyncCallback</code>. The <code>EndReadBody</code> method must return the number of bytes copied into the destination buffer as a result of the read operation, or return 0 to signal the end of the request body, or throw an exception. If either <code>BeginReadBody</code> or <code>EndReadBody</code> throw an exception, the application must propagate the error back to the host. See <a href="#ErrorHandling">Error Handling</a>.</p>
-
-<p>The <code>Items</code> property is a bag in which the host, application, or user can store arbitrary data associated with the request. Hosts should provide the following keys in <code>Items</code>:</p>
+<p>When a host invokes an application delegate, it provides an environment dictionary which represents the request the application is to process. The environment dictionary also provides additional context to the application. An environment dictionary must be mutable and must contain the following keys whose values must be non-null unless otherwise specified below:</p>
 
 <ul>
+<li><code>owin.RequestMethod</code> &mdash; The HTTP request method string of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</li>
+<li><code>owin.RequestUri</code> &mdash; The HTTP request URI string of the request. The value includes the query string of the HTTP request URI (e.g., <code>"/path/and?query=string"</code>). The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</li>
+<li><code>owin.RequestHeaders</code> &mdash; A dictionary of the form <code>IDictionary&lt;string, IList&lt;string&gt;&gt;</code>. This dictionary represents the HTTP headers present in the request. The dictionary must be mutable and its keys must be case-insensitive. Keys must be HTTP header names without <code>':'</code> or whitespace. Values are <code>IList&lt;string&gt;</code> objects containing the corresponding header value strings, without newlines. If a header appears in a request multiple times, the list value for that key must contain a number of elements corresponding to the number of times the header appears in the request, with each element being a value of a single instance of the header.</li>
+<li><code>owin.RequestBody</code> &mdash; A delegate of the form <code>Action&lt;byte[], int, int, Action&lt;int&gt;, Action&lt;Exception&gt;&gt;</code> (the <em>request body delegate</em>). The request body delegate defines an asynchronous operation which reads the body data of the request into a destination buffer. Applications must provide a valid destination buffer in the first three arguments, and non-null result and exception callbacks. Valid buffer arguments consists of (first) a non-null <code>byte[] buffer</code>, (second) an <code>int offset</code> into the buffer at which copying should begin, and (third) an <code>int count</code> of the number of bytes which should be read, where <code>offset + count &lt;= buffer.Length</code>. In response to an invocation of the request body delegate, hosts must invoke either the result callback or the exception callback exactly once. When invoking the result callback, a host must provide the number of bytes copied into the destination buffer as a result of the read operation (up to but not more than <code>count</code> bytes), or return 0 to signal the end of the request body. If the exception callback in invoked, the application must propagate the exception back to the host. See <a href="#ErrorHandling">Error Handling</a>.</li>
 <li><code>owin.BaseUri</code> &mdash; The portion of the request URI's path corresponding to the "root" of the application object. See <a href="#Paths">Paths</a>.</li>
 <li><code>owin.ServerName</code>, <code>owin.ServerPort</code> &mdash; Hosts should provide values which can be used to reconstruct the full URL of the request in absence of the HTTP <code>Host</code> header of the request.</li>
 <li><code>owin.UriScheme</code> &mdash; <code>"http"</code> or <code>"https"</code></li>
 <li><code>owin.RemoteEndPoint</code> &mdash; A <code>System.Net.IPEndPoint</code> representing the connected client.</li>
+<li><code>owin.Version</code> &mdash; The string <code>"1.0"</code> indicating OWIN version 1.0.</li>
 </ul>
 
-<a name="IResponse"></a>
-<h3>IResponse</h3>
+<p>In addition to these keys, the host, application, or user may add arbitrary data associated with the request to the environment dictionary.</p>
 
-<pre><code>public interface IResponse
-{
-    string Status { get; }
-    IDictionary&lt;string, IEnumerable&lt;string&gt;&gt; Headers { get; }
-    IEnumerable&lt;object&gt; GetBody();
-}
-</code></pre>
+<a name="ResponseCallback"></a>
+<h3>Response Callback</h3>
 
-<p>The <code>Status</code> property is a string containing the integer status of the response followed by a space and a reason phrase without a newline (e.g., <code>"200 OK"</code>). All characters in the status string provided by an application should be within the ASCII codepage.</p>
+<p>The response callback of the application delegate takes three arguments of type <code>string</code>, <code>Dictionary&lt;string, IList&lt;string&gt;&gt;</code>, and <code>IEnumerable&lt;object&gt;&gt;</code>. These arguments together represent an HTTP response generated by an application.</p>
 
-<p>The <code>Headers</code> property is a dictionary representing the headers to be sent with the request. Keys must be header names without <code>':'</code> or whitespace. Values must be <code>IEnumerable&lt;string&gt;</code> sequences containing the corresponding header value strings, without newlines. If the sequence value for a header name contains multiple elements, the host must write a header name-value line with that name once for each value in the sequence. All characters in header name and value strings should be within the ASCII codepage.</p>
+<p>The first argument to the response callback must be a string which contains the integer status of the response followed by a space and a reason phrase without a newline (e.g., <code>"200 OK"</code>). All characters in the status string provided by an application should be within the ASCII codepage.</p>
 
-<p>The <code>GetBody</code> method may return an enumerable which represents the body data, or null. Each element in the enumerable must be of one of the following types:</p>
+<p>The second argument to the response callback must be a mutable dictionary representing the headers to be sent with the request. The keys must be header names without <code>':'</code> or whitespace. Values must be <code>IList&lt;string&gt;</code> objects containing the corresponding header value strings, without newlines. If the list object for a header name contains multiple elements, the host must write a header name-value line with that name once for each value in the list. All characters in header name and value strings should be within the ASCII codepage.</p>
+
+<p>The third argument to the response callback must be a instance of <code>IEnumerable&lt;object&gt;</code> which represents the body data (the <em>response enumerable</em>), or null if the response does not include a body. Each item in the response enumerable may be of one of the following types (the <em>response item types</em>):</p>
 
 <ul>
 <li><code>byte[]</code></li>
 <li><code>ArraySegment&lt;byte&gt;</code></li>
 <li><code>FileInfo</code></li>
-<li><code>Task&lt;T&gt;</code>, where <code>T</code> is one of the above types.</li>
+<li><code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code></li>
 </ul>
 
-<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor. Hosts must enumerate the enumerable to completion (i.e., until <code>MoveNext</code> returns false) or until an exception is thrown by <code>MoveNext()</code> or the <code>Current</code> property. After all of the items have been enumerated or if an exception occurs during enumeration, the host must call <code>Dispose</code> on the enumerator.</p>
+<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor.</p>
 
-<p>[TODO] Discuss <code>Task&lt;T&gt;</code>.</p>
+<p>An item of the type <code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code> (an <em>asynchronous response delegate</em>) allows applications to provide the next item asynchronously. The semantics of this delegate are the same as that of the application delegate and the request body delegate&mdash;the host must provide non-null result and exception callbacks to the delegate, and when the delegate is invoked, the application must invoke either the result or exception callback exactly once. A host must invoke an asynchronous response delegate exactly once, and the callbacks it provides must not throw exceptions. The application may invoke the result callback with objects of any of the response item types.<p>
+
+<p>In the interest of extensibility, a response enumerable may contain items whose types are not among the response item types listed above, and hosts may support additional response item types and define corresponding behaviors. If a host does not recognize the type of an object contained in the response enumerable, it may ignore the object and continue enumerating.</p>
+
+<p>Hosts must enumerate the enumerable to completion (i.e., until <code>MoveNext</code> returns false) or until an exception is thrown by <code>MoveNext()</code> or the <code>Current</code> property. After all of the items have been enumerated or if an exception occurs during enumeration, the host must call <code>Dispose</code> on the enumerator.</p>
 
 <a name="Paths"></a>
 <h2>Paths</h2>
 
-<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application object configured to respond to requests beginning with <code>"/my-app"</code>, in which case it must set the value of <code>"owin.BaseUri"</code> in <code>IRequest.Items</code> to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>Uri</code> property of the <code>IRequest</code> object provided to the application at <code>"/my-app"</code> must be <code>"/foo"</code>. The value of <code>"owin.BaseUri"</code> may be an empty string and must not end with a trailing slash; the value of the <code>URI</code> property must not be an empty string and must start with a slash.</p>
+<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application delegate configured to respond to requests beginning with <code>"/my-app"</code>, in which case it must set the value of <code>"Owin.BaseUri"</code> in the environment dictionary to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>Owin.RequestUri</code> value of the environment dictionary provided to the application configured to respond at <code>"/my-app"</code> must be <code>"/foo"</code>. The value of <code>"Owin.BaseUri"</code> may be an empty string and must not end with a trailing slash; the value of the <code>"Owin.RequestUri"</code> property must not be an empty string and must start with a slash.</p>
 
 <a name="ErrorHandling"></a>
 <h2>Error Handling</h2>
@@ -136,76 +125,38 @@
 <a name="ApplicationErrors"></a>
 <h3>Application Errors</h3>
 
-<p>An application might throw an exception in the following places:</p>
+<p>An application might generate an exception in the following places:</p>
 
 <ul>
-<li>The <code>IApplication.BeginInvoke</code> method</li>
-<li>The <code>IApplication.EndInvoke</code> method</li>
-<li>The <code>AsyncCallback</code> provided to <code>BeginReadBody</code>
-<li>The <code>IResponse.GetBody</code> method</li>
-<li>The <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
-<li>The <code>MoveNext</code> method of the enumerator returned by the <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
-<li>The <code>Current</code> property of the enumerator returned by the <code>GetEnumerator</code> method of the <code>IEnumerable&lt;object&gt;</code> returned by <code>IResponse.GetBody</code></li>
-<li>[TODO] Discuss Task&lt;T&gt; exceptions</li>
+    <li>Thrown from an invocation of the application delegate.</li>
+    <li>Provided to the error callback of the application delegate.</li>
+    <li>Thrown from the result callback of the request body delegate.</li>
+    <li>Thrown from the error callback of the request body delegate.</li>
+    <li>Thrown from the <code>GetEnumerator</code> method of the response enumerable.</li>
+    <li>Thrown from the <code>MoveNext</code> method of the enumerator returned by the response enumerable.</li>
+    <li>Thrown from the <code>Current</code> property of the enumerator returned by the response enumerable.</li>
+    <li>Thrown from an invocation of an asynchronous response item contained in the response enumerable.</li> 
+    <li>Provided to the error callback of an asynchronous item delegate contained in the response enumerable.</li>
 </ul>
 
-<p>An application should make every attempt to trap its own internal errors and generate an appropriate (possibly 500-level) response rather than throwing an exception up to the host. Before writing the response headers to the underlying transport, the host must call <code>GetBody</code> and if the return value is a non-null enumerable containing at least one item, the host must enumerate at least one item from the enumerable. This allows the application to guarantee that it has caught as many of its internal errors as possible; that the host can begin the response without further buffering. If an exception is thrown by the application while enumerating subsequent items from the response body enumerable, the host may write a textual description of the error to the underlying transport, and/or close the connection.</p>
+<p>An application should attempt to trap its own internal errors and generate an appropriate (possibly 500-level) response rather than propagating an exception up to the host.</p> 
+
+<p>After an application provides a response, if the response enumerable is non-null, the host should attempt to enumerate at least one item from the response enumerable before writing the response headers to the underlying transport. If the enumeration of the first item results in an error, the host will be able to generate a 500-level response. Otherwise, the application has caught as many of its internal errors as possible and host can begin the response without further buffering. If an exception is thrown by the application while enumerating subsequent items from the response body enumerable, the host may write a textual description of the error to the underlying transport, and/or close the connection.</p>
 
 <a name="HostErrors"></a>
 <h3>Host Errors</h3>
 
-<p>Hosts may throw exceptions in the following places:</p>
+<p>A host might generate exceptions in the following places:</p>
 
 <ul>
-<li>The <code>IRequest.BeginReadBody</code> method</li>
-<li>The <code>IRequest.EndReadBody</code> method</li>
+    <li>Thrown from an invocation of the request body delegate.</li>
+    <li>Provided to the error callback of the request body delegate.</li>  
 </ul>
 
-<p>Hosts must not throw exceptions from the <code>AsyncCallback</code> provided to the application through the <code>BeginInvoke</code> method.</p>
-
-<p>An exception from either of these methods may indicate that the client has closed or dropped the connection, or another transport-layer error has occurred. The application should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the calls described in <a href="#ApplicationErrors">Application Errors</a>.</p>
+<p>An exception generated in either of these places may indicate that the client has closed or dropped the connection, or another transport-layer error has occurred. The application should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the sites described in <a href="#ApplicationErrors">Application Errors</a>.</p>
 
 <a name="Examples"></a>
 <h2>Example</h2>
-
-<pre><code>public class HelloApp : IApplication
-{
-    public IAsyncResult BeginInvoke(IRequest request, AsyncCallback callback, object state)
-    {
-        callback(null);
-        return null;
-    }
-
-    IResponse EndInvoke(IAsyncResult result)
-    {
-        return new HelloResponse();
-    }
-}
-
-class HelloResponse : IResponse
-{
-    public string Status
-    {
-        get { return "200 OK"; }
-    }
-
-    public IDictionary&lt;string, IEnumerable&lt;string&gt;&gt; Headers
-    {
-        get
-        {
-            return new Dictionary&lt;string, IEnumerable&lt;string&gt;&gt;() {
-                { "Content-Type", new string[] { "text/html" } },
-                { "Content-Length", new string[] { "13" } }
-            };
-        }
-    }
-
-    public IEnumerable&lt;object&gt; GetBody()
-    {
-        yield return Encoding.UTF8.GetBytes("Hello, world!");
-    }
-}
-</code></pre>
 
 <a name="Acknowledgements"></a>
 <h2>Acknowledgments</h2>
@@ -215,6 +166,8 @@ class HelloResponse : IResponse
 		<li><a href="http://twitter.com/panesofglass">Ryan Riley</a></li>
 		<li><a href="http://twitter.com/serialseb">Sebastien Lambla</a></li>
 		<li><a href="http://jdhardy.blogspot.com/">Jeff Hardy</a></li>
+		<li><a href="http://twitter.com/demisbellot">Demis Bellot</a></li>
+		<li><a href="http://whereslou.com/">Louis DeJardin</a></li>
 	</ul>
 </body>
 </html>
