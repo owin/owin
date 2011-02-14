@@ -54,7 +54,7 @@
     IDictionary&lt;string, object&gt;, 
     
     // response callback
-    Action&lt;string, Dictionary&lt;string, IList&lt;string&gt;&gt;, IEnumerable&lt;object&gt;&gt;,
+    Action&lt;string, IDictionary&lt;string, string&gt;, IEnumerable&lt;object&gt;&gt;,
     
     // error callback
     Action&lt;Exception&gt;
@@ -74,28 +74,87 @@
 
 <p>When a host invokes an application delegate, it provides an environment dictionary which represents the request the application is to process. The environment dictionary also provides additional context to the application. An environment dictionary must be mutable and must contain the following keys whose values must be non-null unless otherwise specified below:</p>
 
-<ul>
-<li><code>owin.RequestMethod</code> &mdash; The HTTP request method string of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</li>
-<li><code>owin.RequestUri</code> &mdash; The HTTP request URI string of the request. The value includes the query string of the HTTP request URI (e.g., <code>"/path/and?query=string"</code>). The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</li>
-<li><code>owin.RequestHeaders</code> &mdash; A dictionary of the form <code>IDictionary&lt;string, IList&lt;string&gt;&gt;</code>. This dictionary represents the HTTP headers present in the request. The dictionary must be mutable and its keys must be case-insensitive. Keys must be HTTP header names without <code>':'</code> or whitespace. Values are <code>IList&lt;string&gt;</code> objects containing the corresponding header value strings, without newlines. If a header appears in a request multiple times, the list value for that key must contain a number of elements corresponding to the number of times the header appears in the request, with each element being a value of a single instance of the header.</li>
-<li><code>owin.RequestBody</code> &mdash; A delegate of the form <code>Action&lt;byte[], int, int, Action&lt;int&gt;, Action&lt;Exception&gt;&gt;</code> (the <em>request body delegate</em>). The request body delegate defines an asynchronous operation which reads the body data of the request into a destination buffer. Applications must provide a valid destination buffer in the first three arguments, and non-null result and exception callbacks. Valid buffer arguments consists of (first) a non-null <code>byte[] buffer</code>, (second) an <code>int offset</code> into the buffer at which copying should begin, and (third) an <code>int count</code> of the number of bytes which should be read, where <code>offset + count &lt;= buffer.Length</code>. In response to an invocation of the request body delegate, hosts must invoke either the result callback or the exception callback exactly once. When invoking the result callback, a host must provide the number of bytes copied into the destination buffer as a result of the read operation (up to but not more than <code>count</code> bytes), or return 0 to signal the end of the request body. If the exception callback in invoked, the application must propagate the exception back to the host. See <a href="#ErrorHandling">Error Handling</a>.</li>
-<li><code>owin.BaseUri</code> &mdash; The portion of the request URI's path corresponding to the "root" of the application object. See <a href="#Paths">Paths</a>.</li>
-<li><code>owin.ServerName</code>, <code>owin.ServerPort</code> &mdash; Hosts should provide values which can be used to reconstruct the full URL of the request in absence of the HTTP <code>Host</code> header of the request.</li>
-<li><code>owin.UriScheme</code> &mdash; <code>"http"</code> or <code>"https"</code></li>
-<li><code>owin.RemoteEndPoint</code> &mdash; A <code>System.Net.IPEndPoint</code> representing the connected client.</li>
-<li><code>owin.Version</code> &mdash; The string <code>"1.0"</code> indicating OWIN version 1.0.</li>
-</ul>
+<table border=1>
+<tr>
+    <td><code>owin.RequestMethod</code></td>
+    <td>The HTTP request method string of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</td>
+</tr>
+
+<tr>
+    <td><code>owin.RequestUri</code></td>
+    <td>The HTTP request URI string of the request. The value includes the query string of the HTTP request URI (e.g., <code>"/path/and?query=string"</code>). The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</td>
+</tr>
+    <tr>
+        <td>
+            <code>owin.RequestHeaders</code>
+        </td>
+        <td>
+            <p>A dictionary of the form <code>IDictionary&lt;string, string&gt;</code> which represents the HTTP headers present in the request (the <em>request header dictionary</em>). The requirements outlined below are predicated on <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">RFC 2616 section 4.2</a>.</p>
+            <p>The dictionary must be mutable and its keys must be case-insensitive. Keys must be HTTP header names without <code>':'</code> or whitespace. Values are <code>string</code> objects containing the corresponding field-value strings, with any linear whitespace (as defined by <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.2">RFC 2616 section 2.2</a>) collapsed to a single space (<code>' '</code>). If a given field-name appears multiple times in a request received by a host, the host must collapse the corresponding field-values into a single string, with the field-values delimited by a comma (<code>','</code>), preserving the order in which the values appeared in the original request. Hosts must not generate request header dictionaries whose values start or end with a comma, contain adjacent commas, or are null, empty, or consist entirely of linear whitespace.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>owin.RequestBody</code>
+        </td>
+        <td>
+            <p>A delegate of the form <code>Action&lt;Action&lt;ArraySegment&lt;byte&gt;&gt;, Action&lt;Exception&gt;&gt;</code> (the <em>request body delegate</em>). The request body delegate defines an asynchronous operation which causes the host to read a single chunk of request body data into a buffer and provide it to the application.</p>
+            <p>In response to an invocation of the request body delegate, the host must invoke either the result callback or the exception callback exactly once. When invoking the result callback, a host must provide an <code>ArraySegment&lt;byte&gt;</code> which refers to the body data read as a result of the invocation of the request body delegate. This buffer is considered internal to the host implementation and is only guaranteed to be valid during the result callback; if an application wishes to retain the data it must copy it out of the buffer. If there is no more request body data to be read, the host must provide an <code>ArraySegment&lt;byte&gt;</code> whose <code>Count</code> is 0 to signal the end of the request body. After invoking the request body delegate, an application must not invoke the request body delegate again until after the result callback provided to the request body delegate is invoked by the host. If an error occurs while attempting to read the request body, the host must invoke the exception callback with a relevant exception. If the exception callback is invoked, the application must propagate the exception back to the host as described in the <a href="#ErrorHandling">Error Handling</a> section and abort all processing of the request.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>owin.BaseUri</code>
+        </td>
+        <td>
+            The portion of the request URI's path corresponding to the "root" of the application object. See <a href="#Paths">Paths</a>.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>owin.ServerName</code>, <code>owin.ServerPort</code>
+        </td>
+        <td>
+            Hosts should provide values which can be used to reconstruct the full URI of the request in absence of the HTTP <code>Host</code> header of the request.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>owin.UriScheme</code>
+        </td>
+        <td>
+            <code>"http"</code> or <code>"https"</code>.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>owin.RemoteEndPoint</code>
+        </td>
+        <td>
+            A <code>System.Net.IPEndPoint</code> representing the connected client.
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <code>owin.Version</code>
+        </td>
+        <td>
+            The string <code>"1.0"</code> indicating OWIN version 1.0.
+        </td>
+    </tr>
+    
+</table>
 
 <p>In addition to these keys, the host, application, or user may add arbitrary data associated with the request to the environment dictionary.</p>
 
 <a name="ResponseCallback"></a>
 <h3>Response Callback</h3>
 
-<p>The response callback of the application delegate takes three arguments of type <code>string</code>, <code>Dictionary&lt;string, IList&lt;string&gt;&gt;</code>, and <code>IEnumerable&lt;object&gt;&gt;</code>. These arguments together represent an HTTP response generated by an application.</p>
+<p>The response callback of the application delegate takes three arguments of type <code>string</code>, <code>Dictionary&lt;string, string&gt;</code>, and <code>IEnumerable&lt;object&gt;&gt;</code>. These arguments together represent an HTTP response generated by an application.</p>
 
 <p>The first argument to the response callback must be a string which contains the integer status of the response followed by a space and a reason phrase without a newline (e.g., <code>"200 OK"</code>). All characters in the status string provided by an application should be within the ASCII codepage.</p>
 
-<p>The second argument to the response callback must be a mutable dictionary representing the headers to be sent with the request. The keys must be header names without <code>':'</code> or whitespace. Values must be <code>IList&lt;string&gt;</code> objects containing the corresponding header value strings, without newlines. If the list object for a header name contains multiple elements, the host must write a header name-value line with that name once for each value in the list. All characters in header name and value strings should be within the ASCII codepage.</p>
+<p>The second argument to the response callback must be a dictionary representing the headers to be sent with the request (the <em>response header dictionary</em>). The dictionary must be mutable and its keys must be case-insensitive. The keys must be header field-names without <code>':'</code> or whitespace. Values must be <code>string</code> objects containing the corresponding header field-value strings. The application must encode or strip all <code>'\r'</code> and <code>'\n'</code> characters from header value data. The application should use the token <code>"\r\n"</code> to delimit values that are required to be sent as separate response headers of the same name (this is to support <code>Set-Cookie</code>). Applications must not produce dictionary values which start or end with <code>"\r\n"</code>, or contain adjacent <code>"\r\n"</code> delimiters. Applications must not generate response header dictionaries whose values start or end with <code>"\r\n"</code>, contain adjacent <code>"\r\n"</code> delimiters, or are null, empty, or consist entirely of linear whitespace (as defined by <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.2">RFC 2616 section 2.2</a>). All characters in header field-name and field-value strings should be within the ASCII codepage.</p>
 
 <p>The third argument to the response callback must be a instance of <code>IEnumerable&lt;object&gt;</code> which represents the body data (the <em>response enumerable</em>), or null if the response does not include a body. Each item in the response enumerable may be of one of the following types (the <em>response item types</em>):</p>
 
@@ -108,16 +167,16 @@
 
 <p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor.</p>
 
-<p>An item of the type <code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code> (an <em>asynchronous response delegate</em>) allows applications to provide the next item asynchronously. The semantics of this delegate are the same as that of the application delegate and the request body delegate&mdash;the host must provide non-null result and exception callbacks to the delegate, and when the delegate is invoked, the application must invoke either the result or exception callback exactly once. A host must invoke an asynchronous response delegate exactly once, and the callbacks it provides must not throw exceptions. The application may invoke the result callback with objects of any of the response item types.<p>
+<p>An item of the type <code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code> (an <em>asynchronous response delegate</em>) allows applications to provide the next item asynchronously. The semantics of this delegate are the same as that of the application delegate and the request body delegate. The host must provide non-null result and exception callbacks to the delegate, and when the delegate is invoked, the application must invoke either the result or exception callback exactly once. A host must invoke an asynchronous response delegate exactly once, and the callbacks it provides must not throw exceptions. The application may invoke the result callback with objects of any of the response item types.<p>
 
-<p>In the interest of extensibility, a response enumerable may contain items whose types are not among the response item types listed above, and hosts may support additional response item types and define corresponding behaviors. If a host does not recognize the type of an object contained in the response enumerable, it may ignore the object and continue enumerating.</p>
+<p>In the interest of extensibility, a response enumerable may contain items (and an asynchronous response delegate may yield values) whose types are not among the response item types listed above, and hosts may support additional response item types and define and document corresponding behaviors. If a host does not recognize the type of an object contained in the response enumerable or yielded by an asynchronous response delegate, it may ignore the object and continue enumerating.</p>
 
 <p>Hosts must enumerate the enumerable to completion (i.e., until <code>MoveNext</code> returns false) or until an exception is thrown by <code>MoveNext()</code> or the <code>Current</code> property. After all of the items have been enumerated or if an exception occurs during enumeration, the host must call <code>Dispose</code> on the enumerator.</p>
 
 <a name="Paths"></a>
 <h2>Paths</h2>
 
-<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application delegate configured to respond to requests beginning with <code>"/my-app"</code>, in which case it must set the value of <code>"Owin.BaseUri"</code> in the environment dictionary to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>Owin.RequestUri</code> value of the environment dictionary provided to the application configured to respond at <code>"/my-app"</code> must be <code>"/foo"</code>. The value of <code>"Owin.BaseUri"</code> may be an empty string and must not end with a trailing slash; the value of the <code>"Owin.RequestUri"</code> property must not be an empty string and must start with a slash.</p>
+<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application delegate configured to respond to requests beginning with <code>"/my-app"</code>, in which case it must set the value of <code>"owin.BaseUri"</code> in the environment dictionary to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>owin.RequestUri</code> value of the environment dictionary provided to the application configured to respond at <code>"/my-app"</code> must be <code>"/foo"</code>. The value of <code>"owin.BaseUri"</code> may be an empty string and must not end with a trailing slash; the value of the <code>"owin.RequestUri"</code> property must not be an empty string and must start with a slash.</p>
 
 <a name="ErrorHandling"></a>
 <h2>Error Handling</h2>
@@ -154,9 +213,6 @@
 </ul>
 
 <p>An exception generated in either of these places may indicate that the client has closed or dropped the connection, or another transport-layer error has occurred. The application should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the sites described in <a href="#ApplicationErrors">Application Errors</a>.</p>
-
-<a name="Examples"></a>
-<h2>Example</h2>
 
 <a name="Acknowledgements"></a>
 <h2>Acknowledgments</h2>
