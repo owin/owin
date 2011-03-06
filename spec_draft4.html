@@ -23,6 +23,7 @@
 	<li><a href="#Definition">Definition</a>
 		<ul>
 			<li><a href="#ApplicationDelegate">Application Delegate</a></li>
+			<li><a href="#EntityStreamDelegate">Entity Stream Delegate</a></li>
 			<li><a href="#EnvironmentDictionary">Environment Dictionary</a></li>
 			<li><a href="#ResponseCallback">Response Callback</a></li>
 		</ul>
@@ -47,32 +48,76 @@
 <a name="Definition"></a>
 <h2>Definition</h2>
 
-<p>The OWIN interface is expressed as a single raw .NET delegate (the <em>application delegate</em>).</p>
+<p>In this document, an OWIN-compatible web server is referred to as a "host", and an instance of an application delegate (described below) is referred to as an "application". Broadly speaking, a host invokes an application (providing as arguments an environment dictionary, and response and error callbacks); an application either provides a response to the host by invoking the response callback with response information, or indicates an error by invoking the error callback with an exception.</p>
+	
+<p>How an application is provided to a host is outside the scope of this specification and must be documented by the host implementor.</p>
+
+<p>Because OWIN is defined in terms of a raw delegate, there is no need for an assembly called "OWIN.dll" or similar. Implementing either the host or application side the OWIN spec does not introduce a dependency to a project.</p>
+
+<p>In this document, the C# <code>Action</code>/<code>Func</code> syntax is used to notate the delegate structure. However, the delegate structure could be equivalently represented with F# native functions, CLR interfaces, or named delegates. This is by design; when implementing OWIN, choose an equivalent representation that works for you.</p>
+
+<a name="ApplicationDelegate"></a>
+<h3>Application Delegate</h3>
+
+<p>The primary interface in OWIN is called the <em>application delegate</em>. An application delegate takes three parameters: an environment dictionary, a response callback, and an error callback.</p>
 
 <pre><code>Action&lt;
-    // an environment dictionary containing server and request data
+    // an environment dictionary containing host and request data
     IDictionary&lt;string, object&gt;, 
     
     // response callback
-    Action&lt;string, IDictionary&lt;string, string&gt;, IEnumerable&lt;object&gt;&gt;,
+    Action&lt;
+		string, // response status, e.g., "200 OK"
+		IDictionary&lt;string, string&gt;, // response headers
+		EntityStream // response body, as represented by an entity stream delegate (described below)
+	&gt;, 
     
     // error callback
     Action&lt;Exception&gt;
 &gt;</code></pre>
 
-<p>In this document, an OWIN-compatible web server is referred to as a "host", and an instance of the above delegate is referred to as an "application". Broadly speaking, hosts invoke applications (providing as arguments an environment dictionary, and response and error callbacks), and the application either provides a response to the host by invoking the response callback with response information, or indicates an error by invoking the error callback with an exception. How an application is provided to a host is outside the scope of this specification and must be documented by the host implementor.</p>
+<p>A host must provide non-null values for all three arguments. The application must invoke either the response callback or the error callback exactly once, or throw an exception. The response and error callbacks provided to an application by a host must not throw an exception.</p>
 
-<p>Because OWIN is defined in terms of a raw delegate, there is no need for an assembly called "OWIN.dll" or similar. Implementing either the host or application side the OWIN spec does not introduce a dependency to a project.
+<a name="EntityStreamDelegate"></a>
+<h3>Entity Stream Delegate</h3>
 
-<a name="ApplicationDelegate"></a>
-<h3>Application Delegate</h3>
+<p>The <em>entity stream delegate</em> is a mechanism for transferring streaming data between host and application. It is used for both request and response entities in OWIN.</p>
 
-<p>An application delegate takes an environment, a response callback, and an error callback. When an application delegate is invoked, it must invoke either the response callback or the error callback exactly once, or throw an exception. A callback provided to an application by a host must not throw an exception.</p>
+<p>The entity stream delegate is roughly equivalent to <code>IObserver</code>/<code>IObservable</code>, but with a modified "on next" signature. An instance of the delegate is a producer; a consumer invokes the delegate and provides it "on next", "on error", and "on complete" callbacks. The return value of the entity stream delegate is a cancellation delegate, which allows the consumer to instruct the producer not to produce any further values.</p>
+
+<p>The purpose of the modified "on next" callback is to enable the consumer to instruct the producer to "back off" and not produce values for a time, thereby preventing potentially unbounded buffer sizes in host and application implementations.</p>
+
+<p>In addition to taking a data value parameter, the "on next" callback takes a continuation parameter, and returns a boolean value indicating whether or not it will invoke the continuation.</p>
+
+<pre><code>Func&lt;
+	
+	// on next
+	Func&lt;
+		ArraySegment&lt;byte&gt;, // data
+		Action, // continuation
+		bool // will invoke continuation
+	&gt;,
+ 	
+	// on error
+	Action&lt;Exception&gt;,
+	
+	// on complete
+	Action,
+	
+	// cancel 
+	Action 
+&gt;</code></pre>
+
+<p>If the producer provides a null continuation, the consumer must return false. If the producer provides a non-null continuation, the consumer may return true or false. If the consumer returns true, the consumer must eventually invoke the continuation. The consumer must not invoke the continuation in a manner such that the "on next" callback which provided the continuation is on the stack when the continuation is invoked. If the consumer returns false, it must not invoke the continuation provided by the producer.
+
+<p>If the consumer returns true, the producer must not invoke the consumer "on next", "on error", or "on complete" callbacks until the consumer invokes the continuation provided by the producer. If the consumer returns false, the producer may invoke the "on next", "on error, or "on complete"" callbacks at any time.</p>
+
+<p>Instances of <code>ArraySegment&lt;byte&gt;</code> provided to consumers must be considered internal to the producer implementation and must be guaranteed to be valid only for the duration of the "on next" callback. Once the "on next" callback returns, the <code>ArraySegment&lt;byte&gt;</code> may be invalid. If a consumer wishes to retain the data it must copy it out of the buffer before the "on next" callback returns.</p>
 
 <a name="EnvironmentDictionary"></a>
 <h3>Environment Dictionary</h3>
 
-<p>When a host invokes an application delegate, it provides an environment dictionary which represents the request the application is to process. The environment dictionary also provides additional context to the application. An environment dictionary must be mutable and must contain the following keys whose values must be non-null unless otherwise specified below:</p>
+<p>When a host invokes an application delegate, it provides the application with an environment dictionary. The environment dictionary represents the request the application is to process and provides additional context to the application. An environment dictionary must be mutable and must contain the following keys whose values must be non-null unless otherwise specified:</p>
 
 <table border=1>
 <tr>
@@ -100,8 +145,7 @@
             <code>owin.RequestBody</code>
         </td>
         <td>
-            <p>A delegate of the form <code>Action&lt;Action&lt;ArraySegment&lt;byte&gt;&gt;, Action&lt;Exception&gt;&gt;</code> (the <em>request body delegate</em>). The request body delegate defines an asynchronous operation which causes the host to read a single chunk of request body data into a buffer and provide it to the application.</p>
-            <p>In response to an invocation of the request body delegate, the host must invoke either the result callback or the exception callback exactly once. When invoking the result callback, a host must provide an <code>ArraySegment&lt;byte&gt;</code> which refers to the body data read as a result of the invocation of the request body delegate. This buffer is considered internal to the host implementation and is only guaranteed to be valid during the result callback; if an application wishes to retain the data it must copy it out of the buffer. If there is no more request body data to be read, the host must provide an <code>ArraySegment&lt;byte&gt;</code> whose <code>Count</code> is 0 to signal the end of the request body. After invoking the request body delegate, an application must not invoke the request body delegate again until after the result callback provided to the request body delegate is invoked by the host. If an error occurs while attempting to read the request body, the host must invoke the exception callback with a relevant exception. If the exception callback is invoked, the application must propagate the exception back to the host as described in the <a href="#ErrorHandling">Error Handling</a> section and abort all processing of the request.</p>
+			<p>An entity stream delegate representing the body of the request.</p>
         </td>
     </tr>
     <tr>
@@ -152,28 +196,13 @@
 <a name="ResponseCallback"></a>
 <h3>Response Callback</h3>
 
-<p>The response callback of the application delegate takes three arguments of type <code>string</code>, <code>Dictionary&lt;string, string&gt;</code>, and <code>IEnumerable&lt;object&gt;&gt;</code>. These arguments together represent an HTTP response generated by an application.</p>
+<p>The response callback of the application delegate takes three arguments. The first two are of type <code>string</code>, <code>Dictionary&lt;string, string&gt;</code>. The third is an entity stream delegate representing the response body. These arguments together represent an HTTP response generated by an application.</p>
 
 <p>The first argument to the response callback must be a string which contains the integer status of the response followed by a space and a reason phrase without a newline (e.g., <code>"200 OK"</code>). All characters in the status string provided by an application should be within the ASCII codepage.</p>
 
 <p>The second argument to the response callback must be a dictionary representing the headers to be sent with the request (the <em>response header dictionary</em>). The dictionary must be mutable and its keys must be case-insensitive. The keys must be header field-names without <code>':'</code> or whitespace. Values must be <code>string</code> objects containing the corresponding header field-value strings. The application must encode or strip all <code>'\r'</code> and <code>'\n'</code> characters from header value data. The application must use the token <code>"\r\n"</code> to delimit values that are required to be sent as separate response headers of the same name (this is to support <code>Set-Cookie</code>). Applications must not generate response header dictionaries whose values start or end with <code>"\r\n"</code>, contain adjacent <code>"\r\n"</code> delimiters, or are null, empty, or consist entirely of linear whitespace (as defined by <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.2">RFC 2616 section 2.2</a>). All characters in header field-name and field-value strings should be within the ASCII codepage.</p>
 
-<p>The third argument to the response callback must be a instance of <code>IEnumerable&lt;object&gt;</code> which represents the body data (the <em>response enumerable</em>), or null if the response does not include a body. Each item in the response enumerable may be of one of the following types (the <em>response item types</em>):</p>
-
-<ul>
-<li><code>byte[]</code></li>
-<li><code>ArraySegment&lt;byte&gt;</code></li>
-<li><code>FileInfo</code></li>
-<li><code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code></li>
-</ul>
-
-<p>Hosts must write both <code>byte[]</code> and <code>ArraySegment&lt;byte&gt;</code> to the underlying transport as raw data. <code>FileInfo</code> must cause the host to write the named file to the underlying transport. How relative file paths are resolved is outside the scope of this specification and must be documented by the host implementor.</p>
-
-<p>An item of the type <code>Action&lt;Action&lt;object&gt;,Action&lt;Exception&gt;&gt;</code> (an <em>asynchronous response delegate</em>) allows applications to provide the next item asynchronously. The semantics of this delegate are the same as that of the application delegate and the request body delegate. The host must provide non-null result and exception callbacks to the delegate, and when the delegate is invoked, the application must invoke either the result or exception callback exactly once. A host must invoke an asynchronous response delegate exactly once, and the callbacks it provides must not throw exceptions. The application may invoke the result callback with objects of any of the response item types.<p>
-
-<p>In the interest of extensibility, a response enumerable may contain items (and an asynchronous response delegate may yield values) whose types are not among the response item types listed above, and hosts may support additional response item types and define and document corresponding behaviors. If a host does not recognize the type of an object contained in the response enumerable or yielded by an asynchronous response delegate, it may ignore the object and continue enumerating.</p>
-
-<p>Hosts must enumerate the enumerable to completion (i.e., until <code>MoveNext</code> returns false) or until an exception is thrown by <code>MoveNext()</code> or the <code>Current</code> property. After all of the items have been enumerated or if an exception occurs during enumeration, the host must call <code>Dispose</code> on the enumerator.</p>
+<p>The third argument must be an entity stream delegate representing the response body, or null.</p>
 
 <a name="Paths"></a>
 <h2>Paths</h2>
