@@ -319,7 +319,7 @@
 
 <p>An application should attempt to trap its own internal errors and generate an appropriate (possibly 500-level) response rather than propagating an exception up to the host.</p> 
 
-<p>After an application provides a response, if the response body delegate is non-null, the host should wait to receive least one on-next callback from the the response body delegate before writing the response headers to the underlying transport. In this way, if instead of an on-next callback the host gets an on-error callback, the host will be able to generate a 500-level response. If the host get an on-next callback first, it can safely assume that the application has caught as many of its internal errors as possible; the host can begin the response without further buffering. If an on-error callback is subsequently received, the host may write a textual description of the error to the underlying transport, and/or close the connection.</p>
+<p>After an application provides a response, if the response body delegate is non-null, the host should wait to receive least one on-next callback from the the response body delegate before writing the response headers to the underlying transport. In this way, if instead of an on-next callback the host gets an on-error callback, the host will be able to generate a 500-level response. If the host gets an on-next callback first, it can safely assume that the application has caught as many of its internal errors as possible; the host can begin the response without further buffering. If an on-error callback is subsequently received, the host may write a textual description of the error to the underlying transport, and/or close the connection.</p>
 
 <a name="HostErrors"></a>
 <h3>Host Errors</h3>
