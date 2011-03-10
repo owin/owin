@@ -273,7 +273,7 @@
 <ul>
 	<li>If the producer provides a null continuation to the on-next callback, the consumer must return false.</li>
 	<li>If the producer provides a non-null continuation to the on-next callback, the consumer may return true or false. 
-	<li>The consumer returns true from the on-next callback if and only if the consumer will eventually invoke the continuation. The consumer must not invoke the continuation in a manner such that the on-next callback which provided the continuation is on the stack when the continuation is invoked.</li>
+	<li>The consumer returns true from the on-next callback if and only if the consumer will eventually invoke the continuation. The consumer must not invoke the continuation in a manner such that the on-next callback which provided the continuation is on the call stack when the continuation is invoked.</li>
 	<li>The consumer returns false from the on-next callback if and only if the consumer will never invoke continuation.</li>
 	</li>
 	<li>If the consumer returns true from the on-next callback, the producer must not invoke the consumer's on-next, on-error, or on-complete callbacks until the consumer invokes the continuation provided by the producer.</li>
@@ -293,8 +293,8 @@
 
 <div class="normative">
 <ul>
-	<li>The value of <code>"owin.BaseUri"</code> may be an empty string and must not end with a trailing slash</li>
-	<li>The value of the <code>"owin.RequestUri"</code> property must not be an empty string and must start with a slash.</li>
+	<li>The value of the <code>"owin.BaseUri"</code> environment dictionary key may be an empty string and must not end with a trailing slash</li>
+	<li>The value of the <code>"owin.RequestUri"</code> environment dictionary key must not be an empty string and must start with a slash.</li>
 </ul>
 </div>
 
