@@ -335,18 +335,21 @@
 <p>An exception generated in either of these places may indicate that the client has closed or dropped the connection, or another transport-layer error has occurred.
 
 <div class="normative">	
-<p>If an application receives an error from a host, it should perform any post-mortem logic it needs to, and must propagate the exception back to the host through one of the sites described in <a href="#ApplicationErrors">Application Errors</a>.</p>
+	<p>If an application receives an error from a host, it must propagate it back to the host through one of the sites described in <a href="#ApplicationErrors">Application Errors</a>.</p>
 </div>
 
-<p>To simplify the programming model for applications, a host must not generate exceptions in the following places:</p>
+<p>There are several other points where an application might call into the host but cannot meaningfully handle an exception from thrown from the call.<p>
 
-<div class="normative">
-<ul>
-	<li>Thrown from an invocation of the application delegate's response callback.</li>
-	<li>Thrown from an invocation of the application delegate's error callback.</li>
-	<li>Thrown from an invocation of the continuation provided to the on-next callback of the request entity stream delegate.</li>
-	<li>Thrown from an invocation of the cancellation delegate returned by the request entity stream delegate.</li>
-</ul>
+<div class="notes">
+	<p>A host should not generate exceptions in the following places:</p>
+	<ul>
+		<li>Thrown from an invocation of the response callback provided to the application delegate.</li>
+		<li>Thrown from an invocation of the error callback provided to the application delegate.</li>
+		<li>Thrown from an invocation of the continuation provided to the on-next callback of the request entity stream delegate.</li>
+		<li>Thrown from an invocation of the cancellation delegate returned by the request entity stream delegate.</li>
+		<li>Thrown from the on-next, on-error, or on-completed callbacks provided to the response entity stream delegate.</li>
+	</ul>
 </div>
+
 </body>
 </html>
