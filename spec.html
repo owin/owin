@@ -160,7 +160,7 @@
             <code>"owin.RequestScheme"</code>
         </td>
         <td>
-			Hosts should attempt to provide a sensible value for the URI scheme, falling back to the string <code>"http"</code>; see <a href="#URIScheme">URI Scheme</a>. 
+			A <code>string</code> containing the URI scheme used for the request (e.g., <code>"http"</code>, <code>"https"</code>); see <a href="#URIScheme">URI Scheme</a>. 
         </td>
     </tr>
     <tr>
@@ -291,18 +291,22 @@
 
 <p>This information is usually not transmitted by an HTTP client and, depending on network configuration, it may not be possible for an OWIN host to determine a correct value. In these cases, the user may have to manually configure or compute a value.</p>
 
+<div class="notes">
+<p>Hosts must provide a best-guess value for <code>"owin.RequestScheme"</code>.</p>
+</div>
+
 <a name="Hostname"></a>
 <h3>Hostname</h3>
 
-<p>In the context of an HTTP/1.1 request, the hostname to which the client is making a request is usually indicated in the Host header field-value of the request, although it might be specified using an absolute Request-URI (see RFC 2616, sections <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2</a>, <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.1.1">19.6.1.1</a>).
+<p>In the context of an HTTP/1.1 request, the name of the host to which the client is making a request is usually indicated in the Host header field-value of the request, although it might be specified using an absolute Request-URI (see RFC 2616, sections <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2</a>, <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.1.1">19.6.1.1</a>).
 
 <div class="normative">
-	<p>A host must attempt to provide a value for the <code>"Host"</code> key in the request header dictionary. The format of the value must be "&lt;hostname&gt;[:&lt;port&gt;]". The value must be deduced by the host using the following steps:</p>
+	<p>A host must provide a value for the <code>"Host"</code> key in the request header dictionary. The format of the value must be "&lt;hostname&gt;[:&lt;port&gt;]". The value must be deduced by the host using the following steps:</p>
 	
 	<ol>
 		<li>If the Request-URI of the incoming request is an absolute URI, the value of the <code>"Host"</code> key must be taken from the host part of the absolute URI.</li>
 		<li>If the Request-URI of the incoming request is not an absolute URI, the value of the <code>"Host"</code> key must be taken from the Host header field-value of the incoming request.</li>
-		<li>If the Host header is not present in the incoming request (as in an HTTP/1.0 request), or if its value consists entirely of linear whitespace, the server must attempt to provide a sensible value for the <code>"Host"</code> key.
+		<li>If the Host header is not present in the incoming request (as in an HTTP/1.0 request), or if its value consists entirely of linear whitespace, the server must provide a sensible best-guess value for the <code>"Host"</code> key.
 	</ol>
 </div>
 
@@ -326,14 +330,14 @@
 <pre><code>var uri =
   (string)env["host.RequestScheme"] + 
   "://" +
-  (string)env["owin.RequestHeaders"]["Host"] +
+  ((IDictionary&lt;string, string&gt;)env["owin.RequestHeaders"])["Host"] +
   (string)env["owin.RequestPathBase"] +
   (string)env["owin.RequestPath"];
 	
 if (env["owin.QueryString"] != "")
   uri += "?" + (string)env["owin.QueryString"];</code></pre>
 
-<p>The result of this algorithm may not be identical to the URI the client used to make the request; for example, the host may have done some URL rewriting to canonicalize the request.</p>
+<p>The result of this algorithm may not be identical to the URI the client used to make the request; for example, the host may have done some rewriting to canonicalize the request. Further, it is subject to the caveats described in the <a href="#URIScheme">URI Scheme</a> and <a href="#Hostname">Hostname</a> sections above.</p>
 
 <a name="ErrorHandling"></a>
 <h2>Error Handling</h2>
