@@ -41,7 +41,14 @@
 			<li><a href="#BodyDelegate">Body Delegate</a></li>
 		</ul>
 	</li>
-	<li><a href="#Paths">Paths</a></li>
+	<li><a href="#URIReconstruction">URI Reconstruction</a>
+		<ul>
+			<li><a href="#URIScheme">URI Scheme</a></li>
+			<li><a href="#Hostname">Hostname</a></li>
+			<li><a href="#Paths">Paths</a></li>
+			<li><a href="#URIReconstructionAlgorithm">URI Reconstruction Algorithm</a></li>
+		</ul>
+	</li>
 	<li><a href="#ErrorHandling">Error Handling</a>
 		<ul>
 			<li><a href="#ApplicationErrors">Application Errors</a></li>
@@ -105,10 +112,10 @@
 <a name="EnvironmentDictionary"></a>
 <h3>Environment Dictionary</h3>
 
-<p>When a host invokes an application delegate, it provides the application with an environment dictionary. The environment dictionary represents the request the application is to process. Host implementations may provide additional context (such as server address and port, client address and port, URL scheme, etc) to the application using keys prefixed with <code>"host."</code>.</p>
+<p>When a host invokes an application delegate, it provides the application with an environment dictionary. The environment dictionary represents the request the application is to process.</p>
 
 <div class="normative">
-<p>An environment dictionary must be mutable and must contain the keys in the table below. The values of the keys must be non-null, unless otherwise specified. Keys starting with the string <code>"host."</code> are reserved for use by host implementations.</p>
+<p>An environment dictionary must be mutable and must contain the keys in the table below. The values of the keys must be non-null, unless otherwise specified.</p>
 <br>
 <table border="1">
 	<tr>
@@ -116,16 +123,20 @@
 	    <td>A <code>string</code> containing the HTTP request method of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</td>
 	</tr>
 	<tr>
-	    <td><code>"owin.RequestUri"</code></td>
-	    <td>A <code>string</code> containing the HTTP request URI of the request (e.g., <code>"/request/uri"</code>). <!-- The value must be percent-decoded; see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">RFC 3986</a>.--> The value must not include the query string component of the HTTP request URI. The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</td>
+	    <td><code>"owin.RequestPath"</code></td>
+	    <td>A <code>string</code> containing the request path. The path must be relative to the "root" of the application delegate; see <a href="#Paths">Paths</a>.</td>
 	</tr>
-	<!--tr>
-	    <td><code>"owin.RequestUriRaw"</code></td>
-	    <td>The same value as "owin.RequestUri", but not percent-decoded.</td>
-	</tr-->
+    <tr>
+        <td>
+            <code>"owin.RequestPathBase"</code>
+        </td>
+        <td>
+            A <code>string</code> containing the portion of the request path corresponding to the "root" of the application delegate; see <a href="#Paths">Paths</a>. The value may be an empty string.
+        </td>
+    </tr>
 	<tr>
 		<td><code>"owin.RequestQueryString"</code></td>
-		<td>A <code>string</code> containing the query string component of the HTTP request URI (e.g., <code>"foo=bar&baz=quux"</code>). <!--The string must not be percent-decoded.-->
+		<td>A <code>string</code> containing the query string component of the HTTP request URI (e.g., <code>"foo=bar&amp;baz=quux"</code>). The value may be an empty string.
 		</td>
 	</tr>
     <tr>
@@ -146,20 +157,12 @@
     </tr>
     <tr>
         <td>
-            <code>"owin.BaseUri"</code>
+            <code>"owin.RequestScheme"</code>
         </td>
         <td>
-            A <code>string</code> containing the portion of the request URI's path corresponding to the "root" of the application delegate; see <a href="#Paths">Paths</a>. <!-- The value must be percent-decoded; see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">RFC 3986</a>. -->
+			Hosts should attempt to provide a sensible value for the URI scheme, falling back to the string <code>"http"</code>; see <a href="#URIScheme">URI Scheme</a>. 
         </td>
     </tr>
-    <!--tr>
-        <td>
-            <code>"owin.BaseUriRaw"</code>
-        </td>
-        <td>
-            The same value as <code>"owin.BaseUri"</code>, but not percent-decoded.
-        </td>
-    </tr-->
     <tr>
         <td>
             <code>"owin.Version"</code>
@@ -169,8 +172,6 @@
         </td>
     </tr>
 </table>
-
-
 </div>
 
 <div class="notes">
@@ -221,7 +222,6 @@
 		<li>If a given field-name appears multiple times in a request received by a host, the host must collapse the corresponding field-values into a single dictionary string value, with the field-values delimited by a comma (<code>','</code>), preserving the order in which the field-values appeared in the original request.</li>
 		<li>Hosts must not generate request header dictionaries whose values start or end with a comma, contain adjacent commas, or are null, empty, or consist entirely of linear whitespace.</li>
 	</ul>
-	
 	
 	<h4>Response header dictionary requirements</h4>
 	
@@ -280,18 +280,60 @@
 	<p>Instances of <code>ArraySegment&lt;byte&gt;</code> provided to consumers should be considered internal to the producer implementation and are guaranteed to be valid only for the duration of the on-next callback. Once the on-next callback returns, the <code>ArraySegment&lt;byte&gt;</code> may be invalid. If a consumer wishes to retain the data it should copy it out of the buffer before the on-next callback returns.</p>
 </div>
 
-<a name="Paths"></a>
-<h2>Paths</h2>
 
-<p>Hosts may have the ability to map application objects to some base path. For example, a host might have an application delegate configured to respond to requests beginning with <code>"/my-app"</code>, in which case it should set the value of <code>"owin.BaseUri"</code> in the environment dictionary to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>owin.RequestUri</code> value of the environment dictionary provided to the application configured to respond at <code>"/my-app"</code> should be <code>"/foo"</code>.</p>
+<a name="URIReconstruction"></a>
+<h2>URI Reconstruction</h2>
+
+<p>Applications often require the ability to reconstruct the complete URI of a request. This process cannot be perfect since HTTP clients do not usually transmit the complete URI which they are requesting, but OWIN makes provisions for the purpose of reconstructing the URI of a request.</p>
+
+<a name="URIScheme"></a>
+<h3>URI Scheme</h3>
+
+<p>This information is usually not transmitted by an HTTP client and, depending on network configuration, it may not be possible for an OWIN host to determine a correct value. In these cases, the user may have to manually configure or compute a value.</p>
+
+<a name="Hostname"></a>
+<h3>Hostname</h3>
+
+<p>In the context of an HTTP/1.1 request, the hostname to which the client is making a request is usually indicated in the Host header field-value of the request, although it might be specified using an absolute Request-URI (see RFC 2616, sections <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2</a>, <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.1.1">19.6.1.1</a>).
+
+<div class="normative">
+	<p>A host must attempt to provide a value for the <code>"Host"</code> key in the request header dictionary. The format of the value must be "&lt;hostname&gt;[:&lt;port&gt;]". The value must be deduced by the host using the following steps:</p>
+	
+	<ol>
+		<li>If the Request-URI of the incoming request is an absolute URI, the value of the <code>"Host"</code> key must be taken from the host part of the absolute URI.</li>
+		<li>If the Request-URI of the incoming request is not an absolute URI, the value of the <code>"Host"</code> key must be taken from the Host header field-value of the incoming request.</li>
+		<li>If the Host header is not present in the incoming request (as in an HTTP/1.0 request), or if its value consists entirely of linear whitespace, the server must attempt to provide a sensible value for the <code>"Host"</code> key.
+	</ol>
+</div>
+
+<a name="Paths"></a>
+<h3>Paths</h3>
+
+<p>Hosts may have the ability to map application delegates to some base path. For example, a host might have an application delegate configured to respond to requests beginning with <code>"/my-app"</code>, in which case it should set the value of <code>"owin.RequestPathBase"</code> in the environment dictionary to <code>"/my-app"</code>. If this host receives a request for <code>"/my-app/foo"</code>, the <code>owin.RequestPath</code> value of the environment dictionary provided to the application configured to respond at <code>"/my-app"</code> should be <code>"/foo"</code>.</p>
 
 <div class="normative">
 <ul>
-	<li>The value of the <code>"owin.BaseUri"</code> environment dictionary key may be an empty string and must not end with a trailing slash</li>
-	<li>The value of the <code>"owin.RequestUri"</code> environment dictionary key must not be an empty string and must start with a slash.</li>
+	<li>The value of the <code>"owin.RequestPathBase"</code> environment dictionary key must not end with a slash.</li>
+	<li>The value of the <code>"owin.RequestPath"</code> environment dictionary key must not be an empty string and must start with a slash.</li>
 </ul>
 </div>
 
+<a name="URIReconstructionAlgorithm"></a>
+<h3>URI Reconstruction Algorithm</h3>
+
+<p>The following algorithm can be used to reconstruct the complete URI of the current request:</p>
+
+<pre><code>var uri =
+  (string)env["host.RequestScheme"] + 
+  "://" +
+  (string)env["owin.RequestHeaders"]["Host"] +
+  (string)env["owin.RequestPathBase"] +
+  (string)env["owin.RequestPath"];
+	
+if (env["owin.QueryString"] != "")
+  uri += "?" + (string)env["owin.QueryString"];</code></pre>
+
+<p>The result of this algorithm may not be identical to the URI the client used to make the request; for example, the host may have done some URL rewriting to canonicalize the request.</p>
 
 <a name="ErrorHandling"></a>
 <h2>Error Handling</h2>
