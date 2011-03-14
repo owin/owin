@@ -328,7 +328,7 @@
 <p>The following algorithm can be used to reconstruct the complete URI of the current request:</p>
 
 <pre><code>var uri =
-  (string)env["host.RequestScheme"] + 
+  (string)env["owin.RequestScheme"] + 
   "://" +
   ((IDictionary&lt;string, string&gt;)env["owin.RequestHeaders"])["Host"] +
   (string)env["owin.RequestPathBase"] +
