@@ -105,21 +105,29 @@
 <a name="EnvironmentDictionary"></a>
 <h3>Environment Dictionary</h3>
 
-<p>When a host invokes an application delegate, it provides the application with an environment dictionary. The environment dictionary represents the request the application is to process and provides additional context to the application.</p>
+<p>When a host invokes an application delegate, it provides the application with an environment dictionary. The environment dictionary represents the request the application is to process. Host implementations may provide additional context (such as server address and port, client address and port, URL scheme, etc) to the application using keys prefixed with <code>"host."</code>.</p>
 
 <div class="normative">
-<p>An environment dictionary must be mutable and must contain the keys in the table below. The values of the keys must be non-null, unless otherwise specified.</p>
+<p>An environment dictionary must be mutable and must contain the keys in the table below. The values of the keys must be non-null, unless otherwise specified. Keys starting with the string <code>"host."</code> are reserved for use by host implementations.</p>
 <br>
 <table border="1">
-<tr>
-    <td><code>"owin.RequestMethod"</code></td>
-    <td>A <code>string</code> containing the HTTP request method of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</td>
-</tr>
-
-<tr>
-    <td><code>"owin.RequestUri"</code></td>
-    <td>A <code>string</code> containing the HTTP request URI of the request. The value must include the query string of the HTTP request URI (e.g., <code>"/path/and?query=string"</code>). The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</td>
-</tr>
+	<tr>
+	    <td><code>"owin.RequestMethod"</code></td>
+	    <td>A <code>string</code> containing the HTTP request method of the request (e.g., <code>"GET"</code>, <code>"POST"</code>).</td>
+	</tr>
+	<tr>
+	    <td><code>"owin.RequestUri"</code></td>
+	    <td>A <code>string</code> containing the HTTP request URI of the request (e.g., <code>"/request/uri"</code>). <!-- The value must be percent-decoded; see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">RFC 3986</a>.--> The value must not include the query string component of the HTTP request URI. The URI must be relative to the application delegate; see <a href="#Paths">Paths</a>.</td>
+	</tr>
+	<!--tr>
+	    <td><code>"owin.RequestUriRaw"</code></td>
+	    <td>The same value as "owin.RequestUri", but not percent-decoded.</td>
+	</tr-->
+	<tr>
+		<td><code>"owin.RequestQueryString"</code></td>
+		<td>A <code>string</code> containing the query string component of the HTTP request URI (e.g., <code>"foo=bar&baz=quux"</code>). <!--The string must not be percent-decoded.-->
+		</td>
+	</tr>
     <tr>
         <td>
             <code>"owin.RequestHeaders"</code>
@@ -141,34 +149,18 @@
             <code>"owin.BaseUri"</code>
         </td>
         <td>
-            A <code>string</code> containing the portion of the request URI's path corresponding to the "root" of the application object. See <a href="#Paths">Paths</a>.
+            A <code>string</code> containing the portion of the request URI's path corresponding to the "root" of the application delegate; see <a href="#Paths">Paths</a>. <!-- The value must be percent-decoded; see <a href="http://tools.ietf.org/html/rfc3986#section-2.1">RFC 3986</a>. -->
         </td>
     </tr>
+    <!--tr>
+        <td>
+            <code>"owin.BaseUriRaw"</code>
+        </td>
+        <td>
+            The same value as <code>"owin.BaseUri"</code>, but not percent-decoded.
+        </td>
+    </tr-->
     <tr>
-        <td>
-            <code>"owin.ServerName"</code>, <code>"owin.ServerPort"</code>
-        </td>
-        <td>
-            Hosts should provide values which can be used to reconstruct the full URI of the request in absence of the HTTP <code>Host</code> header of the request.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <code>"owin.UriScheme"</code>
-        </td>
-        <td>
-            A string representing the URI scheme (e.g. <code>"http"</code>, <code>"https"</code>)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <code>"owin.RemoteEndPoint"</code>
-        </td>
-        <td>
-            A <code>System.Net.IPEndPoint</code> representing the connected client.
-        </td>
-    </tr>
-     <tr>
         <td>
             <code>"owin.Version"</code>
         </td>
@@ -177,6 +169,8 @@
         </td>
     </tr>
 </table>
+
+
 </div>
 
 <div class="notes">
