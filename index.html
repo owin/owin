@@ -1,37 +1,102 @@
 <html>
 <head>
     <title>OWIN &mdash; Open Web Interface for .NET</title>
-    <style>
-    body
-    {
-        font-family: Helvetica, sans-serif;
-    }
-    </style>
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<h1>OWIN &mdash; Open Web Interface for .NET</h1>
-
-
-<p><em>Read the <a href="spec.html">OWIN 1.0 Draft</a> specification.</em></p>
-
-<h2>Overview</h2>
-
-<p>OWIN defines a standard interface between .NET web servers and web applications. The goal of the OWIN interface is to decouple server and application, encourage the development of simple modules for .NET web development, and, by being an open standard, stimulate the open source ecosystem of .NET web development tools.</p>
+<div id="main">
     
-<p>OWIN defines a single anonymous delegate signature, and therefore introduces no dependencies; there is no OWIN source code.</p>
+<div id="masthead">
+    <h1>OWIN</h1>
+    <h2>Open Web Interface for .NET</h2>
+</div>
 
-<h2>Contributing</h2>
-
-Your feedback is appreciated. Discuss OWIN on the <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a></li> list.</p>
-
-<h2>Related Projects</h2>
-
-<ul>
-    <li><a href="http://github.com/kayak/kayak">Kayak</a></li>
-    <li><a href="http://github.com/panesofglass/frack">Frack</a></li>
-    <li><a href="http://github.com/remi/knack">Knack</a></li>
-    <li><a href="http://github.com/markrendle/fix">Fix</a></li>
+<ul id="nav">
+    <li><a href="#about">About</a></li>
+    <li><a href="#spec">Specification</a></li>
+    <li><a href="#discuss">Discussion</a></li>
+    <li><a href="#projects">Projects</a></li>
 </ul>
+<div id="content">
+    
+    <!--p><em>Read the <a href="spec.html">OWIN 1.0 Draft</a> specification.</em></p-->
+
+    <a name="about"></a>
+    <h2>About</h2>
+
+    <p>OWIN defines a standard interface between .NET web servers and web applications. The goal of the OWIN interface is to decouple server and application, encourage the development of simple modules for .NET web development, and, by being an open standard, stimulate the open source ecosystem of .NET web development tools.</p>
+    
+    <p>OWIN defines a single anonymous delegate signature, and therefore introduces no dependencies; there is no OWIN source code.</p>
+    
+    <a name="spec"></a>
+    <h2>Specification</h2>
+    
+    <ul id="speclist">
+        <li>
+            <a href="/spec/owin-0.8.0.html">Spec 0.8.0</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Adopted semver.</p>
+        </li>
+        <li>
+            <a href="/spec/owin-draft5.html">Draft 5</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Changed stuff.</p>
+        </li>
+        
+        <li>
+            <a href="/spec/owin-draft4.html">Draft 4</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Changed stuff.</p>
+        </li>
+        <li>
+            <a href="/spec/owin-draft3.html">Draft 3</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Changed stuff.</p>
+        </li>
+        <li>
+            <a href="/spec/owin-draft2.html">Draft 2</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Changed stuff.</p>
+        </li>
+        <li>
+            <a href="/spec/owin-draft1.html">Draft 1</a> 
+            <span class="date">23 October 2011</span>
+            <p class="summary">Changed stuff.</p>
+        </li>
+    </ul>
+    
+    <a name="discuss"></a>
+    <h2>Discussion</h2>
+
+    Discuss OWIN on the <a href="http://groups.google.com/group/net-http-abstractions">.NET HTTP Abstractions</a></li> list.</p>
+
+    <h2>Projects</h2>
+    
+    <p>These projects are known to be OWIN-compatible. If you'd like your project listed here, please post on the discussion list.</p>
+    
+    <h3>Hosts</h3>
+
+    <ul>
+        <li><a href="http://github.com/owin/gate">Gate</a></li>
+        <li><a href="http://github.com/kayak/kayak">Kayak</a></li>
+    </ul>
+    
+    <h3>Frameworks</h3>
+    
+    <ul>
+        <li><a href="http://nancyfx.org">Nancy</a></li>
+        <li><a href="http://mvc.fubu-project.org/">FubuMVC</a></li>
+    </ul>
+    
+    <h3>Other</h3>
+    <ul>
+        <li><a href="http://github.com/panesofglass/frack">Frack</a></li>
+        <li><a href="http://github.com/remi/knack">Knack</a></li>
+        <li><a href="http://github.com/markrendle/fix">Fix</a></li>
+    </ul>
+    
+</div>
+</div>
 </body>
 </html>
