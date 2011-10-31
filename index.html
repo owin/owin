@@ -34,35 +34,35 @@
     
     <ul id="speclist">
         <li>
-            <a href="/spec/owin-0.8.0.html">Spec 0.8.0</a> 
-            <span class="date">23 October 2011</span>
-            <p class="summary">Adopted semver.</p>
+            <a class="version" href="#">Draft 6 (Forthcoming)</a> 
+            <span class="date">November 2011</span>
+            <p class="summary">Goals: Adopt <a href="http://semver.org">Semantic Versioning</a>; define a normative method for obtaining the IP address of the connected client; move request body delegate out of the environment dictionary and pass as an argument to the application delegate; define normative encoding rules for path, path base, and query string.</p>
         </li>
         <li>
-            <a href="/spec/owin-draft5.html">Draft 5</a> 
-            <span class="date">23 October 2011</span>
-            <p class="summary">Changed stuff.</p>
+            <a class="version" href="/spec/owin-draft5.html">Draft 5</a> 
+            <span class="date">13 March 2011</span>
+            <p class="summary">New styling to highlight normative sections and important notes. Environment dictionary keys renamed for consistency. Expanded and clarified rules for line-folding in request and response header dictionaries. Introduced the body delegate, replacing <code>IEnumerable&lt;object&gt;</code> as an entity body mechanism. Introduced algorithm for reconstructing the complete URI of a request. Added requirement that the Host: header must be present in the environment dictionary.</p>
         </li>
         
         <li>
-            <a href="/spec/owin-draft4.html">Draft 4</a> 
-            <span class="date">23 October 2011</span>
-            <p class="summary">Changed stuff.</p>
+            <a class="version" href="/spec/owin-draft4.html">Draft 4</a> 
+            <span class="date">13 February 2011</span>
+            <p class="summary">Header dictionary form changed from <code>IDictionary&lt;string, IList&lt;string&gt;&gt;</code> to <code>IDictionary&lt;string, string&gt;</code>, line folding rules added.</p>
         </li>
         <li>
-            <a href="/spec/owin-draft3.html">Draft 3</a> 
+            <a class="version" href="/spec/owin-draft3.html">Draft 3</a> 
             <span class="date">3 January 2011</span>
             <p class="summary">Uses anonymous delegates and an environment dictionary rather than concrete interfaces, obviating the need for Owin.dll.</p>
         </li>
         <li>
-            <a href="/spec/owin-draft2.html">Draft 2</a> 
+            <a class="version" href="/spec/owin-draft2.html">Draft 2</a> 
             <span class="date">11 December 2011</span>
             <p class="summary">Expanded, more specific language.</p>
         </li>
         <li>
-            <a href="#">Draft 1</a> 
+            <a class="version" href="#">Draft 1</a> 
             <span class="date">7 December 2010</span>
-            <p class="summary">Initial draft used concrete IApplication, IRequest, IResponse interfaces (specified in a companion Owin.dll (no longer available)</p>
+            <p class="summary">Initial draft used concrete <code>IApplication</code>, <code>IRequest</code>, <code>IResponse</code> interfaces (specified in a companion Owin.dll (no longer available)</p>
         </li>
     </ul>
     
