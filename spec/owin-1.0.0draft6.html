@@ -47,6 +47,7 @@
 			<li><a href="#Hostname">Hostname</a></li>
 			<li><a href="#Paths">Paths</a></li>
 			<li><a href="#URIReconstructionAlgorithm">URI Reconstruction Algorithm</a></li>
+			<li><a href="#PercentEncoding">Percent-encoding</a></li>
 		</ul>
 	</li>
 	<li><a href="#ErrorHandling">Error Handling</a>
@@ -340,6 +341,21 @@ if (env["owin.QueryString"] != "")
   uri += "?" + (string)env["owin.QueryString"];</code></pre>
 
 <p>The result of this algorithm may not be identical to the URI the client used to make the request; for example, the host may have done some rewriting to canonicalize the request. Further, it is subject to the caveats described in the <a href="#URIScheme">URI Scheme</a> and <a href="#Hostname">Hostname</a> sections above.</p>
+
+<a name="PercentEncoding"></a>
+<h3>Percent-encoding</h3>
+
+<p>The percent-escaped version is the 'one true form' of a URI (<a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a> section 2.1). Percent-encoding is used express the underlying octets present in a URI component; the character set which defines the interpretation of those octets must be negotiated by means other than the URI itself. Ideally, we should assume the application is best qualified to decode URI components into the proper charset, and mandate that hosts provide applications with percent-encoded URI components so that applications may decode as they see fit. However, most host implementations will perform percent-decoding on paths in order to perform request routing (as they rightly may, see: RFC 2616 section <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2<a/>, also <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.2.3">3.2.3</a>).
+
+<div class="normative">
+<ul>
+	<li>The host must percent-decode the values of <code>"owin.Path"</code> and <code>"owin.PathBase"</code>.</li>
+</ul>
+</div>
+
+<div class="notes">
+	<p>The application should assume the host has not percent-decoded the value of <code>"owin.RequestQueryString"</code>, however it should also tolerate a previously-percent-decoded value.</p>
+</div>
 
 <a name="ErrorHandling"></a>
 <h2>Error Handling</h2>
