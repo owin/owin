@@ -265,17 +265,21 @@
 <ul>
 	<li>If the producer provides a null continuation to the on-next callback, the consumer must return false.</li>
 	<li>If the producer provides a non-null continuation to the on-next callback, the consumer may return true or false. 
-	<li>The consumer returns true from the on-next callback if and only if the consumer will eventually invoke the continuation. The consumer must not invoke the continuation in a manner such that the on-next callback which provided the continuation is on the call stack when the continuation is invoked.</li>
+	<li>The consumer returns true from the on-next callback if and only if the consumer has or will eventually invoke the continuation.</li>
 	<li>The consumer returns false from the on-next callback if and only if the consumer will never invoke continuation.</li>
 	</li>
 	<li>If the consumer returns true from the on-next callback, the producer must not invoke the consumer's on-next, on-error, or on-complete callbacks until the consumer invokes the continuation provided by the producer.</li>
 	<li>The producer must signal the end of the sequence of values by invoking either the on-complete callback or the on-error callback. After invoking the on-complete callback or on-error callback, the producer must not subsequently invoke any of the consumer's callbacks.</li>
+	<li>If the consumer invokes the cancellation delegate, the producer should not make further invocations of the on-next, on-error, and on-complete callbacks</li>
+	<li>Consumer implementations must tolerate calls to the callbacks after invoking the producer's cancellation delegate.</li>
 </ul>
 </div>
 <div class="notes">
-	<p>In general, a consumer should not invoke a body delegate more than once. While a "repeatable" producer is possible, consumers should not assume that a producer is repeatable and producers may not support repeatability.</li>
+	<p>In general, a consumer should not invoke a producer more than once. While a "repeatable" producer is possible, consumers should not assume that a producer is repeatable and producers may not support repeatability.</li>
 		
 	<p>Instances of <code>ArraySegment&lt;byte&gt;</code> provided to consumers should be considered internal to the producer implementation and are guaranteed to be valid only for the duration of the on-next callback. Once the on-next callback returns, the <code>ArraySegment&lt;byte&gt;</code> may be invalid. If a consumer wishes to retain the data it should copy it out of the buffer before the on-next callback returns.</p>
+
+	<p>The consumer should not invoke the continuation in a manner such that the on-next callback which provided the continuation is on the call stack when the continuation is invoked, unless it can guarantee that an infinite recursion will not occur if the producer immediately invokes the on-next callback when the continuation is called. In other words, trampoline if you return true from on-next, and beware the stackdive, for you know not the behavior of the peer implementation.</p>
 </div>
 
 
