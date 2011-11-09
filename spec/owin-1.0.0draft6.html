@@ -345,16 +345,13 @@ if (env["owin.QueryString"] != "")
 <a name="PercentEncoding"></a>
 <h3>Percent-encoding</h3>
 
-<p>The percent-escaped version is the 'one true form' of a URI (<a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a> section 2.1). Percent-encoding is used express the underlying octets present in a URI component; the character set which defines the interpretation of those octets must be negotiated by means other than the URI itself. Ideally, we should assume the application is best qualified to decode URI components into the proper charset, and mandate that hosts provide applications with percent-encoded URI components so that applications may decode as they see fit. However, most host implementations will perform percent-decoding on paths in order to perform request routing (as they rightly may, see: RFC 2616 section <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2<a/>, also <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.2.3">3.2.3</a>).
+<p>The percent-escaped version is the 'one true form' of a URI (<a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a> section 2.1). Percent-encoding is used express the underlying octets present in a URI component; the character set which defines the interpretation of those octets must be negotiated by means other than the URI itself. Ideally, we should assume the application is best qualified to decode URI components into the proper charset, and mandate that hosts provide applications with percent-encoded URI components so that applications may decode as they see fit. However, most web server implementations will perform percent-decoding on paths in order to perform request routing (as they rightly may, see: RFC 2616 section <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2<a/>, also <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.2.3">3.2.3</a>), and OWIN follows this precedent. The request query string in OWIN is presented in its percent-encoded; a percent-decoded query string could contain <code>'?'</code> or <code>'='</code> characters, which would render the string unparseable.
 
 <div class="normative">
 <ul>
-	<li>The host must percent-decode the values of <code>"owin.Path"</code> and <code>"owin.PathBase"</code>.</li>
+	<li>The host must provide percent-decoded values for <code>"owin.RequestPath"</code> and <code>"owin.RequestPathBase"</code>.</li>
+	<li>The host must provide a percent-encoded value for <code>"owin.RequestQueryString"</code></li>
 </ul>
-</div>
-
-<div class="notes">
-	<p>The application should assume the host has not percent-decoded the value of <code>"owin.RequestQueryString"</code>, however it should also tolerate a previously-percent-decoded value.</p>
 </div>
 
 <a name="ErrorHandling"></a>
