@@ -50,6 +50,7 @@
 			<li><a href="#PercentEncoding">Percent-encoding</a></li>
 		</ul>
 	</li>
+	<li><a href="#RemoteHosts">Remote Hosts</a></li>
 	<li><a href="#ErrorHandling">Error Handling</a>
 		<ul>
 			<li><a href="#ApplicationErrors">Application Errors</a></li>
@@ -352,6 +353,30 @@ if (env["owin.QueryString"] != "")
 	<li>The host must provide percent-decoded values for <code>"owin.RequestPath"</code> and <code>"owin.RequestPathBase"</code>.</li>
 	<li>The host must provide a percent-encoded value for <code>"owin.RequestQueryString"</code></li>
 </ul>
+</div>
+
+<a name="RemoteHosts">
+<h2>Remote Hosts</h2>
+
+<p>Web applications often require the abilty to obtain the IP address of the client which originated an HTTP request and the IP addresses of any proxies through which the request was forwarded. A web application might use this information for the purpose of implementing logging, access control, or other features. However, there is no mechanism in HTTP which relays this information. (As of this writing, there is an effort underway at IETF to standardize an extension to HTTP which addresses this; see <a href="http://tools.ietf.org/html/draft-petersson-forwarded-for-01">this draft</a>, which provides an excellent overview of this problem space).</p>
+
+<p>OWIN hosts use the <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For header</a>, a de-facto standard used by several proxy implementations, to relay from host to application the IP address of the machine which made the request to the host's web server implementation.</p>
+
+<div class="normative">
+<ul>
+	<li>If the host can determine the IP address of the peer from which the request was received, the host must provide a value for the <code>"X-Forwarded-For"</code> key to the request header dictionary.</li>
+
+	<li>The format of an IP address provided via the <code>"X-Forwarded-For"</code> key must be that of <code>IPv4Address</code> or <code>IPv6Address</code> as defined in <a href="http://tools.ietf.org/html/rfc3986">RFC 3986</a>, section 3.2.2</a>.</li>
+
+	<li>If the incoming request received by the host does not contain an X-Forwarded-For header, the host must set the value of the <code>"X-Forwarded-For"</code> key of the request header dictionary to the <code>IPv4Address</code> or <code>IPv6Address</code> representing the peer's IP address.</li>
+
+	<li>If the incoming request received by the host contains an X-Forwarded-For header, the host must set the value of the <code>"X-Forwarded-For"</code> key of the request header dictionary to a value of the original X-Forwarded-For header-value followed a <code>','</code> character and the <code>IPv4Address</code> or <code>IPv6Address</code> representing the peer's IP address.</li>
+
+</ul>
+</div>
+
+<div class="notes">
+<p>Note that the above implies that, assuming the web server and OWIN host implementations are trusted by the application developer, he or she can only trust the right-most component of the value of X-Forwarded-For header. The right-most component may not represent the IP address of the client which originated the request if the web server is behind a reverse proxy, load balancer, or other network appliance, or if the client made the request through a forward proxy. The application developer is ultimately responsible for determining the trustworthiness of each component of the value of X-Forwarded-For, since doing so requires knowledge of the network architecture in which the application is installed.<p>
 </div>
 
 <a name="ErrorHandling"></a>
