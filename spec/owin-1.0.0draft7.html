@@ -1,0 +1,1014 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>OWIN &#8212; Open Web Server Interface for .NET, v1.0 Draft 7</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:24.0pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:13.5pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+h4
+	{mso-style-link:"Heading 4 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+code
+	{font-family:"Courier New";}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Cambria","serif";
+	color:#4F81BD;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Cambria","serif";
+	color:#4F81BD;
+	font-weight:bold;}
+span.Heading4Char
+	{mso-style-name:"Heading 4 Char";
+	mso-style-link:"Heading 4";
+	font-family:"Cambria","serif";
+	color:#4F81BD;
+	font-weight:bold;
+	font-style:italic;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:Consolas;}
+p.msolistparagraphcxspfirst, li.msolistparagraphcxspfirst, div.msolistparagraphcxspfirst
+	{mso-style-name:msolistparagraphcxspfirst;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.msolistparagraphcxspmiddle, li.msolistparagraphcxspmiddle, div.msolistparagraphcxspmiddle
+	{mso-style-name:msolistparagraphcxspmiddle;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.msolistparagraphcxsplast, li.msolistparagraphcxsplast, div.msolistparagraphcxsplast
+	{mso-style-name:msolistparagraphcxsplast;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.normative, li.normative, div.normative
+	{mso-style-name:normative;
+	margin:7.5pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.notes, li.notes, div.notes
+	{mso-style-name:notes;
+	margin:7.5pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Times New Roman","serif";}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<h1><span style='font-family:"Helvetica","sans-serif"'>OWIN &#8212; Open Web
+Server Interface for .NET, v1.0 Draft 7</span></h1>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Author:
+     OWIN working group.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Last
+     updated: 28 June 2012</span></li>
+</ul>
+
+<h2><span style='font-family:"Helvetica","sans-serif"'>Contents</span></h2>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+     href="#Overview">Overview</a></span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+     href="#Definition">Definition</a> </span></li>
+ <ul style='margin-top:0in' type=circle>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#ApplicationDelegate">Application Delegate</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#EnvironmentDictionary">Environment Dictionary</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#ResponseCallback">Response Callback</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#Headers">Headers</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#BodyDelegate">Body Delegate</a></span></li>
+ </ul>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+     href="#URIReconstruction">URI Reconstruction</a> </span></li>
+ <ul style='margin-top:0in' type=circle>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#URIScheme">URI Scheme</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#Hostname">Hostname</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#Paths">Paths</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#URIReconstructionAlgorithm">URI Reconstruction Algorithm</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#PercentEncoding">Percent-encoding</a></span></li>
+ </ul>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+     href="#ErrorHandling">Error Handling</a> </span></li>
+ <ul style='margin-top:0in' type=circle>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#ApplicationErrors">Application Errors</a></span></li>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'><a
+      href="#HostErrors">Host Errors</a></span></li>
+ </ul>
+</ul>
+
+<h2><a name=Overview></a><span style='font-family:"Helvetica","sans-serif"'>Overview</span></h2>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>This document defines
+OWIN, a standard interface between .NET web servers and web applications. The
+goal of OWIN is to decouple server and application and, by being an open
+standard, stimulate the open source ecosystem of .NET web development tools.</span></p>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>OWIN is defined in terms
+of a delegate structure. These delegates are captured in an Owin.dll that may
+be referenced from a project.</span></p>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In this document, the C# </span><code><span
+style='font-size:10.0pt'>Action</span></code><span style='font-family:"Helvetica","sans-serif"'>/</span><code><span
+style='font-size:10.0pt'>Func</span></code><span style='font-family:"Helvetica","sans-serif"'>
+syntax is used to notate the delegate structure. However, the delegate
+structure could be equivalently represented with F# native functions, CLR
+interfaces, or named delegates. This is by design; when implementing OWIN,
+choose a delegate representation that works for you and your stack.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The key words
+&quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;,
+&quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;,
+&quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this
+document are to be interpreted as described in RFC 2119. </span></p>
+
+</div>
+
+<div style='border:solid #EECC00 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>Normative sections are
+highlighted with a red outline, important notes are highlighted with yellow.</span></p>
+
+</div>
+
+<h2><a name=Definition></a><span style='font-family:"Helvetica","sans-serif"'>Definition</span></h2>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In this document, an
+OWIN-compatible web server is referred to as a &quot;host&quot;, and an
+instance of an application delegate (described below) is referred to as an
+&quot;application&quot;. Broadly speaking, a host invokes an application
+(providing as arguments the headers, body, an environment dictionary, and
+cancelation); an application either provides a response to the host or
+indicates an error.</span></p>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>How an application is
+provided to a host is outside the scope of this specification and must be
+documented by the host implementer.</span></p>
+
+<h3><a name=ApplicationDelegate></a><span style='font-family:"Helvetica","sans-serif"'>Application
+Delegate</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The primary interface in
+OWIN is called the <em><span style='font-family:"Helvetica","sans-serif"'>application
+delegate</span></em>. An application delegate takes the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>CallParameters</span><span
+style='font-family:"Helvetica","sans-serif"'> request data and returns a </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>Task&lt;ResultParameters&gt;</span><span
+style='font-family:"Helvetica","sans-serif"'> with response data.</span></p>
+
+<pre><code>public delegate Task&lt;ResultParameters&gt; AppDelegate(CallParameters request)</code></pre><pre>&nbsp;</pre><pre><code>CallParameters</code><code><span
+style='font-size:12.0pt;font-family:"Helvetica","sans-serif"'> and </span>ResultParameters</code><code><span
+style='font-size:12.0pt;font-family:"Helvetica","sans-serif"'> are </span>structs</code><code><span
+style='font-size:12.0pt;font-family:"Helvetica","sans-serif"'> used to consolidate request and response fields.</span></code></pre><pre>&nbsp;</pre><pre>public struct CallParameters</pre><pre>{</pre><pre>&nbsp;&nbsp;&nbsp; public IDictionary&lt;string, object&gt; Environment;</pre><pre>&nbsp;&nbsp;&nbsp; public IDictionary&lt;string, string[]&gt; Headers;</pre><pre>&nbsp;&nbsp;&nbsp; public Stream Body; // May be null</pre><pre>&nbsp;&nbsp;&nbsp; public CancellationToken Completed;</pre><pre>}</pre><pre>&nbsp;</pre><pre>public struct ResultParameters</pre><pre>{</pre><pre>&nbsp;&nbsp;&nbsp; public int Status; </pre><pre>&nbsp;&nbsp;&nbsp;&nbsp;public IDictionary&lt;string, string[]&gt; Headers;</pre><pre>&nbsp;&nbsp;&nbsp; public BodyDelegate Body; // May be null</pre><pre>&nbsp;&nbsp;&nbsp; public IDictionary&lt;string, object&gt; Properties;</pre><pre>}</pre><pre>&nbsp;</pre><pre>public delegate Task BodyDelegate(Stream output, CancellationToken cancel);</pre><pre>&nbsp;</pre>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A host
+     must provide non-null values for all arguments.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     application must complete the returned Task, or throw an exception.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>CancellationToken</span><span
+     style='font-family:"Helvetica","sans-serif"'> becomes cancelled, the </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate</span><span
+     style='font-family:"Helvetica","sans-serif"'> or </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate</span><span
+     style='font-family:"Helvetica","sans-serif"'> SHOULD stop processing and
+     fail in a timely fashion.</span></li>
+</ul>
+
+</div>
+
+<h3><span style='font-family:"Helvetica","sans-serif"'>CallParameter</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate</span><span
+style='font-family:"Helvetica","sans-serif"'> accepts a </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>CallParameter struct</span><span
+style='font-family:"Helvetica","sans-serif"'> containing the request and
+environment details.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Environment:
+     See <a href="#EnvironmentDictionary">Environment Dictionary</a> below.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Headers field MUST be a non-null </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>IDictionary&lt;string, string[]&gt;</span><span
+     style='font-family:"Helvetica","sans-serif"'> representing the headers for
+     the request (the <em><span style='font-family:"Helvetica","sans-serif"'>request
+     header dictionary</span></em>). See </span><a href="#Headers"><span
+     style='font-family:"Helvetica","sans-serif"'>Headers</span></a><span
+     style='font-family:"Helvetica","sans-serif"'>.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Body field is a </span><span style='font-size:10.0pt;font-family:"Courier New"'>Stream
+     </span><span style='font-family:"Helvetica","sans-serif"'>representing the
+     request body, or null.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Completed field contains a </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>CancellationToken</span><span style='font-family:
+     "Helvetica","sans-serif"'> that the host will trigger if the
+     request/response fail, or once the request is complete, allowing the
+     application to register for cleanup notifications.</span></li>
+</ul>
+
+<ul style='margin-top:0in' type=disc>
+ <ul style='margin-top:0in' type=disc>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+      host may consider the request completed on any error condition, when the </span><span
+      style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate Task</span><span
+      style='font-family:"Helvetica","sans-serif"'> completes if no response </span><span
+      style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate</span><span
+      style='font-family:"Helvetica","sans-serif"'> is returned, or when the
+      returned response </span><span style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate
+      Task</span><span style='font-family:"Helvetica","sans-serif"'> completes.</span></li>
+ </ul>
+</ul>
+
+</div>
+
+<h3><a name=EnvironmentDictionary></a><span style='font-family:"Helvetica","sans-serif"'>Environment
+Dictionary</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>When a host invokes an
+application delegate, it provides the application with an environment
+dictionary. The environment dictionary represents the request and host state to
+the application.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>An environment dictionary
+MUST be mutable and must contain the keys in the table below. The values of the
+keys must be non-null, unless otherwise specified.</span></p>
+
+<table class=MsoNormalTable border=1 cellpadding=0 style='margin-left:9.0pt'>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>&nbsp;</span><code><span
+  style='font-size:10.0pt'>&quot;owin.RequestMethod&quot;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the HTTP request method of the request (e.g., </span><code><span
+  style='font-size:10.0pt'>&quot;GET&quot;</span></code><span style='font-family:
+  "Helvetica","sans-serif"'>, </span><code><span style='font-size:10.0pt'>&quot;POST&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'>).</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RequestPath&quot;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the request path. The path must be relative to the
+  &quot;root&quot; of the application delegate; see <a href="#Paths">Paths</a>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RequestPathBase&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the portion of the request path corresponding to the
+  &quot;root&quot; of the application delegate; see <a href="#Paths">Paths</a>.
+  The value may be an empty string. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RequestProtocol&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the protocol name and version (e.g. </span><code><span
+  style='font-size:10.0pt'>&quot;</span></code><span style='font-size:10.0pt;
+  font-family:"Courier New"'>HTTP/1.0<code>&quot;</code></span><span
+  style='font-family:"Helvetica","sans-serif"'> or </span><code><span
+  style='font-size:10.0pt'>&quot;</span></code><span style='font-size:10.0pt;
+  font-family:"Courier New"'>HTTP/1.1<code>&quot;</code></span><span
+  style='font-family:"Helvetica","sans-serif"'>). </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RequestQueryString&quot;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the query string component of the HTTP request URI (e.g., </span><code><span
+  style='font-size:10.0pt'>&quot;foo=bar&amp;baz=quux&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'>). The value may be an empty
+  string. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RequestScheme&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the URI scheme used for the request (e.g., </span><code><span
+  style='font-size:10.0pt'>&quot;http&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'>, </span><code><span
+  style='font-size:10.0pt'>&quot;https&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'>); see <a href="#URIScheme">URI
+  Scheme</a>. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.RemoteHost&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>A </span><code><span
+  style='font-size:10.0pt'>string</span></code><span style='font-family:"Helvetica","sans-serif"'>
+  containing the IP address of the peer to which the host implementation is
+  connected. The format of the IP address must be that of </span><code><span
+  style='font-size:10.0pt'>IPv4Address</span></code><span style='font-family:
+  "Helvetica","sans-serif"'> or </span><code><span style='font-size:10.0pt'>IPv6Address</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> as defined in <a
+  href="http://tools.ietf.org/html/rfc3986">RFC 3986</a>, section 3.2.2. The
+  value may be an empty string.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.Version&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+  string </span><code><span style='font-size:10.0pt'>&quot;1.0&quot;</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> indicating OWIN version 1.0. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&nbsp;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<div style='border:solid #EECC00 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In addition to these
+keys, the host, application, or user may add arbitrary data associated with the
+request to the environment dictionary.&nbsp; Here are a few commonly available
+items.</span></p>
+
+<p>&nbsp;</p>
+
+</div>
+
+<h3><span style='font-family:"Helvetica","sans-serif"'>Request body stream, 100
+Continue, and Completed Semantics </span></h3>
+
+<p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+request headers indicate there is an associated request body the host should
+provide a </span><span style='font-size:10.0pt;font-family:"Courier New"'>Stream</span><span
+style='font-family:"Helvetica","sans-serif"'> in the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>CallParameter.Body</span><span
+style='font-family:"Helvetica","sans-serif"'> field.&nbsp; If the request
+Expect header indicates the client requests a 100 Continue, it is up to the
+host to provide this.&nbsp; The AppDelegate MUST NOT return a 100 Continue
+ResultParameter as this is only an intermediate response and returning it would
+prevent the application from providing a final response (e.g. 200 OK).&nbsp;
+The host should consider sending the 100 Continue on behalf of the application
+if the application starts reading from the request body stream and data has not
+started arriving yet.</span></p>
+
+<p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If
+consumption of the full request body is critical to the application (e.g. file
+uploads, etc.), the AppDelegate should not complete its returned Task and
+return control to the host until the request body is finished.&nbsp; Once the
+AppDelegate Task is complete, only the response BodyDelegate Task will keep the
+request alive, and this delegate may be replaced by intermediaries.&nbsp; When
+the CallParameter.Completed token fires the application should stop attempting
+to read from the request body so the host can do the necessary cleanup.</span></p>
+
+<h3><span style='font-family:"Helvetica","sans-serif"'>ResultParameter</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>When the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate</span><span
+style='font-family:"Helvetica","sans-serif"'> completes successfully it will
+return a </span><span style='font-size:10.0pt;font-family:"Courier New"'>ResultParameter
+struct</span><span style='font-family:"Helvetica","sans-serif"'> containing the
+response details.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Status field will be an </span><code><span style='font-size:10.0pt'>int</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> which represents the integer
+     status code of the response.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Headers field MUST be a non-null </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>IDictionary&lt;string, string[]&gt;</span><span
+     style='font-family:"Helvetica","sans-serif"'> representing the headers to
+     be sent with the response (the <em><span style='font-family:"Helvetica","sans-serif"'>response
+     header dictionary</span></em>). See </span><a href="#Headers"><span
+     style='font-family:"Helvetica","sans-serif"'>Headers</span></a><span
+     style='font-family:"Helvetica","sans-serif"'>.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Body field is a </span><span style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate</span><span
+     style='font-family:"Helvetica","sans-serif"'> representing the response
+     body, or null.</span></li>
+</ul>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     Properties field MUST be a non-null </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>IDictionary&lt;string, object&gt;</span><span
+     style='font-family:"Helvetica","sans-serif"'> representing additional
+     properties for the response.</span></li>
+</ul>
+
+</div>
+
+<h3><span style='font-family:"Helvetica","sans-serif"'>Response Properties</span></h3>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The response properties
+dictionary MUST be mutable and must contain the keys listed as required in the
+table below. The values of the keys must be non-null, unless otherwise
+specified.</span></p>
+
+<table class=MsoNormalTable border=1 cellpadding=0 style='margin-left:7.5pt'>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.ResponseProtocol&quot;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>An
+  optional </span><code><span style='font-size:10.0pt'>string</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> containing the protocol name
+  and version (e.g. </span><code><span style='font-size:10.0pt'>&quot;</span></code><span
+  style='font-size:10.0pt;font-family:"Courier New"'>HTTP/1.0<code>&quot;</code></span><span
+  style='font-family:"Helvetica","sans-serif"'> or </span><code><span
+  style='font-size:10.0pt'>&quot;</span></code><span style='font-size:10.0pt;
+  font-family:"Courier New"'>HTTP/1.1<code>&quot;</code></span><span
+  style='font-family:"Helvetica","sans-serif"'>). If none is provided then the </span><span
+  style='font-size:10.0pt;font-family:"Courier New"'>&#8220;owin.RequestProtocol&#8221;</span><span
+  style='font-family:"Helvetica","sans-serif"'> value is the default. &nbsp;&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><code><span style='font-size:10.0pt'>&quot;owin.ReasonPhrase&quot;</span></code></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>An
+  optional </span><code><span style='font-size:10.0pt'>string</span></code><span
+  style='font-family:"Helvetica","sans-serif"'> containing the reason phrase
+  associated the given status code. If none is provided then the host should
+  provide a default.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<div style='border:solid #EECC00 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In addition to these
+keys, the host, application, or user may add arbitrary data associated with the
+response to the properties dictionary.</span></p>
+
+</div>
+
+<h3><a name=Headers></a><span style='font-family:"Helvetica","sans-serif"'>Headers</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The headers of HTTP
+messages are represented by objects of type </span><code><span
+style='font-size:10.0pt'>IDictionary&lt;string, string[]&gt;</span></code><span
+style='font-family:"Helvetica","sans-serif"'>. </span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<h4><span style='font-family:"Helvetica","sans-serif"'>Common header dictionary
+requirements</span></h4>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     dictionary must be mutable.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Keys
+     must be HTTP field-names without </span><code><span style='font-size:10.0pt'>':'</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> or whitespace.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Keys
+     must be case-insensitive.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>All
+     characters in key and value strings should be within the ASCII codepage.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     value array returned is assumed to be a copy of the data.&nbsp; Any
+     changes to the value array should be persisted back to the headers
+     dictionary manually by via </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>Headers[header] = modifiedArray;</span><span
+     style='font-family:"Helvetica","sans-serif"'> or </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>Headers.Remove(header).</span></li>
+</ul>
+
+</div>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The requirements below are
+predicated on <a
+href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">RFC 2616
+section 4.2</a>.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<h4><span style='font-family:"Helvetica","sans-serif"'>Request and Response
+header dictionary requirements</span></h4>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Header
+     values are assumed to be in a mixed format, meaning that a normally comma
+     separated header may appear as a single entry in the values array, one
+     entry per value, or a mixture of the two. </span></li>
+</ul>
+
+<ul style='margin-top:0in' type=disc>
+ <ul style='margin-top:0in' type=disc>
+  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>(e.g.
+      {&#8220;value, value, value&#8221;}, {&#8220;value&#8221;,
+      &#8220;value&#8221;, &#8220;value&#8221;} or {&#8220;value, value&#8221;,
+      &#8220;value&#8221;}).</span></li>
+ </ul>
+</ul>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Hosts,
+     applications, and intermediaries SHOULD NOT split or merge header values
+     unnecessarily.&nbsp; While the three formats are supposed to be
+     interchangeable, in practice many existing implementations only support
+     one specific format.&nbsp; Developers should have the flexibility to
+     support existing implementations by producing or consuming a selected
+     format without interference.</span></li>
+</ul>
+
+</div>
+
+<h3><a name=BodyDelegate></a><span style='font-family:"Helvetica","sans-serif"'>Body
+Delegate</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The <em><span
+style='font-family:"Helvetica","sans-serif"'>body delegate</span></em> is the
+mechanism by which the host provides a response stream to the application. An
+instance of the delegate is implemented by an application and returned from the
+</span><span style='font-family:"Courier New"'>AppDelegate</span><span
+style='font-family:"Helvetica","sans-serif"'>; the host invokes the delegate
+and provides it the output </span><span style='font-size:10.0pt;font-family:
+"Courier New"'>Stream</span><span style='font-family:"Helvetica","sans-serif"'>
+and a </span><span style='font-size:10.0pt;font-family:"Courier New"'>CancellationToken</span><span
+style='font-family:"Helvetica","sans-serif"'>. The cancellation token allows
+the host to instruct the application not to produce any further data.</span></p>
+
+<pre>public delegate Task BodyDelegate(Stream output, CancellationToken cancel);</pre><pre>&nbsp;</pre>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>CancellationToken</span><span
+     style='font-family:"Helvetica","sans-serif"'> provided may be the original
+     token from </span><span style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate
+     CallParameters Completed</span><span style='font-family:"Helvetica","sans-serif"'>
+     passed again here for convenience, or it may be a separate to provide
+     granularity.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     application provides a body delegate, the host may or may not invoke it,
+     but it MUST at least cancel the </span><span style='font-size:10.0pt;
+     font-family:"Courier New"'>CancellationToken</span><span style='font-family:
+     "Helvetica","sans-serif"'> provided in the original </span><span
+     style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate
+     CallParameters Completed</span><span style='font-family:"Helvetica","sans-serif"'>
+     so that the application can perform cleanup.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     application must signal completion or failure by completing the returned
+     Task or throwing an exception. After completing the Task, the application
+     MUST NOT write any further data to the stream.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     host cancels the cancellation token, the application should not make
+     further writes to the stream, and should complete the Task with an
+     exception.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     host MUST NOT invoke the response body delegate more than once.</span></li>
+</ul>
+
+</div>
+
+<div style='border:solid #EECC00 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In general, an
+application should not assume the given stream supports multiple outstanding asynchronous
+writes. It is the responsibility of the application developer to ensure the
+host and all middleware in use provide such support before attempting it use
+it.&nbsp; </span></p>
+
+</div>
+
+<h2><a name=URIReconstruction></a><span style='font-family:"Helvetica","sans-serif"'>URI
+Reconstruction</span></h2>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>Applications often
+require the ability to reconstruct the complete URI of a request. This process
+cannot be perfect since HTTP clients do not usually transmit the complete URI
+which they are requesting, but OWIN makes provisions for the purpose of
+reconstructing the URI of a request.</span></p>
+
+<h3><a name=URIScheme></a><span style='font-family:"Helvetica","sans-serif"'>URI
+Scheme</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>This information is usually
+not transmitted by an HTTP client and, depending on network configuration, it
+may not be possible for an OWIN host to determine a correct value. In these
+cases, the user may have to manually configure or compute a value.</span></p>
+
+<div style='border:solid #EECC00 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>Hosts must provide a
+best-guess value for </span><code><span style='font-size:10.0pt'>&quot;owin.RequestScheme&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'>.</span></p>
+
+</div>
+
+<h3><a name=Hostname></a><span style='font-family:"Helvetica","sans-serif"'>Hostname</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>In the context of an
+HTTP/1.1 request, the name of the host to which the client is making a request
+is usually indicated in the Host header field-value of the request, although it
+might be specified using an absolute Request-URI (see RFC 2616, sections <a
+href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2</a>,
+<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.1.1">19.6.1.1</a>).
+</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>A host must provide a
+value for the </span><code><span style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'> key in the request header
+dictionary. The format of the value must be
+&quot;&lt;hostname&gt;[:&lt;port&gt;]&quot;. The value must be deduced by the
+host using the following steps:</span></p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     Request-URI of the incoming request is an absolute URI, the value of the </span><code><span
+     style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> key must be taken from the
+     host part of the absolute URI.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     Request-URI of the incoming request is not an absolute URI, the value of
+     the </span><code><span style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> key must be taken from the
+     Host header field-value of the incoming request.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     Host header is not present in the incoming request (as in an HTTP/1.0
+     request), or if its value consists entirely of linear whitespace, the host
+     must provide a sensible best-guess value for the </span><code><span
+     style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> key. </span></li>
+</ol>
+
+</div>
+
+<h3><a name=Paths></a><span style='font-family:"Helvetica","sans-serif"'>Paths</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>Hosts may have the
+ability to map application delegates to some base path. For example, a host
+might have an application delegate configured to respond to requests beginning
+with </span><code><span style='font-size:10.0pt'>&quot;/my-app&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'>, in which case it should set the
+value of </span><code><span style='font-size:10.0pt'>&quot;owin.RequestPathBase&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'> in the environment dictionary to </span><code><span
+style='font-size:10.0pt'>&quot;/my-app&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'>. If this host receives a request
+for </span><code><span style='font-size:10.0pt'>&quot;/my-app/foo&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'>, the </span><code><span
+style='font-size:10.0pt'>owin.RequestPath</span></code><span style='font-family:
+"Helvetica","sans-serif"'> value of the environment dictionary provided to the
+application configured to respond at </span><code><span style='font-size:10.0pt'>&quot;/my-app&quot;</span></code><span
+style='font-family:"Helvetica","sans-serif"'> should be </span><code><span
+style='font-size:10.0pt'>&quot;/foo&quot;</span></code><span style='font-family:
+"Helvetica","sans-serif"'>.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     value of the </span><code><span style='font-size:10.0pt'>&quot;owin.RequestPathBase&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> environment dictionary key must
+     not end with a slash.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     value of the </span><code><span style='font-size:10.0pt'>&quot;owin.RequestPath&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> environment dictionary key
+     must not be an empty string and must start with a slash.</span></li>
+</ul>
+
+</div>
+
+<h3><a name=URIReconstructionAlgorithm></a><span style='font-family:"Helvetica","sans-serif"'>URI
+Reconstruction Algorithm</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The following algorithm
+can be used to reconstruct the complete URI of the current request:</span></p>
+
+<pre><code>var uri =</code></pre><pre><code>&nbsp; (string)Environment[&quot;owin.RequestScheme&quot;] + </code></pre><pre><code>&nbsp;&nbsp;&quot;://&quot; +</code></pre><pre><code>&nbsp; &nbsp;Headers[&quot;Host&quot;].First() +</code></pre><pre><code>&nbsp; (string)Environment[&quot;owin.RequestPathBase&quot;] +</code></pre><pre><code>&nbsp; (string)Environment[&quot;owin.RequestPath&quot;];</code></pre><pre><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code></pre><pre><code>if (Environment[&quot;owin.QueryString&quot;] != &quot;&quot;)</code></pre><pre><code>&nbsp; uri += &quot;?&quot; + (string)Environment[&quot;owin.QueryString&quot;];</code></pre>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The result of this
+algorithm may not be identical to the URI the client used to make the request;
+for example, the host may have done some rewriting to canonicalize the request.
+Further, it is subject to the caveats described in the <a href="#URIScheme">URI
+Scheme</a> and <a href="#Hostname">Hostname</a> sections above.</span></p>
+
+<h3><a name=PercentEncoding></a><span style='font-family:"Helvetica","sans-serif"'>Percent-encoding</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>The percent-escaped
+version is the 'one true form' of a URI (<a
+href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a> section 2.1).
+Percent-encoding is used express the underlying octets present in a URI
+component; the character set which defines the interpretation of those octets
+must be negotiated by means other than the URI itself. Ideally, we should
+assume the application is best qualified to decode URI components into the
+proper charset, and mandate that hosts provide applications with
+percent-encoded URI components so that applications may decode as they see fit.
+However, most web server implementations will perform percent-decoding on paths
+in order to perform request routing (as they rightly may, see: RFC 2616 section
+<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2">5.1.2</a>,
+also <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.2.3">3.2.3</a>),
+and OWIN follows this precedent. The request query string in OWIN is presented
+in its percent-encoded; a percent-decoded query string could contain </span><code><span
+style='font-size:10.0pt'>'?'</span></code><span style='font-family:"Helvetica","sans-serif"'>
+or </span><code><span style='font-size:10.0pt'>'='</span></code><span
+style='font-family:"Helvetica","sans-serif"'> characters, which would render
+the string unparseable. </span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     host must provide percent-decoded values for </span><code><span
+     style='font-size:10.0pt'>&quot;owin.RequestPath&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'> and </span><code><span
+     style='font-size:10.0pt'>&quot;owin.RequestPathBase&quot;</span></code><span
+     style='font-family:"Helvetica","sans-serif"'>.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
+     host must provide a percent-encoded value for </span><code><span
+     style='font-size:10.0pt'>&quot;owin.RequestQueryString&quot;</span></code></li>
+</ul>
+
+</div>
+
+<h2><a name=ErrorHandling></a><span style='font-family:"Helvetica","sans-serif"'>Error
+Handling</span></h2>
+
+<h3><a name=ApplicationErrors></a><span style='font-family:"Helvetica","sans-serif"'>Application
+Errors</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>An application may
+generate an exception in the following places:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Thrown
+     from an invocation of the application delegate.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Provided
+     as the result of the application delegate Task.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Thrown
+     from an invocation of the response body delegate.</span></li>
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>Provided
+     as the result of the response body delegate Task.</span></li>
+</ul>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>An application should
+attempt to trap its own internal errors and generate an appropriate (possibly
+500-level) response rather than propagating an exception up to the host.</span></p>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>After
+an application provides a response, if the response body delegate is non-null,
+the host should wait to receive least one on-next callback from the response
+body delegate before writing the response headers to the underlying transport.
+In this way, if instead of a Write to the </span><span style='font-size:10.0pt;
+font-family:"Courier New"'>Stream</span><span
+style='font-family:"Helvetica","sans-serif"'> the host gets
+an exception from the </span><span style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate Task</span><span style='font-family:"Helvetica","sans-serif"'>, the host will be able to generate a 500-level response. If
+the host gets a Write to the Stream first, it can safely assume that the
+application has caught as many of its internal errors as possible; the host can
+begin the response without further buffering. If an exception is subsequently
+received, the host may write a textual description of the error to the
+underlying transport, and/or close the connection.</span></p>
+
+<h3><a name=HostErrors></a><span style='font-family:"Helvetica","sans-serif"'>Host
+Errors</span></h3>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>If a host encounters
+errors during a request&#8217;s lifetime it should cancel the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>CancellationToken</span><span
+style='font-family:"Helvetica","sans-serif"'> it provided to the </span><span
+style='font-size:10.0pt;font-family:"Courier New"'>AppDelegate
+CallParameters.Completed</span><span style='font-family:"Helvetica","sans-serif"'>
+and/or </span><span style='font-size:10.0pt;font-family:"Courier New"'>BodyDelegate</span><span
+style='font-family:"Helvetica","sans-serif"'>.&nbsp; Once the token has been
+cancelled the host MAY take any necessary actions to terminate the request, but
+it MUST be tolerant of completion delays of the </span><span style='font-size:
+10.0pt;font-family:"Courier New"'>AppDelegate</span><span style='font-family:
+"Helvetica","sans-serif"'> or </span><span style='font-size:10.0pt;font-family:
+"Courier New"'>BodyDelegate</span><span style='font-family:"Helvetica","sans-serif"'>.</span></p>
+
+<div style='border:solid #FF9999 1.0pt;padding:0in 0in 0in 0in;margin-left:
+7.5pt;margin-top:7.5pt;margin-right:7.5pt;margin-bottom:7.5pt'>
+
+<p><span style='font-family:"Helvetica","sans-serif"'>&nbsp;</span></p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
