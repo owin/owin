@@ -148,7 +148,7 @@ style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nb
 
 <p class=MsoListParagraphCxSpLast style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span>Last updated: 12 July 2012</p>
+</span></span>Last updated: 19 July 2012</p>
 
 <h2>Contents</h2>
 
@@ -183,6 +183,8 @@ keys and their semantics.</p>
 <p class=MsoNormal>These guidelines and keys are provided independently of the OWIN
 specification as the list of common keys below is expected to grow independently
 of the OWIN standard.</p>
+
+<p class=MsoNormal>The following guidelines apply to the keys and values specifically listed below, as well as for custom keys and values defined by individual implementations.</p>
 
 <h2><a name="_2._Key_usage"></a>2. Key usage guidelines</h2>
 
@@ -252,7 +254,7 @@ style='font-family:"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&n
 </span></span>Where the version includes the .NET framework version, specify
 the version compiled against, not the version you are currently running.  E.g. if
 you targeted .NET 4.0 and are running on .NET 4.5, specify 4.0.  The version you
-are currently running on is readily available in Environment.Version.</p>
+are currently running on is readily available in System.Environment.Version.</p>
 
 <p class=MsoListParagraphCxSpLast style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -281,8 +283,8 @@ possible.</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span>Null values should be treated the same as if the key were not
-present.</p>
+</span></span>Null values or empty strings should be treated the same as if the key were not
+present.  Every key should provide some value, even if the value is the boolean "true".</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
