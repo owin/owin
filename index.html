@@ -26,13 +26,16 @@
     <h2>About</h2>
 
     <p>OWIN defines a standard interface between .NET web servers and web applications. The goal of the OWIN interface is to decouple server and application, encourage the development of simple modules for .NET web development, and, by being an open standard, stimulate the open source ecosystem of .NET web development tools.</p>
-    
-    <p>OWIN defines a single anonymous delegate signature, and therefore introduces no dependencies; there is no OWIN source code.</p>
-    
+        
     <a name="spec"></a>
     <h2>Specification</h2>
     
     <ul id="speclist">
+        <li>
+            <a class="version" href="/spec/owin-0.12.0.html">v0.12.0</a> (Formerly Draft 8)
+            <span class="date">6 August 2012</span>
+            <p class="summary">Adopting <a href="http://semver.org">Semantic Versioning</a>.  Call completion changed from a CancellationToken to a Task and moved back into the Environment dictionary.  Initial IAppBuilder notes.</p>
+        </li> 
         <li>
             <a class="version" href="/spec/owin-1.0.0draft7.html">Draft 7</a> 
             <span class="date">12 July 2012</span>
@@ -84,10 +87,11 @@
     
     <p>These projects are known to be OWIN-compatible. If you'd like your project listed here, please post on the discussion list.</p>
     
-    <h3>Hosts</h3>
+    <h3>Servers and Hosts</h3>
 
     <ul>
         <li><a href="http://github.com/owin/gate">Gate</a></li>
+        <li><a href="http://katanaproject.codeplex.com/">Katana</a></li>
         <li><a href="http://github.com/kayak/kayak">Kayak</a></li>
     </ul>
     
