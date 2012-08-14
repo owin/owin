@@ -277,7 +277,7 @@ Delegate</a></span></p>
 href="#_2.9._Request_lifetime">Request Lifetime</a></p>
 
 <p class=MsoNormal style='margin-left:.55in;text-indent:-.3in'>2.10. <a
-href="#_2.1._IAppBuilder">IAppBuilder</a></p>
+href="#_2.10._IAppBuilder">IAppBuilder</a></p>
 
 <p class=MsoNormal style='margin-left:.25in;text-indent:-.25in'>3. <span
 style='font-family:"Helvetica","sans-serif"'><a href="#URIReconstruction">URI
@@ -317,9 +317,9 @@ href="#_5._Versioning">Versioning</a></span></p>
 <h2><a name=Overview></a>1. Overview</h2>
 
 <p><span style='font-family:"Helvetica","sans-serif"'>This document defines
-OWIN, a standard interface between .NET web servers and web applications. The
-goal of OWIN is to decouple server and application and, by being an open
-standard, stimulate the open source ecosystem of .NET web development tools.</span></p>
+OWIN, a standard interface between .NET web servers and web applications. The goal
+of OWIN is to decouple server and application and, by being an open standard,
+stimulate the open source ecosystem of .NET web development tools.</span></p>
 
 <p><span style='font-family:"Helvetica","sans-serif"'>OWIN is defined in terms
 of a delegate structure. These delegates are captured in an optional Owin.dll
@@ -362,9 +362,9 @@ the following software actors:</span></p>
 
 <p class=MsoNoSpacing style='margin-left:.5in;text-indent:-.25in'><span
 style='font-family:Symbol'>&middot;</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Server &#8211; The HTTP server that directly communicates with the client
-and uses OWIN semantics to process requests.&nbsp; Servers may require an
-adapter layer that converts to OWIN semantics.</p>
+</span>Server &#8211; The HTTP server that directly communicates with the
+client and uses OWIN semantics to process requests.&nbsp; Servers may require
+an adapter layer that converts to OWIN semantics.</p>
 
 <p class=MsoNoSpacing style='margin-left:.5in;text-indent:-.25in'><span
 style='font-family:Symbol'>&middot;</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -485,10 +485,10 @@ unless otherwise specified.</span></p>
 <table class=MsoNormalTable border=1 cellpadding=0 style='margin-left:15.0pt'>
  <tr>
   <td valign=top style='padding:0in 0in 0in 0in'>
-  <p class=MsoNormal><code><span style='font-family:"Helvetica","sans-serif"'>Required</span></code></p>
+  <p class=MsoNormal><code><span style='font-size:10.0pt;font-family:"Helvetica","sans-serif"'>Required</span></code></p>
   </td>
   <td style='padding:.75pt .75pt .75pt .75pt'>
-  <p class=MsoNormal><code><span style='font-family:"Helvetica","sans-serif"'>Key
+  <p class=MsoNormal><code><span style='font-size:10.0pt;font-family:"Helvetica","sans-serif"'>Key
   Name</span></code></p>
   </td>
   <td style='padding:.75pt .75pt .75pt .75pt'>
@@ -753,10 +753,10 @@ specified.</p>
 <table class=MsoNormalTable border=1 cellpadding=0 style='margin-left:13.5pt'>
  <tr>
   <td valign=top style='padding:0in 0in 0in 0in'>
-  <p class=MsoNormal><code><span style='font-family:"Helvetica","sans-serif"'>Required</span></code></p>
+  <p class=MsoNormal><code><span style='font-size:10.0pt;font-family:"Helvetica","sans-serif"'>Required</span></code></p>
   </td>
   <td style='padding:.75pt .75pt .75pt .75pt'>
-  <p class=MsoNormal><code><span style='font-family:"Helvetica","sans-serif"'>Key
+  <p class=MsoNormal><code><span style='font-size:10.0pt;font-family:"Helvetica","sans-serif"'>Key
   Name</span></code></p>
   </td>
   <td style='padding:.75pt .75pt .75pt .75pt'>
@@ -796,9 +796,9 @@ specified.</p>
   <td style='padding:.75pt .75pt .75pt .75pt'>
   <p class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>An
   optional </span><code><span style='font-size:10.0pt'>string</span></code><span
-  style='font-family:"Helvetica","sans-serif"'> containing the reason phrase
-  associated the given status code. If none is provided then the server SHOULD
-  provide a default.</span></p>
+  style='font-family:"Helvetica","sans-serif"'> containing the reason phrase associated
+  the given status code. If none is provided then the server SHOULD provide a
+  default.</span></p>
   </td>
  </tr>
 </table>
@@ -842,8 +842,8 @@ requirements</span></h4>
  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>All
      characters in key and value strings SHOULD be within the ASCII codepage.</span></li>
  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>The
-     value array returned is assumed to be a copy of the data.&nbsp; Any intended
-     changes to the value array MUST be persisted back to the headers
+     value array returned is assumed to be a copy of the data.&nbsp; Any
+     intended changes to the value array MUST be persisted back to the headers
      dictionary manually by via </span><span style='font-size:10.0pt;
      font-family:"Courier New"'>Headers[header] = modifiedArray;</span><span
      style='font-family:"Helvetica","sans-serif"'> or </span><span
@@ -954,10 +954,9 @@ full scope or lifetime of a request is limited by the several factors,
 including the client, server, application delegate, and body delegate.&nbsp; In
 the simplest scenario a request&#8217;s lifetime ends when the application
 delegate and body delegate have completed and the server gracefully ends the
-request.&nbsp; Failures at any level may cause the request to terminate
-prematurely, or may be handled internally and allow the request to
-continue.&nbsp; For this reason it may be difficult to determine when to clean
-up request resources.</span></p>
+request.&nbsp; Failures at any level may cause the request to terminate prematurely,
+or may be handled internally and allow the request to continue.&nbsp; For this
+reason it may be difficult to determine when to clean up request resources.</span></p>
 
 <p class=MsoNoSpacing><span style='font-family:"Helvetica","sans-serif"'>&nbsp;</span></p>
 
@@ -970,8 +969,8 @@ is for information purposes only.&nbsp; Any components that need to do resource
 cleanup SHOULD do so regardless of if the completion indicated success,
 failure, or cancellation.</span></p>
 
-<h3><span style='font-family:"Helvetica","sans-serif"'>&nbsp;&nbsp;&nbsp; 2.10.
-IAppBuilder</span></h3>
+<h3><a name="_2.10._IAppBuilder"></a><span style='font-family:"Helvetica","sans-serif"'>&nbsp;&nbsp;&nbsp;
+2.10. IAppBuilder</span></h3>
 
 <p><span style='font-family:"Helvetica","sans-serif"'>An application constructs
 its request processing pipeline at startup using the IAppBuilder implementation
@@ -1080,16 +1079,16 @@ dictionary. The format of the value MUST be
 host using the following steps:</span></p>
 
 <ol style='margin-top:0in' start=1 type=1>
- <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the Request-URI
-     of the incoming request is an absolute URI, the value of the </span><code><span
+ <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
+     Request-URI of the incoming request is an absolute URI, the value of the </span><code><span
      style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
      style='font-family:"Helvetica","sans-serif"'> key MUST be taken from the
      host part of the absolute URI.</span></li>
  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
      Request-URI of the incoming request is not an absolute URI, the value of
      the </span><code><span style='font-size:10.0pt'>&quot;Host&quot;</span></code><span
-     style='font-family:"Helvetica","sans-serif"'> key MUST be taken from the Host
-     header field-value of the incoming request.</span></li>
+     style='font-family:"Helvetica","sans-serif"'> key MUST be taken from the
+     Host header field-value of the incoming request.</span></li>
  <li class=MsoNormal><span style='font-family:"Helvetica","sans-serif"'>If the
      Host header is not present in the incoming request (as in an HTTP/1.0
      request), or if its value consists entirely of linear whitespace, the
@@ -1228,16 +1227,16 @@ attempt to trap its own internal errors and generate an appropriate (possibly
 provides a response, if the response body delegate is non-null, the server
 SHOULD wait to receive at least one write from the response body delegate </span><span
 style='font-size:10.0pt;font-family:"Courier New"'>Stream </span><span
-style='font-family:"Helvetica","sans-serif"'>before writing the response headers
-to the underlying transport. In this way, if instead of a write to the </span><span
+style='font-family:"Helvetica","sans-serif"'>before writing the response
+headers to the underlying transport. In this way, if instead of a write to the </span><span
 style='font-size:10.0pt;font-family:"Courier New"'>Stream</span><span
 style='font-family:"Helvetica","sans-serif"'> the server gets an exception from
 the body delegate Task, the server will still be able to generate a 500-level
 response. If the server gets a write to the Stream first, it can safely assume
 that the application has caught as many of its internal errors as possible; the
 server can begin the response without further buffering. If an exception is
-subsequently received, the server may write a textual description of the error to
-the underlying transport, and/or close the connection.</span></p>
+subsequently received, the server may write a textual description of the error
+to the underlying transport, and/or close the connection.</span></p>
 
 <h3 style='margin-left:.75in;text-indent:-.5in'><a name=HostErrors></a><span
 style='font-family:"Helvetica","sans-serif"'>4.2. Server Errors</span></h3>
@@ -1283,8 +1282,8 @@ version number (e.g. OWIN 1.1).</span></p>
 
 <p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:
 Symbol'>&middot;</span><span style='font-size:7.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-family:"Helvetica","sans-serif"'>Making corrections and
-clarifications to the document alone only requires incrementing the patch
+</span><span style='font-family:"Helvetica","sans-serif"'>Making corrections
+and clarifications to the document alone only requires incrementing the patch
 version number and last modified date (e.g. OWIN 1.0.1).</span></p>
 
 <p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:

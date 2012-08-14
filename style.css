@@ -87,3 +87,28 @@ p {
 #speclist .summary {
 	margin: 20px 0 0 0;
 }
+
+#extendlist {
+	padding: 0;
+}
+
+#extendlist a.version {
+	font-size: 1.5em;
+}
+
+#extendlist li {
+	padding: 10px;
+	list-style: none;
+	margin:5px;
+	background: #f7f7f7;
+}
+
+#extendlist .date {
+	color: #6bd;
+	padding-left: 10px;
+	font-size: .8em;
+}
+
+#extendlist .summary {
+	margin: 20px 0 0 0;
+}
