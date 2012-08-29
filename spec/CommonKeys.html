@@ -162,7 +162,7 @@ Symbol'>·</span><span style='font-size:7.0pt;font-family:"Times New Roman","seri
 
 <p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:
 Symbol'>·</span><span style='font-size:7.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Last updated: 14 August 2012</p>
+</span>Last updated: 28 August 2012</p>
 
 <h2>Contents</h2>
 
@@ -190,10 +190,9 @@ style='font-size:7.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
 
 <p class=MsoNormal>This document contains guidelines for adding functionality
 to OWIN based servers or application via additional keys in the
-IDictionary&lt;string, object&gt; collections (e.g. the request environment,
-the response properties, or the startup properties).&nbsp; This includes naming
-conventions, value conventions, and a list of know common keys and their
-semantics.</p>
+IDictionary&lt;string, object&gt; collections (e.g. the request environment or
+the startup properties).&nbsp; This includes naming conventions, value
+conventions, and a list of know common keys and their semantics.</p>
 
 <p class=MsoNormal>These guidelines and keys are provided independently of the
 OWIN specification as the list of common keys below is expected to grow
@@ -269,8 +268,8 @@ name that identifies that technology. E.g. “ssl.*” or “websocket.*”.</p>
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
 "Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span>Keys that expose functionality specific to a single implementation
-SHOULD use a prefix that clearly identifies that implementation.&nbsp; E.g. “iis.*”,
-“httplistener.*”, “webapi.*”, “mymiddleware.*”.</p>
+SHOULD use a prefix that clearly identifies that implementation.&nbsp; E.g.
+“iis.*”, “httplistener.*”, “webapi.*”, “mymiddleware.*”.</p>
 
 <p class=MsoListParagraph style='margin-left:39.0pt;text-indent:-21.0pt'><span
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
@@ -281,12 +280,12 @@ existing keys (e.g. casing, spelling, etc.). </p>
 <p class=MsoListParagraph style='margin-left:39.0pt;text-indent:-21.0pt'><span
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
 "Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Implementers SHOULD include a technology specific version key that clearly
-identifies not only the version of the underlying component, but also the
-version of any OWIN specific wrapper of that component.&nbsp; E.g. “httplistener.Version:
-.NET 4.5, OWIN wrapper 1.0.1”.&nbsp; This is intended to help consumers cross
-reference documentation with implementations, facilitating both development and
-debugging.</p>
+</span>Implementers SHOULD include a technology specific version key that
+clearly identifies not only the version of the underlying component, but also
+the version of any OWIN specific wrapper of that component.&nbsp; E.g.
+“httplistener.Version: .NET 4.0, OWIN wrapper 1.0.1”.&nbsp; This is intended to
+help consumers cross reference documentation with implementations, facilitating
+both development and debugging.</p>
 
 <p class=MsoListParagraph style='margin-left:1.0in;text-indent:-.25in'><span
 style='font-family:"Courier New"'>o</span><span style='font-size:7.0pt;
@@ -330,8 +329,8 @@ possible.</p>
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
 "Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span>Null values or empty strings SHOULD be treated the same as if the key
-were not present. Every key SHOULD define some value, even if the value is the string
-&quot;true&quot;.</p>
+were not present. Every key SHOULD define some value, even if the value is the
+string &quot;true&quot;.</p>
 
 <p class=MsoListParagraph style='margin-left:39.0pt;text-indent:-21.0pt'><span
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
@@ -361,28 +360,26 @@ framework that have existed for multiple releases (e.g. Stream).</p>
 <p class=MsoListParagraph style='margin-left:39.0pt;text-indent:-21.0pt'><span
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
 "Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Values in the request Environment or response Properties collections are
-assumed to be alive and accurate only for the lifetime of the request/response.&nbsp;
-Consumers SHOULD NOT retain or attempt to use values after a request has
-completed or failed.&nbsp; Where a value advertises a specific capability, that
-capability is only assumed to be available for that request instance and SHOULD
-be re-verified on future requests.</p>
+</span>Values in the request Environment collection are assumed to be alive and
+accurate only for the lifetime of the request.&nbsp; Consumers SHOULD NOT
+retain or attempt to use values after a request has completed or failed.&nbsp;
+Where a value advertises a specific capability, that capability is only assumed
+to be available for that request instance and SHOULD be re-verified on future
+requests.</p>
 
 <p class=MsoListParagraph style='margin-left:1.0in;text-indent:-.25in'><span
 style='font-family:"Courier New"'>o</span><span style='font-size:7.0pt;
 font-family:"Times New Roman","serif"'>&nbsp;&nbsp; </span>Global capabilities
-or data SHOULD be communicated in the startup Properties collection, but MAY also
-be communicated on a per request basis where appropriate.</p>
+or data SHOULD be communicated in the startup Properties collection, but MAY
+also be communicated on a per request basis where appropriate.</p>
 
 <p class=MsoListParagraph style='margin-left:39.0pt;text-indent:-21.0pt'><span
 style='font-family:Symbol'>·</span><span style='font-size:7.0pt;font-family:
 "Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Where any specific value cleanup is required (e.g. Dispose), such
-cleanup is the responsibility of the component that originally added the
-value.&nbsp; Consider registering with the request completion <span
-style='font-size:10.0pt;font-family:"Courier New"'>Task</span>
-(“owin.CallCompleted”) as a definitive means of identifying the end of the
-request scope.</p>
+</span>Where any specific value cleanup is required (e.g. Dispose), such cleanup
+is the responsibility of the component that originally added the value.&nbsp; This
+should be taken care of as the stack unwinds after a request has completed or
+failed.</p>
 
 <h2><a name="_5._Common_keys"></a>5. Common keys</h2>
 
@@ -397,7 +394,7 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>Key</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border:solid windowtext 1.0pt;
   border-left:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>Type</p>
   </td>
@@ -409,10 +406,6 @@ basic operations.</p>
   border-left:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>Request</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border:solid windowtext 1.0pt;
-  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>Response</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border:solid windowtext 1.0pt;
   border-left:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>Description</p>
@@ -423,8 +416,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>ssl.ClientCertificate</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X509Certificate</p>
   </td>
@@ -438,11 +431,6 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
@@ -455,8 +443,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>server.RemoteIpAddress</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>String</p>
   </td>
@@ -469,11 +457,6 @@ basic operations.</p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
-  </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
   </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -487,8 +470,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>server.RemotePort</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>String</p>
   </td>
@@ -501,11 +484,6 @@ basic operations.</p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
-  </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
   </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -518,8 +496,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>server.LocalIpAddress</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>String</p>
   </td>
@@ -532,11 +510,6 @@ basic operations.</p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
-  </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
   </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -550,8 +523,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>server.LocalPort</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>String</p>
   </td>
@@ -565,11 +538,6 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
@@ -581,8 +549,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>server.IsLocal</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>Boolean</p>
   </td>
@@ -596,16 +564,11 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>Was the request sent from the same machine? E.g. true or false.&nbsp;
-  </p>
+  <p class=MsoNormal>Was the request sent from the same machine? E.g. true or
+  false.&nbsp; </p>
   </td>
  </tr>
  <tr>
@@ -613,8 +576,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>host.TraceOutput</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>TextWriter</p>
   </td>
@@ -628,11 +591,6 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
@@ -644,8 +602,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>websocket.*</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>&nbsp;</p>
   </td>
@@ -655,11 +613,6 @@ basic operations.</p>
   <p class=MsoNormal>X</p>
   </td>
   <td width=78 valign=top style='width:58.4pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>X</p>
-  </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>X</p>
@@ -675,8 +628,8 @@ basic operations.</p>
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>host.Addresses</p>
   </td>
-  <td width=127 valign=top style='width:95.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  <td width=182 valign=top style='width:1.9in;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>IList&lt;IDictionary&lt;string, object&gt;&gt;</p>
   </td>
@@ -690,16 +643,11 @@ basic operations.</p>
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal>&nbsp;</p>
   </td>
-  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>&nbsp;</p>
-  </td>
   <td width=714 valign=top style='width:535.5pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal>A list of per-address server configuration.  The following
-  keys are defined with string values: scheme, host, port, path.</p>
+  <p class=MsoNormal>A list of per-address server configuration.&nbsp; The
+  following keys are defined with string values: scheme, host, port, path.</p>
   </td>
  </tr>
 </table>
