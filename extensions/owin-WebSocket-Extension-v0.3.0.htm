@@ -1,0 +1,708 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>OWIN WebSocket Extension</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:normal;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:8.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:normal;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Cambria","serif";
+	color:#365F91;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Cambria","serif";
+	color:#365F91;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxspfirst, li.msotitlecxspfirst, div.msotitlecxspfirst
+	{mso-style-name:msotitlecxspfirst;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxspmiddle, li.msotitlecxspmiddle, div.msotitlecxspmiddle
+	{mso-style-name:msotitlecxspmiddle;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxsplast, li.msotitlecxsplast, div.msotitlecxsplast
+	{mso-style-name:msotitlecxsplast;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msolistparagraphcxspfirst, li.msolistparagraphcxspfirst, div.msolistparagraphcxspfirst
+	{mso-style-name:msolistparagraphcxspfirst;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msolistparagraphcxspmiddle, li.msolistparagraphcxspmiddle, div.msolistparagraphcxspmiddle
+	{mso-style-name:msolistparagraphcxspmiddle;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msolistparagraphcxsplast, li.msolistparagraphcxsplast, div.msolistparagraphcxsplast
+	{mso-style-name:msolistparagraphcxsplast;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msopapdefault, li.msopapdefault, div.msopapdefault
+	{mso-style-name:msopapdefault;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<p class=MsoTitle>OWIN WebSocket Extension v0.3.0</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Authors: The OWIN working group</p>
+
+<p class=MsoNormal>Last Modified: 7 September 2012</p>
+
+<h1>Contents</h1>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt;color:black'>Introduction</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt;color:black'>Definitions</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Detection</p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.55in;margin-bottom:.0001pt;text-indent:-.3in;line-height:normal'>3.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span>Startup</p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.55in;margin-bottom:.0001pt;text-indent:-.3in;line-height:normal'>3.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span>Per Request</p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Upgrade</p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Consumption</p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt;color:black'>Delegate Signature</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt;color:black'>Usage</span></p>
+
+<h1>1.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Introduction</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>This
+document outlines the recommended patterns for using WebSockets through the
+OWIN interface. It depends on OWIN v0.15 (but may work with other versions),
+the OWIN opaque streams extension v0.2.0, and uses the extension key mechanics
+as outlined in CommonKeys.html.</span></p>
+
+<h1>2.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Definitions</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>WebSocket
+- Defined in RFC 6455, a web socket is a bidirectional, framed communication
+channel that uses HTTP for its initial handshake.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>Opaque
+Stream - Some servers allow a request to take direct ownership of the
+underlying connection after the initial HTTP handshake. This gives the
+application access to a bidirectional opaque stream and the application is then
+responsible for employing its own protocol (e.g. &nbsp;WebSockets) to
+communicate with the client.</span></p>
+
+<h1>3.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Detection</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>In
+order for an application to use WebSockets it MUST first detect support for the
+extension.  </span></p>
+
+<h2 style='text-indent:.5in'>3.1 Startup</h2>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:12.0pt;
+line-height:115%;color:black'>At startup the server SHOULD specify in the
+Properties dictionary if WebSockets are supported (see the table below).  If
+the application does not see support for WebSockets but does see support for
+Opaque Streams, it MAY insert a middleware to add WebSocket support.</span></p>
+
+<h2 style='text-indent:.5in'>3.2 Per Request</h2>
+
+<p class=MsoNormal style='text-indent:.5in'>The WebSocket capable server or
+middleware inspects each request as it arrives to determine if it is WebSocket
+compatible (e.g. verb, headers, etc.).  If so, it marks the request with a
+specific environment key (<span style='font-size:12.0pt;line-height:115%;
+color:black'>see the table below</span>).</p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Key Name</p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Description</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.Version”</p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>The string value “1.0” indicating version 1.0 of the OWIN WebSockets
+  extension.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.Support”</p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>The string value “WebSocketFunc” used in the startup Properties
+  dictionary to indicate general WebSocket support.&nbsp; Used in the request
+  Environment dictionary to indicate a WebSocket compatible request.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1>4. Upgrade</h1>
+
+<p class=MsoNormal>When an application sees a request that is marked as
+WebSocket capable and decides to upgrade to a WebSocket, it indicates this to
+the server or middleware by specifying a 101 response status code and provides
+a WebSocketFunc delegate in the environment dictionary (see the table below). 
+The application MAY set the Sec-WebSocket-Protocol response header, according
+to RFC 6455 Section 4.2.2 Step 5.5.  The application then completes the AppFunc
+Task and allows the pipeline to unwind.  Middleware that wish to intercept the
+applications WebSocketFunc SHOULD insert themselves at this point.</p>
+
+<p class=MsoNormal>When the WebSocket server or middleware sees the 101 and
+WebSocketFunc it SHOULD perform the requested upgrade.  The WebSocket server or
+middleware MUST provide the necessary WebSocket response headers when
+performing the upgrade.  Once the upgrade is complete the request has left HTTP
+processing and transitioned to WebSocket processing.  The original Environment
+dictionary and its content are presumed invalid and a new one MUST be provided
+with the keys listed as required in the table below (see Consumption).</p>
+
+<p class=MsoNormal>If the upgrade fails then the server or middleware SHOULD
+terminate the request.  There is no guarantee that the WebSocketFunc provided
+by the application can or will be invoked in these scenarios.</p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Key Name</p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Description</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.Func”</p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Used in the Environment dictionary to request that the server or
+  middleware upgrade to a WebSocket and invoke this delegate.&nbsp; See
+  Delegate Signature.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1>5. Consumption</h1>
+
+<p class=MsoNormal>When the server or middleware invoke the WebSocketFunc it
+provides a new WebSocket Environment dictionary (see Delegate Signature).  The
+WebRequest Environment dictionary has the same requirements as the OWIN request
+Envronment dictionary, namely that it MUST be non-null, mutable, use ordinal
+key comparison, and MUST contain request information and delegates for Send,
+Receive, and Close where listed as required in the table below.  </p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Required?</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Key Name</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Description</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Yes</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.SendAsyncFunc”</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>A Func used to send data. See Delegate Signature.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Yes</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.ReceiveAsyncFunc”</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>A Func used to receive data. See Delegate Signature.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Yes</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.CloseAsyncFunc”</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>A Func used to close the output channel. See Delegate Signature.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Yes</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.Version”</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>The string value “1.0” indicating version 1.0 of this OWIN WebSockets
+  extension.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>Yes</p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>“websocket.CallCancelled”</p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>A CancellationToken provided by the server to signal that the
+  WebSocket has been canceled/aborted.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>In addition to these keys the host, server, middleware,
+application, etc. may add arbitrary data associated with the WebSocket context
+to the environment dictionary.  Guidelines for additional keys and a list of
+commonly defined keys can be found in CommonKeys.html.</p>
+
+<h1><a name="_4._Keys"></a>&nbsp;<a name="_5._Delegate_Func"></a><a
+name="_5._Delegate_Signature"></a>6. Delegate Signature</h1>
+
+<p class=MsoNormal>The WebSocket Func signatures are follows:</p>
+
+<p class=MsoNoSpacing>using System;</p>
+
+<p class=MsoNoSpacing>using System.Threading;</p>
+
+<p class=MsoNoSpacing>using System.Threading.Tasks;</p>
+
+<p class=MsoNoSpacing>using System.Collections.Generic;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>namespace Owin.WebSockets</p>
+
+<p class=MsoNoSpacing>{</p>
+
+<p class=MsoNoSpacing>    using WebSocketFunc =</p>
+
+<p class=MsoNoSpacing>        Func</p>
+
+<p class=MsoNoSpacing>        &lt;</p>
+
+<p class=MsoNoSpacing>            IDictionary&lt;string, object&gt;, //
+WebSocket Environment</p>
+
+<p class=MsoNoSpacing>            Task // Complete</p>
+
+<p class=MsoNoSpacing>        &gt;;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>    using WebSocketSendAsync =</p>
+
+<p class=MsoNoSpacing>        Func</p>
+
+<p class=MsoNoSpacing>        &lt;</p>
+
+<p class=MsoNoSpacing>            ArraySegment&lt;byte&gt; /* data */,</p>
+
+<p class=MsoNoSpacing>            int /* messageType */,</p>
+
+<p class=MsoNoSpacing>            bool /* endOfMessage */,</p>
+
+<p class=MsoNoSpacing>            CancellationToken /* cancel */,</p>
+
+<p class=MsoNoSpacing>            Task</p>
+
+<p class=MsoNoSpacing>        &gt;;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>    using WebSocketReceiveAsync =</p>
+
+<p class=MsoNoSpacing>        Func</p>
+
+<p class=MsoNoSpacing>        &lt;</p>
+
+<p class=MsoNoSpacing>            ArraySegment&lt;byte&gt; /* data */,</p>
+
+<p class=MsoNoSpacing>            CancellationToken /* cancel */,</p>
+
+<p class=MsoNoSpacing>            Task</p>
+
+<p class=MsoNoSpacing>            &lt;</p>
+
+<p class=MsoNoSpacing>                Tuple</p>
+
+<p class=MsoNoSpacing>                &lt;</p>
+
+<p class=MsoNoSpacing>                    int /* messageType */,</p>
+
+<p class=MsoNoSpacing>                    bool /* endOfMessage */,</p>
+
+<p class=MsoNoSpacing>                    int? /* count */,</p>
+
+<p class=MsoNoSpacing>                    int? /* closeStatus */,</p>
+
+<p class=MsoNoSpacing>                    string /* closeStatusDescription */</p>
+
+<p class=MsoNoSpacing>                &gt;</p>
+
+<p class=MsoNoSpacing>            &gt;</p>
+
+<p class=MsoNoSpacing>        &gt;;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>    using WebSocketReceiveTuple =</p>
+
+<p class=MsoNoSpacing>        Tuple</p>
+
+<p class=MsoNoSpacing>        &lt;</p>
+
+<p class=MsoNoSpacing>            int /* messageType */,</p>
+
+<p class=MsoNoSpacing>            bool /* endOfMessage */,</p>
+
+<p class=MsoNoSpacing>            int? /* count */,</p>
+
+<p class=MsoNoSpacing>            int? /* closeStatus */,</p>
+
+<p class=MsoNoSpacing>            string /* closeStatusDescription */</p>
+
+<p class=MsoNoSpacing>        &gt;;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>    using WebSocketCloseAsync =</p>
+
+<p class=MsoNoSpacing>        Func</p>
+
+<p class=MsoNoSpacing>        &lt;</p>
+
+<p class=MsoNoSpacing>            int /* closeStatus */,</p>
+
+<p class=MsoNoSpacing>            string /* closeDescription */,</p>
+
+<p class=MsoNoSpacing>            CancellationToken /* cancel */,</p>
+
+<p class=MsoNoSpacing>            Task</p>
+
+<p class=MsoNoSpacing>        &gt;;</p>
+
+<p class=MsoNoSpacing>}</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<h1 style='margin-left:.25in;text-indent:-.25in'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span>Usage</h1>
+
+<h2 style='text-indent:.5in'>7.1 WebSocketFunc</h2>
+
+<p class=MsoNormal style='text-indent:.5in'>This is the WebSocket application
+entry point.  The server provides an IDictionary containing request information
+and the Send, Receive, and Close Funcs.  On completion (success or fail), the
+application MUST complete or fail the returned Task or throw a synchronous
+exception.</p>
+
+<h2 style='text-indent:.5in'>7.2 WebSocketSendAsync</h2>
+
+<p class=MsoNormal style='text-indent:.5in'>The application uses the
+WebSocketSendAsync Func to send data to the client.  The application does not
+have direct control over frame boundaries, but it does control message
+boundaries.&nbsp; The values of messageType MUST match the opcodes defined in
+the RFC; E.g. 0x1 = Text, 0x2 = Binary, and 0x8 = Close. &nbsp;If SendAsync is
+used to send a close frame, the ArraySegment must either refer to a null or empty
+segment, or must contain the close status code and message as defined in RFC 6455
+section 5.5.1. Ping and Pong control frames (0x9, 0xA) MAY be sent, but the
+underlying server or middleware MUST silently discard them if it does not permit
+them.</p>
+
+<h2 style='text-indent:.5in'>7.3 WebSocketReceiveAsync</h2>
+
+<p class=MsoNoSpacing>&nbsp;               ReceiveAsync will return the current
+message type, if the full message was consumed, and the count of data copied to
+the given buffer.&nbsp; The values of messageType MUST match the opcodes
+defined in the RFC; 0x1 = Text, 0x2 = Binary, and 0x8 = Close.  The server or
+middleware MUST perform any necessary un-masking of the data before returning
+it. If a closed frame is received then count will be null and closeStatus and
+closeStatusDescription MAY be populated if such values were sent by the
+client.  Close data MUST NOT be copied to the user’s buffer.  The server or
+middleware MUST NOT deliver Ping and Pong control frames (0x9, 0xA) to the
+application, they MUST be handled internally.</p>
+
+<h2 style='text-indent:.5in'>7.4 WebSocketCloseAsync</h2>
+
+<p class=MsoNoSpacing>&nbsp;               Applications SHOULD follow the RFC
+guidelines regarding CloseAsync (section 5.5.1).&nbsp; The application SHOULD
+invoke CloseAsync when it is done sending outgoing data.&nbsp; The application
+MUST NOT attempt to send additional data after sending a close frame.&nbsp; The
+application MUST NOT attempt any further receives after a close frame is
+received.&nbsp; The application MAY abortively terminate the connection at any
+time by completing the WebSocketFunc return Task, optionally with an
+exception.&nbsp; The application SHOULD NOT invoke any of the delegates after
+it completes the returned task.</p>
+
+</div>
+
+</body>
+
+</html>
