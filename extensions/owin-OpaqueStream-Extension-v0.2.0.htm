@@ -184,46 +184,49 @@ div.WordSection1
 
 <p class=MsoTitle>OWIN Opaque Stream Extension v0.2.0</p>
 
-<p class=MsoNormal>&nbsp;</p>
+<p class=MsoNoSpacing>&nbsp;</p>
 
-<p class=MsoNormal>Authors: The OWIN working group</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>Authors: The OWIN working
+group</span></p>
 
-<p class=MsoNormal>Last Modified: 9 August 2012</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>Copyright: OWIN
+Contributors</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>License: <a
+href="http://creativecommons.org/licenses/by/3.0/deed.en_US" target="_blank">Creative
+Commons Attribution 3.0 Unported License</a></span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>Last Modified: 28
+September 2012</span></p>
 
 <h1>Contents</h1>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-size:
-12.0pt;line-height:115%;color:black'>1.</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-size:12.0pt;line-height:115%;color:black'>Introduction</span></p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>1.</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt'>Introduction</span></p>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-size:
-12.0pt;line-height:115%;color:black'>2.</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-size:12.0pt;line-height:115%;color:black'>Definitions</span></p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>2.</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt'>Definitions</span></p>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-size:
-12.0pt;line-height:115%;color:black'>3.</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-size:12.0pt;line-height:115%;color:black'>Scenarios</span></p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>3.</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt'>Detection</span></p>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-size:
-12.0pt;line-height:115%;color:black'>4.</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-size:12.0pt;line-height:115%;color:black'>Keys</span></p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>4.</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt'>Upgrade</span></p>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-size:
-12.0pt;line-height:115%;color:black'>5.</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='font-size:12.0pt;line-height:115%;color:black'>Delegate
-Signature &amp; Usage</span></p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>5.</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:12.0pt'>Delegate Signature &amp; Usage</span></p>
 
 <h1 style='margin-left:.5in;text-indent:-.25in'>1.<span style='font-size:7.0pt;
 line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp; </span>Introduction</h1>
 
 <p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>This
 document outlines the recommended patterns for using opaque streams through the
-OWIN interface. It depends on OWIN version 0.12.0 (but may work with other
+OWIN interface. It depends on OWIN version 1.0.0-RC (but may work with other
 versions), and uses the extension key mechanics as outlined in CommonKeys.html.</span></p>
 
 <h1 style='margin-left:.5in;text-indent:-.25in'>2.<span style='font-size:7.0pt;
@@ -234,51 +237,23 @@ Streams or Opaque Mode - Some servers allow a request to take direct ownership
 of the underlying connection after the initial HTTP handshake. This gives the
 application access to a bidirectional communication channel and the application
 is then responsible for employing its own protocol (e.g. &nbsp;WebSockets) to
-communicate with the client.</span></p>
+communicate with the client.  Normally this involves sending a 101 response
+status code.</span></p>
 
-<h1 style='margin-left:.5in;text-indent:-.25in'>3.<span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp; </span>Scenarios</h1>
+<h1>3.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Detection</h1>
 
-<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>At
-startup the server SHOULD advertise via keys in the IAppBuilder Properties
-dictionary what capabilities it supports.&nbsp; See the recommended </span><a
-href="#_4._Keys"><span style='font-size:12.0pt;line-height:115%'>Keys</span></a><span
-style='font-size:12.0pt;line-height:115%;color:black'> below.&nbsp; This
-advertisement helps the application build a pipeline to fit its needs.</span></p>
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>In
+order for an application to use Opaque it MUST first detect support for the
+extension.&nbsp; </span></p>
 
-<h2 style='margin-left:40.5pt;text-indent:-22.5pt'>3.1.<span style='font-size:
-7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp; </span>The
-application needs opaque stream access and the server supports it.</h2>
+<h2 style='text-indent:.5in'>3.1 Startup</h2>
 
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:
-Symbol'>·</span><span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>When the server identifies a request that can be upgraded to an opaque,
-it SHOULD indicate this to the application by adding the appropriate key and
-value to the Environment dictionary (see <a href="#_4._Keys">Keys</a>).&nbsp; </p>
-
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:
-Symbol'>·</span><span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>Applications that see this key and want to complete the upgrade can
-indicate this to the server by returning a 101 status code and adding an opaque
-stream body delegate to the response Properties dictionary (see <a
-href="#_4._Keys">Keys</a>, <a href="#_5._Delegate_Signature">Delegate Signature
-&amp; Usage</a>).&nbsp;&nbsp; </p>
-
-<p class=MsoListParagraph style='margin-left:1.0in;text-indent:-.25in'><span
-style='font-family:"Courier New"'>o</span><span style='font-size:7.0pt;
-line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp; </span>The
-normal response body delegate field SHOULD be set to null.</p>
-
-<p class=MsoListParagraph style='text-indent:-.25in'><span style='font-family:
-Symbol'>·</span><span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span>The server then performs the upgrade and invokes the opaque stream body
-delegate.</p>
-
-<h1><a name="_4._Keys"></a>4. Keys</h1>
-
-<p class=MsoNormal>The following keys and values are defined according to the
-guidelines provided in CommonKeys.html.&nbsp; Key names and string values MUST
-be compared as Ordinal, case sensitive.</p>
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:12.0pt;
+line-height:115%;color:black'>At startup the server SHOULD specify in the
+Properties “server.Capabilities” dictionary if Opaque is supported (see the
+table below).&nbsp; If the application does not see support for Opaque but does
+see support for Opaque Streams, it MAY insert a middleware to add Opaque support.</span></p>
 
 <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
  style='border-collapse:collapse'>
@@ -286,97 +261,327 @@ be compared as Ordinal, case sensitive.</p>
   <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>Key Name</p>
-  </td>
-  <td width=83 valign=top style='width:62.2pt;border:solid windowtext 1.0pt;
-  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>Type</p>
+  normal'><span style='font-size:12.0pt'>Key Name</span></p>
   </td>
   <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
   border-left:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>Description</p>
+  normal'><span style='font-size:12.0pt'>Description</span></p>
   </td>
  </tr>
  <tr>
   <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
   border-top:none;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>opaque.Support</p>
-  </td>
-  <td width=83 valign=top style='width:62.2pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>string</p>
+  normal'><span style='font-size:12.0pt'>“opaque.Version”</span></p>
   </td>
   <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>“BodyFunc” Used in the IAppBuilder Properties dictionary to indicate
-  general opaque stream support.&nbsp; Used in the request Environment
-  dictionary to indicate an opaque stream compatible request.</p>
-  </td>
- </tr>
- <tr>
-  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
-  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>opaque.BodyFunc</p>
-  </td>
-  <td width=83 valign=top style='width:62.2pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>Func&lt;...&gt;</p>
-  </td>
-  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>Used in the response Properties dictionary to request that the server
-  upgrade to an opaque stream and invoke this delegate.&nbsp; See <a
-  href="#_4._Keys">Delegate Signature &amp; Usage</a>.</p>
+  normal'><span style='font-size:12.0pt'>The string value “1.0” indicating
+  version 1.0 of the OWIN <span style='color:black'>Opaque Stream </span>extension.</span></p>
   </td>
  </tr>
 </table>
 
 <p class=MsoNormal>&nbsp;</p>
 
+<h2 style='text-indent:.5in'>3.2 Per Request</h2>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:12.0pt;
+line-height:115%'>The <span style='color:black'>Opaque </span>capable server or
+middleware inspects each request as it arrives to determine if it is <span
+style='color:black'>Opaque </span>compatible (e.g. verb, headers, etc.).&nbsp;
+If so, it marks the request with a specific environment key (<span
+style='color:black'>see the table below</span>).</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Key Name</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Description</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“opaque.Upgrade”</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>An OpaqueUpgrade Action added by the
+  server if the current request supports <span style='color:black'>Opaque</span>.&nbsp;
+  See Delegate Signature</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><a name="_4._Keys"></a>&nbsp;</p>
+
+<h1>4. Upgrade</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>When an
+application sees a request that is marked as Opaque capable and decides to upgrade
+to Opaque, it indicates this to the server or middleware by invoking the
+provided OpaqueUpgrade Action with parameters and a OpaqueFunc callback.&nbsp;
+This Action MUST immediately set the response status code to 101 and validate
+any input parameters and request state.&nbsp; The application then completes
+the AppFunc Task and allows the request pipeline to unwind.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>When the
+pipeline has unwound to the Opaque server or middleware it SHOULD perform the
+requested upgrade.&nbsp; Once the upgrade is complete the request has left HTTP
+processing and transitioned to Opaque processing.&nbsp; The original
+Environment dictionary and its content are presumed invalid and a new one MUST
+be provided to the OpaqueFunc callback with the keys listed as required in the
+table below (see Consumption).</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>If the
+upgrade fails then the server or middleware SHOULD terminate the request.&nbsp;
+There is no guarantee that the OpaqueFunc provided by the application can or
+will be invoked in these scenarios, but the “owin.CallCancelled”
+CancellationToken MUST be signaled if the callback won’t be. </span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The OpaqueUpgrade
+parameters dictionary MAY be null if there are no parameters to pass in.&nbsp;
+If not null, it MUST be mutable and use ordinal key comparison.</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Upgrade Parameter Key Name</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Description</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>None currently defined</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'></td>
+ </tr>
+</table>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>In addition
+to these keys the host, server, middleware, application, etc. may add arbitrary
+data associated with the Opaque Upgrade to the parameters dictionary.&nbsp;
+Guidelines for additional keys and a list of commonly defined keys can be found
+in CommonKeys.html.</span></p>
+
 <h1><a name="_5._Delegate_Func"></a><a name="_5._Delegate_Signature"></a>5.
-Delegate Signature &amp; Usage</h1>
+Consumption</h1>
 
-<p class=MsoNormal>The opaque stream body delegate signature is as follows:</p>
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>When the
+server or middleware invoke the OpaqueFunc it provides a new Opaque Environment
+dictionary (see Delegate Signature).&nbsp; The Opaque Environment dictionary
+has the same requirements as the OWIN request Environment dictionary, namely
+that it MUST be non-null, mutable, use ordinal key comparison, and MUST contain
+the keys and values where listed as required in the table below.&nbsp; </span></p>
 
-<p class=MsoNoSpacing>using OpaqueStreamAction = </p>
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Required?</span></p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Key Name</span></p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Description</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Yes</span></p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“opaque.Input”</span></p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>A readable Stream that provides access
+  to the incoming client data.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Yes</span></p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“opaque.Output”</span></p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>A writeable Stream that sends output
+  to the client.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Yes</span></p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“opaque.Version”</span></p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>The string value “1.0” indicating
+  version 1.0 of this OWIN Opaque extension.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=83 valign=top style='width:62.6pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Yes</span></p>
+  </td>
+  <td width=216 valign=top style='width:2.25in;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“opaque.CallCancelled”</span></p>
+  </td>
+  <td width=1049 valign=top style='width:786.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>A CancellationToken provided by the
+  server to signal that opaque streaming has been canceled/aborted.</span></p>
+  </td>
+ </tr>
+</table>
 
-<p class=MsoNoSpacing>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Func</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;</span></p>
 
-<p class=MsoNoSpacing>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt; </p>
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>In addition
+to these keys the host, server, middleware, application, etc. may add arbitrary
+data associated with the Opaque context to the environment dictionary.&nbsp;
+Guidelines for additional keys and a list of commonly defined keys can be found
+in CommonKeys.html.</span></p>
 
-<p class=MsoNoSpacing>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Stream, // Incoming (CanRead)</p>
+<h1>6. Delegate Signature</h1>
 
-<p class=MsoNoSpacing>            Stream, // Outgoing
-(CanWrite)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The opaque
+stream body delegate signature is as follows:</span></p>
 
-<p class=MsoNoSpacing>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Task // Complete</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp; using OpaqueUpgrade
+=</span></p>
 
-<p class=MsoNoSpacing>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;;</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Action</span></p>
 
-<p class=MsoNoSpacing>&nbsp;</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;</span></p>
 
-<p class=MsoNoSpacing>The application provides this delegate in the response
-Properties dictionary.&nbsp; The server invokes it to provide the application
-with Streams for incoming and outgoing data.&nbsp; The consumer then operates
-their own protocol (e.g. WebSockets) over these streams.&nbsp; On completion
-(success or fail), the application MUST complete or fail the returned Task. 
-The consumer SHOULD NOT close the given streams, the provider (the server) owns
-these and is responsible for any cleanup on completion.  The application SHOULD
-NOT continue to access the Streams once it completes the returned task.</p>
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+IDictionary&lt;string, object&gt;, // Parameters</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Func // OpaqueFunc callback</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+IDictionary&lt;string, object&gt;, // Opaque environment</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Task // Complete</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&gt;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&gt;;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp; using OpaqueFunc
+=</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Func</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+IDictionary&lt;string, object&gt;, // Opaque Environment</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Task // Complete</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&gt;;</span></p>
+
+<h1 style='margin-left:.25in;text-indent:-.25in'><span style='font-size:12.0pt;
+line-height:115%'>&nbsp;</span>7.<span style='font-size:7.0pt;line-height:115%;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp; </span>Usage</h1>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>Once the upgrade is
+complete the consumer operates their own protocol (e.g. WebSockets) over these
+streams.&nbsp; On completion (success or fail), the application MUST complete
+or fail the returned Task.&nbsp; The consumer SHOULD NOT close the given
+streams, the provider (the server or middleware) owns these and is responsible
+for any cleanup on completion of the OpaqueFunc.&nbsp; The application SHOULD
+NOT continue to access the Streams once it completes the returned task.  </span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>If the
+oapaque.CallCancelled CancellationToken is cancelled, the application SHOULD
+promptly terminate processing and complete the returned Task.</span></p>
 
 </div>
 

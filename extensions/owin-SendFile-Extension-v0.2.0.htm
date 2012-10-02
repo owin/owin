@@ -1,0 +1,456 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>OWIN SendFile Extension</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:normal;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:8.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:normal;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Cambria","serif";
+	color:#365F91;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Cambria","serif";
+	color:#365F91;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxspfirst, li.msotitlecxspfirst, div.msotitlecxspfirst
+	{mso-style-name:msotitlecxspfirst;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxspmiddle, li.msotitlecxspmiddle, div.msotitlecxspmiddle
+	{mso-style-name:msotitlecxspmiddle;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msotitlecxsplast, li.msotitlecxsplast, div.msotitlecxsplast
+	{mso-style-name:msotitlecxsplast;
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:90%;
+	font-size:28.0pt;
+	font-family:"Cambria","serif";
+	color:#404040;
+	letter-spacing:-.5pt;}
+p.msolistparagraphcxspfirst, li.msolistparagraphcxspfirst, div.msolistparagraphcxspfirst
+	{mso-style-name:msolistparagraphcxspfirst;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msolistparagraphcxspmiddle, li.msolistparagraphcxspmiddle, div.msolistparagraphcxspmiddle
+	{mso-style-name:msolistparagraphcxspmiddle;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msolistparagraphcxsplast, li.msolistparagraphcxsplast, div.msolistparagraphcxsplast
+	{mso-style-name:msolistparagraphcxsplast;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";}
+p.msopapdefault, li.msopapdefault, div.msopapdefault
+	{mso-style-name:msopapdefault;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<p class=MsoTitle>OWIN SendFile Extension v0.2.0</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal;background:white'><span style='font-size:12.0pt'>Authors: The OWIN
+working group</span></p>
+
+<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal;background:white'><span style='font-size:12.0pt;color:black'>Copyright:
+OWIN Contributors</span></p>
+
+<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal'><span style='font-size:12.0pt;color:black'>License: <a
+href="http://creativecommons.org/licenses/by/3.0/deed.en_US" target="_blank"><span
+style='color:#0066CC'>Creative Commons Attribution 3.0 Unported License</span></a></span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Last
+Modified: 28 September 2012</span></p>
+
+<h1>Contents</h1>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'><span style='font-size:12.0pt'>1.</span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:12.0pt;color:black'>Introduction</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'><span style='font-size:12.0pt'>2.</span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:12.0pt;color:black'>Definitions</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'><span style='font-size:12.0pt'>3.</span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:12.0pt'>Detection</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.55in;margin-bottom:.0001pt;text-indent:-.3in;line-height:normal'><span
+style='font-size:12.0pt'>3.1.</span><span style='font-size:12.0pt;font-family:
+"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp; </span><span style='font-size:
+12.0pt'>Startup</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.55in;margin-bottom:.0001pt;text-indent:-.3in;line-height:normal'><span
+style='font-size:12.0pt'>3.2.</span><span style='font-size:12.0pt;font-family:
+"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp; </span><span style='font-size:
+12.0pt'>Per Request</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'><span style='font-size:12.0pt'>4.</span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:12.0pt;color:black'>Delegate Signature</span></p>
+
+<p class=MsoListParagraph style='margin-top:0in;margin-right:0in;margin-bottom:
+0in;margin-left:.25in;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+normal'><span style='font-size:12.0pt'>5.</span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:12.0pt'>Consumption</span></p>
+
+<h1>1.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Introduction</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>This
+document outlines the recommended patterns for consuming a server’s direct file
+transmission capabilities through the OWIN interface. It depends on OWIN v1.0.0-RC0
+(but may work with other versions) and uses the extension key mechanics as
+outlined in CommonKeys.html.</span></p>
+
+<h1>2.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Definitions</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>SendFile
+– A server or platform feature that is capable of optimizing the copy of a
+files contents to the response output.</span></p>
+
+<h1>3.<span style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif"'>&nbsp;&nbsp;&nbsp;
+</span>Detection</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%;color:black'>In
+order for an application to use SendFile it MUST first detect support for the
+extension.&nbsp; </span></p>
+
+<h2 style='text-indent:.5in'>3.1 Startup</h2>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:12.0pt;
+line-height:115%;color:black'>At startup the server SHOULD specify in the
+Properties “server.Capabilities” dictionary if SendFile is supported (see the
+table below).&nbsp; If the application does not see support for SendFile it MAY
+insert a middleware to add SendFile support.</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Key Name</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Description</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“sendfile.Version”</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>The string value “1.0” indicating
+  version 1.0 of the OWIN SendFile extension.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“sendfile.Support”</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>An IDictionary&lt;string, object&gt;
+  containing feature details. This key and value do not need to be present if
+  the dictionary would be empty.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“sendfile.Concurrency”</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Placed in the sendfile.Support dictionary,
+  the string value “Overlapped” indicates support for multiple outstanding
+  async operations.</span></p>
+  </td>
+ </tr>
+</table>
+
+<h2 style='text-indent:.5in'>3.2 Per Request</h2>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='font-size:12.0pt;
+line-height:115%'>The SendFile capable server or middleware adds the
+SendFileFunc to the environment dictionary for an application to utilize.</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Key Name</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>Description</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=203 valign=top style='width:152.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>“sendfile.SendAsync”</span></p>
+  </td>
+  <td width=944 valign=top style='width:707.7pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>The SendFileFunc provided by the
+  server or middleware for the application to utilize.&nbsp; See Delegate
+  Signature.</span></p>
+  </td>
+ </tr>
+</table>
+
+<h1><a name="_4._Keys"></a><a name="_5._Delegate_Func"></a><a
+name="_5._Delegate_Signature"></a>4. Delegate Signature</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The SendFile
+Func signature is as follows:</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>using SendFileFunc =</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Func</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+string, // File Name and path</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+long, // Initial file offset</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+long?, // Byte count, null for remainder of file</span></p>
+
+<p class=MsoNoSpacing><span style='font-size:12.0pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Task // Complete</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&gt;;&nbsp;&nbsp;</span></p>
+
+<h1>5. Consumption</h1>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The server
+or middleware provides the SendFileFunc in the environment dictionary.&nbsp;
+The consumer checks for its presence and invokes it once for each file range to
+be sent.&nbsp; Before, after, or in between SendFile operations the consumer
+MAY also write to the response body stream.&nbsp; If the consumer does write to
+the response body stream, they SHOULD flush the stream to ensure proper
+ordering with SendFileFunc invocations. &nbsp;The server or middleware
+implementing SendFileFunc MUST NOT complete the corresponding Task until it is
+completely finished accessing the named file.&nbsp; Once complete the
+application MUST be able to perform any normally allowed operations on the file
+including rename, modify, append, or delete.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Invoking the
+SendFileFunc SHOULD result in the response headers being sent if they have not
+already been, so the consumer MUST complete any necessary headers in advance,
+including range, content-length, transfer-encoding, etc..</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Some
+implementations MAY permit SendFileFunc to be invoked multiple times before the
+prior operations have completed.&nbsp; This capability is advertised with the
+key “sendFile.Concurrency” and value “Overrlapped”.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Middleware
+that wish to replace, augment, or otherwise intercept SendFileFunc operations
+MAY do so by replacing the Func in the environment dictionary, possibly
+creating an invocation chain.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>File names
+and paths SHOULD be absolute disk paths, e.g. “c:\myapp\myfile.ext”.&nbsp;
+Routing middleware MAY assist in mapping relative URIs or disk paths to
+absolute disk paths.</span></p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
