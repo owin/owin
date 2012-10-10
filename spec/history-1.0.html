@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>OWIN &mdash; Open Web Interface for .NET</title>
+    <link rel="stylesheet" href="history-1.0-style.css"/>
+</head>
+<body>
+
+<div id="main">
+    
+<div id="masthead">
+    <h1>OWIN</h1>
+    <h2>Open Web Interface for .NET</h2>
+</div>
+
+<ul id="nav">
+    <li><a href="#about">About</a></li>
+    <li><a href="#spec">Specification</a></li>
+</ul>
+<div id="content">
+
+    <a name="about"></a>
+    <h2>About</h2>
+
+    <p>Here is a list of historical drafts and notes from the OWIN 1.0 development process.</p>
+        
+    <a name="spec"></a>
+    <h2>Specification</h2>
+    
+    <ul id="speclist">
+        <li>
+            <a class="version" href="/spec/owin-1.0.0-RC0.html">v1.0.0-RC0</a>
+            <span class="date">27 September 2012</span>
+            <p class="summary">Added copyright and license statements.</p>
+        </li> 
+        <li>
+            <a class="version" href="/spec/owin-0.15.0.html">v0.15.0</a>
+            <span class="date">29 August 2012</span>
+            <p class="summary">Changed from a model where the applicaiton provides the response structures to where the the server provides them up front. Removed the body delegate and provided the response stream up front. Everything is now merged into the Environment dictionary.  Removed owin.dll.</p>
+        </li> 
+        <li>
+            <a class="version" href="/spec/owin-0.14.0.html">v0.14.0</a>
+            <span class="date">14 August 2012</span>
+            <p class="summary">Additional startup details.  General clarification and cleanup.</p>
+        </li> 
+        <li>
+            <a class="version" href="/spec/owin-0.12.0.html">v0.12.0</a> (Formerly Draft 8)
+            <span class="date">6 August 2012</span>
+            <p class="summary">Adopting <a href="http://semver.org">Semantic Versioning</a>.  Call completion changed from a CancellationToken to a Task and moved back into the Environment dictionary.  Initial IAppBuilder notes.</p>
+        </li> 
+        <li>
+            <a class="version" href="/spec/owin-1.0.0draft7.html">Draft 7</a> 
+            <span class="date">12 July 2012</span>
+            <p class="summary">Significant updates the the delegate signatures.  Moving to Streams for request and response body. Focusing on Tasks for the async model.  Owin.dll published on Nuget.</p>
+        </li>   
+        <li>
+            <s>Draft 6 (Canceled)</s> 
+            <s><span class="date">November 2011</span></s>
+            <p class="summary">Goals: Adopt <a href="http://semver.org">Semantic Versioning</a>; define a normative method for obtaining the IP address of the connected client; move request body delegate out of the environment dictionary and pass as an argument to the application delegate; define normative encoding rules for path, path base, and query string.</p>
+        </li>
+        <li>
+            <a class="version" href="/spec/owin-1.0.0draft5.html">Draft 5</a> 
+            <span class="date">13 March 2011</span>
+            <p class="summary">New styling to highlight normative sections and important notes. Environment dictionary keys renamed for consistency. Expanded and clarified rules for line-folding in request and response header dictionaries. Introduced the body delegate, replacing <code>IEnumerable&lt;object&gt;</code> as an entity body mechanism. Introduced algorithm for reconstructing the complete URI of a request. Added requirement that the Host: header must be present in the environment dictionary.</p>
+        </li>
+        
+        <li>
+            <a class="version" href="/spec/owin-1.0.0draft4.html">Draft 4</a> 
+            <span class="date">13 February 2011</span>
+            <p class="summary">Header dictionary form changed from <code>IDictionary&lt;string, IList&lt;string&gt;&gt;</code> to <code>IDictionary&lt;string, string&gt;</code>, line folding rules added.</p>
+        </li>
+        <li>
+            <a class="version" href="/spec/owin-1.0.0draft3.html">Draft 3</a> 
+            <span class="date">3 January 2011</span>
+            <p class="summary">Uses anonymous delegates and an environment dictionary rather than concrete interfaces, obviating the need for Owin.dll.</p>
+        </li>
+        <li>
+            <a class="version" href="/spec/owin-1.0.0draft2.html">Draft 2</a> 
+            <span class="date">11 December 2011</span>
+            <p class="summary">Expanded, more specific language.</p>
+        </li>
+        <li>
+            <a class="version" href="#">Draft 1 (no longer available)</a> 
+            <span class="date">7 December 2010</span>
+            <p class="summary">Initial draft used concrete <code>IApplication</code>, <code>IRequest</code>, <code>IResponse</code> interfaces (specified in a companion Owin.dll, no longer available)</p>
+        </li>
+    </ul>
+    
+   
+
+</div>
+</div>
+</body>
+</html>

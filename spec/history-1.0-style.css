@@ -1,0 +1,114 @@
+
+body
+{
+  font-family: Helvetica, sans-serif;
+	text-align: center;
+}
+
+p {
+  line-height: 28px;
+}
+
+#main {
+	width: 600px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+#masthead h1 {
+	text-align: center;
+	color: #9df;
+	font-size: 4.5em;
+	margin: 0;
+}
+
+#masthead h2 {
+	text-align: center;
+	color: #666;
+	font-size: .9em;
+	margin: 0;
+}
+
+#content h2 {
+	color:#a3d538
+}
+
+#nav {
+	padding: 20px;
+	text-align: center;
+}
+
+#nav li {
+	display: inline;
+	margin:0;
+}
+
+#nav li a {
+	color: #000;
+	text-decoration: none;
+	background: #eee;
+	padding: 10px;
+}
+
+#nav li a:visited {
+	color: #000;
+}
+
+#nav li a:hover {
+	background: #9df;
+	color: #fff;
+}
+#content a {
+	color: #ff6000;
+	text-decoration: none;
+}
+
+#speclist {
+	padding: 0;
+}
+
+#speclist a.version {
+	font-size: 1.5em;
+}
+
+#speclist li {
+	padding: 10px;
+	list-style: none;
+	margin:5px;
+	background: #f7f7f7;
+}
+
+#speclist .date {
+	color: #6bd;
+	padding-left: 10px;
+	font-size: .8em;
+}
+
+#speclist .summary {
+	margin: 20px 0 0 0;
+}
+
+#extendlist {
+	padding: 0;
+}
+
+#extendlist a.version {
+	font-size: 1.5em;
+}
+
+#extendlist li {
+	padding: 10px;
+	list-style: none;
+	margin:5px;
+	background: #f7f7f7;
+}
+
+#extendlist .date {
+	color: #6bd;
+	padding-left: 10px;
+	font-size: .8em;
+}
+
+#extendlist .summary {
+	margin: 20px 0 0 0;
+}
