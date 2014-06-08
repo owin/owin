@@ -1,37 +1,38 @@
 # OWIN: Open Web Server Interface for .NET
 
 
-**Author**
-[OWIN working group][WGForum]
-**Copyright**
-OWIN contributors
-**License**
-[Creative Commons Attribution 3.0 Unported License][CCLicense]
-**Last updated**
-05 June 2014
+**Author**  
+[OWIN working group][WGForum]  
+**Copyright**  
+OWIN contributors  
+**License**  
+[Creative Commons Attribution 3.0 Unported License][CCLicense]  
+**Last updated**  
+05 June 2014  
 
 ---
 
 1. [Overview](#1-Overview)
 2. [Definitions](#2-Definitions)
-3. [Request Execution](#3-Request-Execution)
-  3.1. [Application Delegate](#31-Application-Delegate)
-  3.2. [Environment](#32-Environment)
-  3.3. [Headers][sec-headers]
-  3.4. [Request Body][sec-req-body]
-  3.5. [Response Body][sec-res-body]
-  3.6. [Request Lifetime](#36-Request-Lifetime)
+3. [Request Execution](#3-Request-Execution)  
+  3.1. [Application Delegate](#31-Application-Delegate)  
+  3.2. [Environment](#32-Environment)  
+  3.3. [Headers][sec-headers]  
+  3.4. [Request Body][sec-req-body]  
+  3.5. [Response Body][sec-res-body]  
+  3.6. [Request Lifetime](#36-Request-Lifetime)  
 4. [Application Startup](#4-Application-Startup)
-5. [URI Reconstruction](#5-URI-Reconstruction)
-  5.1. [URI Scheme][sec-uri-scheme]
-  5.2. [Hostname][sec-hostname]
-  5.3. [Paths][sec-paths]
-  5.4. [URI Reconstruction Algorithm](#54-URI-Reconstruction-Algorithm)
-  5.5. [Percent-encoding](#55-Percent-encoding)
-6. [Error Handling](#6-Error-Handling)
-  6.1. [Application Errors](#61-Application-Errors)
-  6.2. [Server Errors](#62-Server-Errors)
+5. [URI Reconstruction](#5-URI-Reconstruction)  
+  5.1. [URI Scheme][sec-uri-scheme]  
+  5.2. [Hostname][sec-hostname]  
+  5.3. [Paths][sec-paths]  
+  5.4. [URI Reconstruction Algorithm](#54-URI-Reconstruction-Algorithm)  
+  5.5. [Percent-encoding](#55-Percent-encoding)  
+6. [Error Handling](#6-Error-Handling)  
+  6.1. [Application Errors](#61-Application-Errors)  
+  6.2. [Server Errors](#62-Server-Errors)  
 7. [Versioning][sec-versioning]
+
 ---
 
 ## 1. Overview
@@ -136,7 +137,7 @@ The headers of HTTP request and response messages are represented by objects of 
 > * The value array returned is assumed to be a copy of the data. Any intended changes to the value array MUST be persisted back to the headers dictionary manually by via `headers[headerName] = modifiedArray;` or `headers.Remove(header)`.
 
 > * Header values are assumed to be in a mixed format, meaning that a normally comma separated header may appear as a single entry in the values array, one entry per value, or a mixture of the two.
-> E.g. `new string[1] {"value, value, value"}`, `new string[3] {"value", "value", "value"}`, or `new string[2] {"value, value", "value"}`
+> (e.g. `new string[1] {"value, value, value"}`, `new string[3] {"value", "value", "value"}`, or `new string[2] {"value, value", "value"}`)
 
 
 > * Servers, applications, and intermediaries SHOULD NOT split or merge header values unnecessarily. While the three formats are supposed to be interchangeable, in practice many existing implementations only support one specific format. Developers should have the flexibility to support existing implementations by producing or consuming a selected format without interference.
@@ -196,8 +197,8 @@ The Properties dictionary may be used to read or set any configuration parameter
 > * The values associated with the keys MUST be non-null, unless otherwise specified.
 
 > | Required | Key Name       | Value Description |
-  |----------|----------------|-------------------|
-  | **Yes**  | `owin.Version` | The string `"1.0"` indicating OWIN version. Added by the server in step 2 above. See [Versioning][sec-versioning]. |
+|----------|----------------|-------------------|
+| **Yes**  | `owin.Version` | The string `"1.0"` indicating OWIN version. Added by the server in step 2 above. See [Versioning][sec-versioning]. |
 
 In addition to these keys the host, server, middleware, application, etc. may add arbitrary data associated with the application configuration to the properties dictionary. Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][CommonKeys] to this spec.
 
@@ -223,7 +224,7 @@ In the context of an HTTP/1.1 request, the name of the server to which the clien
 
 ### 5.3. Paths
 
-Servers may have the ability to map application delegates to some base path. For example, a server might have an application delegate configured to respond to requests beginning with `"/my-app"`, in which case it should set the value of `"owin.RequestPathBase"` in the environment dictionary to `"/my-app"`. If this server receives a request for `"/my-app/foo"`, the "`owin.RequestPath"` value of the environment dictionary provided to the application configured to respond at `"/my-app"` should be `"/foo"`.
+Servers may have the ability to map application delegates to some base path. For example, a server might have an application delegate configured to respond to requests beginning with `"/my-app"`, in which case it should set the value of `"owin.RequestPathBase"` in the environment dictionary to `"/my-app"`. If this server receives a request for `"/my-app/foo"`, the `"owin.RequestPath"` value of the environment dictionary provided to the application configured to respond at `"/my-app"` should be `"/foo"`.
 
 > * The value associated with the environment key `"owin.RequestPathBase"` MUST NOT end with a slash and MUST either start with a slash or be `String.Empty`.
 
