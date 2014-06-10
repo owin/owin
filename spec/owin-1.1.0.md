@@ -68,7 +68,7 @@ Broadly speaking, a server invokes an application (providing as arguments an env
 
 ### 3.1. Application Delegate
 
-The primary interface in OWIN is called the application delegate or AppFunc. An application delegate takes the `IDictionary<string, object>` environment and returns a `Task` when it has finished processing.
+The primary interface in OWIN is called the application delegate or `AppFunc`. An application delegate takes the `IDictionary<string, object>` environment and returns a `Task` when it has finished processing.
 
 ```c#
 using AppFunc = Func<
@@ -96,8 +96,8 @@ In addition to these keys, the host, server, middleware, application, etc. may a
 
 | Required | Key Name                  | Value Description |
 |----------|---------------------------|-------------------|
-| **Yes**  | `owin.RequestBody`        | A Stream with the request body, if any. `Stream.Null` MAY be used as a placeholder if there is no request body. See [Request Body](sec-req-body). |
-| **Yes**  | `owin.RequestHeaders`     | An `IDictionary` of request headers. See [Headers][sec-headers]. |
+| **Yes**  | `owin.RequestBody`        | A `Stream` with the request body, if any. `Stream.Null` MAY be used as a placeholder if there is no request body. See [Request Body](sec-req-body). |
+| **Yes**  | `owin.RequestHeaders`     | An `IDictionary<string, string[]>` of request headers. See [Headers][sec-headers]. |
 | **Yes**  | `owin.RequestMethod`      | A `string` containing the HTTP request method of the request (e.g., `"GET"`, `"POST"`). |
 | **Yes**  | `owin.RequestPath`        | A `string` containing the request path. The path MUST be relative to the "root" of the application delegate. See [Paths][sec-paths]. |
 | **Yes**  | `owin.RequestPathBase`    | A `string` containing the portion of the request path corresponding to the "root" of the application delegate; see [Paths][sec-paths]. |
@@ -110,7 +110,7 @@ In addition to these keys, the host, server, middleware, application, etc. may a
 
 | Required | Key Name                  | Value Description |
 |----------|---------------------------|-------------------|
-| **Yes**  | `owin.ResponseBody`       | A Stream used to write out the response body, if any. See [Response Body][sec-res-body]. |
+| **Yes**  | `owin.ResponseBody`       | A `Stream` used to write out the response body, if any. See [Response Body][sec-res-body]. |
 | **Yes**  | `owin.ResponseHeaders`    | An `IDictionary<string, string[]>` of response headers. See [Headers][sec-headers]. |
 | **No**   | `owin.ResponseStatusCode` | An optional `int` containing the HTTP response status code as defined in [RFC 2616][rfc2616] section 6.1.1. The default is 200. |
 | **No**  | `owin.ResponseReasonPhrase`| An optional `string` containing the reason phrase associated the given status code. If none is provided then the server SHOULD provide a default as described in [RFC 2616][rfc2616] section 6.1.1 |
@@ -121,7 +121,7 @@ In addition to these keys, the host, server, middleware, application, etc. may a
 | Required | Key Name                  | Value Description |
 |----------|---------------------------|-------------------|
 | **Yes**  | `owin.CallCancelled`      | A `CancellationToken` indicating if the request has been canceled/aborted. See [Request Lifetime][sec-req-lifetime]. |
-| **Yes**  | `owin.Version`            | The string `"1.0"` indicating OWIN version. See [Versioning][sec-versioning]. |
+| **Yes**  | `owin.Version`            | A `string` indicating the OWIN version. See [Versioning][sec-versioning]. |
 
 ### 3.3. Headers
 
@@ -199,7 +199,7 @@ The Properties dictionary may be used to read or set any configuration parameter
 
 > | Required | Key Name       | Value Description |
 |----------|----------------|-------------------|
-| **Yes**  | `owin.Version` | The string `"1.0"` indicating OWIN version. Added by the server in step 2 above. See [Versioning][sec-versioning]. |
+| **Yes**  | `owin.Version` | A `string` indicating the OWIN version. Added by the server in step 2 above. See [Versioning][sec-versioning]. |
 
 In addition to these keys the host, server, middleware, application, etc. may add arbitrary data associated with the application configuration to the properties dictionary. Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][CommonKeys] to this spec.
 
