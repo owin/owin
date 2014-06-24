@@ -1,7 +1,7 @@
 # OWIN: Open Web Server Interface for .NET
 
 **Version**  
-1.0
+1.1.0-draft  
 **Author**  
 [OWIN working group][WGForum]  
 **Copyright**  
@@ -9,7 +9,7 @@ OWIN contributors
 **License**  
 [Creative Commons Attribution 3.0 Unported License][CCLicense]  
 **Last updated**  
-10 October 2012
+05 June 2014  
 
 ---
 
@@ -104,6 +104,7 @@ In addition to these keys, the host, server, middleware, application, etc. may a
 | **Yes**  | `owin.RequestProtocol`    | A `string` containing the protocol name and version (e.g. `"HTTP/1.0"` or `"HTTP/1.1"`). |
 | **Yes**  | `owin.RequestQueryString` | A `string` containing the query string component of the HTTP request URI, without the leading "?" (e.g., `"foo=bar&amp;baz=quux"`). The value may be an empty string. |
 | **Yes**  | `owin.RequestScheme`      | A `string` containing the URI scheme used for the request (e.g., `"http"`, `"https"`); see [URI Scheme][sec-uri-scheme]. |
+| **No**   | `owin.RequestId `          | An optional `string` that uniquely identifies a request. The value is opaque and SHOULD have some level of uniqueness. A Host MAY specify this value. If it is not specified, middleware MAY set it. Once set, it SHOULD NOT be modified. |
 
 ### 3.2.2 Response Data
 
