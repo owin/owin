@@ -1,6 +1,4 @@
 
-[Source](http://owin.org/governance/OWINdecisionprocess.html "Permalink to first draft of OWIN decision process")
-
 # first draft of OWIN decision process
 
 # Voting
