@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+    <title>OWIN Decision Process</title>
+    <link type="text/css" rel="stylesheet" href="../style.css"/>
+</head>
+<body>
+    <div id="main">
+        <header id="masthead">
+            <h1>OWIN</h1>
+            <h2>Decision Process</h2>
+        </header>
+
+        <div id="content">
+            <h2>Voting</h2>
+            <p>If a formal vote on a proposal is called (signaled simply by sending a email with &lsquo;[VOTE]&rsquo; in the subject line), all participants on the project contributors&rsquo; list may express an opinion and vote. They do this by sending an email in reply to the original &lsquo;[VOTE]&rsquo; email, with the following vote and information:</p>
+            <ul>
+                <li>+1 &lsquo;yes&rsquo;, &lsquo;agree&rsquo;: also willing to help bring about the proposed action</li>
+                <li>+0 &lsquo;yes&rsquo;, &lsquo;agree&rsquo;: not willing or able to help bring about the proposed action</li>
+                <li>-0 &lsquo;no&rsquo;, &lsquo;disagree&rsquo;: but will not oppose the action&rsquo;s going forward</li>
+                <li>-1 &lsquo;no&rsquo;, &lsquo;disagree&rsquo;: opposes the action&rsquo;s going forward and must propose an alternative action to address the issue (or a justification for not addressing the issue)</li>
+            </ul>
+            <p>To abstain from the vote, participants simply do not respond to the email. However, it can be more helpful to cast a &lsquo;+0&rsquo; or &lsquo;-0&rsquo; than to abstain, since this allows the team to gauge the general feeling of the community if the proposal should be controversial.</p>
+            <p>However, only some members have binding votes for the purposes of decision making; for example in of the OWIN decision making process, these are the committers and/or the members of the Management Committee.</p>
+            <p>It is therefore their responsibility to ensure that the opinions of all community members are considered. While not all members members may have a binding vote, a well-justified &lsquo;-1&rsquo; from a non-committer must be considered by the community, and if appropriate, supported by a binding &lsquo;-1&rsquo;.</p>
+            <p>A &lsquo;-1&rsquo; can also indicate a veto, depending on the type of vote and who is using it. Someone without a binding vote cannot veto a proposal, so in their case a -1 would simply indicate an objection.</p>
+            <p>When a [VOTE] receives a &lsquo;-1&rsquo;, it is the responsibility of the community as a whole to address the objection. Such discussion will continue until the objection is either rescinded, overruled (in the case of a non-binding veto) or the proposal itself is altered in order to achieve consensus (possibly by withdrawing it altogether). In the rare circumstance that consensus cannot be achieved, the PMC will decide the forward course of action.</p>
+            <p><strong>In summary:</strong></p>
+            <ul>
+                <li>Those who don&rsquo;t agree with the proposal and think they have a better idea should vote -1 and defend their counter-proposal.</li>
+                <li>Those who don&rsquo;t agree but don&rsquo;t have a better idea should vote -0.</li>
+                <li>Those who agree but will not actively assist in implementing the proposal should vote +0.</li>
+                <li>Those who agree and will actively assist in implementing the proposal should vote +1.</li>
+            </ul>
+            <h2>Lazy Consensus</h2>
+            <p>Lazy consensus is a very important concept within the project. It is this process that allows a large group of people to efficiently reach consensus, as someone with no objections to a proposal need not spend time stating their position, and others need not spend time reading such mails. For lazy consensus to be effective, it is necessary to allow at least 72 hours before assuming that there are no objections to the proposal. This requirement ensures that everyone is given enough time to read, digest and respond to the proposal. This time period is chosen so as to be as inclusive as possible of all participants, regardless of their location and time commitments.</p>
+            <h2>When Is A Vote Required?</h2>
+            <p>Every effort is made to allow the majority of decisions to be taken through lazy consensus. That is, simply stating one&rsquo;s intentions is assumed to be enough to proceed, unless an objection is raised. However, some activities require a more formal approval process in order to ensure fully transparent decision making.</p>
+            <p>The table below describes some of the actions that will require a vote. It also identifies which type of vote should be called.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Description</th>
+                        <th>Approval type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Release plan</td>
+                        <td>Defines the timetable and actions for a release. A release plan cannot be vetoed (hence lazy majority).</td>
+                        <td>Lazy consensus</td>
+                    </tr>
+                    <tr>
+                        <td>Product release</td>
+                        <td>When a release of one of the project&rsquo;s products is ready, a vote is required to accept the release as an official release of the project. A release cannot be vetoed (hence lazy majority).</td>
+                        <td>Lazy consensus</td>
+                    </tr>
+                    <tr>
+                        <td>New committer</td>
+                        <td>A new committer has been proposed.</td>
+                        <td>Consensus approval of the Management Committee</td>
+                    </tr>
+                    <tr>
+                        <td>New Management Committee member</td>
+                        <td>A new Management Committee member has been proposed.</td>
+                        <td>Consensus approval of the community</td>
+                    </tr>
+                    <tr>
+                        <td>Committer removal</td>
+                        <td>When removal of commit privileges is sought.</td>
+                        <td>Unanimous consensus of the PMC</td>
+                    </tr>
+                    <tr>
+                        <td>PMC member removal</td>
+                        <td>When removal of PMC membership is sought.</td>
+                        <td>Unanimous consensus of the community</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

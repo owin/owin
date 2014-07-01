@@ -10,7 +10,7 @@ p {
 }
 
 #main {
-	width: 700px;
+	width: 760px;
 	margin: 0 auto;
 	text-align: left;
 }
@@ -111,4 +111,12 @@ p {
 
 #extendlist .summary {
 	margin: 20px 0 0 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+    vertical-align: top;
 }
