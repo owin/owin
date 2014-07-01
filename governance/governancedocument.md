@@ -1,6 +1,4 @@
 
-[Source](http://owin.org/governance/OWINgovernancedocument.html "Permalink to second draft of OWIN governance document")
-
 # second draft of OWIN governance document
 
 # OWIN Governance
