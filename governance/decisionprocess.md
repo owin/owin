@@ -39,44 +39,11 @@ Every effort is made to allow the majority of decisions to be taken through lazy
 
 The table below describes some of the actions that will require a vote. It also identifies which type of vote should be called.
 
-Action
-
-Description
-
-Approval type
-
-Release plan
-
-Defines the timetable and actions for a release. A release plan cannot be vetoed (hence lazy majority).
-
-Lazy consensus
-
-Product release
-
-When a release of one of the project's products is ready, a vote is required to accept the release as an official release of the project. A release cannot be vetoed (hence lazy majority).
-
-Lazy consensus
-
-New committer
-
-A new committer has been proposed.
-
-Consensus approval of the Management Committee
-
-New Management Committee member
-
-A new Management Committe member has been proposed.
-
-Consensus approval of the community
-
-Committer removal
-
-When removal of commit privileges is sought.
-
-Unanimous consensus of the PMC
-
-PMC member removal
-
-When removal of PMC membership is sought.
-
-Unanimous consensus of the community  
+Action | Description | Approval type
+-------|-------------|----------------
+Release plan | Defines the timetable and actions for a release. A release plan cannot be vetoed (hence lazy majority).| Lazy consensus
+Product release | When a release of one of the project's products is ready, a vote is required to accept the release as an official release of the project. A release cannot be vetoed (hence lazy majority). | Lazy consensus
+New committer | A new committer has been proposed. | Consensus approval of the Management Committee
+New Management Committee member | A new Management Committe member has been proposed. | Consensus approval of the community
+Committer removal | When removal of commit privileges is sought. | Unanimous consensus of the PMC
+PMC member removal | When removal of PMC membership is sought. | Unanimous consensus of the community  
