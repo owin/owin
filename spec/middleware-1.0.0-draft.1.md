@@ -37,7 +37,6 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
 [CCLicense] in effect on the date of publication of this document.
 
 ## Table of Content ##
----
 
 1. [Introduction](#1-introduction)
   1.1. [Requirements Notation](#1.1-requirements-notation)
@@ -47,19 +46,6 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
   3.2. [Middleware Operation](#32-middleware-operation)
   3.3. [Signature][#33-signatuire]
   3.4. [Example][#34-example]
-4. [Application Startup](#4-application-startup)
-5. [URI Reconstruction](#5-uri-reconstruction)
-  5.1. [URI Scheme][sec-uri-scheme]
-  5.2. [Hostname][sec-hostname]
-  5.3. [Paths][sec-paths]
-  5.4. [URI Reconstruction Algorithm](#54-uri-reconstruction-algorithm)
-  5.5. [Percent-encoding](#55-percent-encoding)
-6. [Error Handling](#6-error-handling)
-  6.1. [Application Errors](#61-application-errors)
-  6.2. [Server Errors](#62-server-errors)
-7. [Versioning][sec-versioning]
-
----
 
 ## 1. Introduction
 
