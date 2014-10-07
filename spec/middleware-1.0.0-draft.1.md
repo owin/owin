@@ -2,10 +2,13 @@
 
 **Version**
 1.0.0-draft.1
+
 **Author**
 Sebastien Lambla (Caffeine IT)
+
 **License**
 [Creative Commons Attribution 3.0 Unported License][CCLicense]
+
 **Last updated**
 05 October 2014
 
