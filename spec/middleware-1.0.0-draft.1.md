@@ -38,14 +38,16 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
 
 ## Table of Content ##
 
-1. [Introduction](#1-introduction)
+
+1. [Introduction](#1-introduction)  
   1.1. [Requirements Notation](#1.1-requirements-notation)
 2. [Definitions](#2-definitions)
-3. [Middleware components](#3-middleware-components)
-  3.1. [Examples](#31-examples)
-  3.2. [Middleware Operation](#32-middleware-operation)
-  3.3. [Signature][#33-signatuire]
-  3.4. [Example][#34-example]
+3. [Middleware components](#3-middleware-components)  
+  3.1. [Examples](#31-examples)  
+  3.2. [Middleware Operation](#32-middleware-operation)  
+  3.3. [Signature](#33-signature)  
+  3.4. [Code Sample](#34-code-sample)
+
 
 ## 1. Introduction
 
