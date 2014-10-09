@@ -119,7 +119,7 @@ SERVER =============== LOGGER ============= WEB APPLICATION
         response     < (log response)     < (return response)
 ```
 
-Some other middlewares could respond immediately, without calling the next
+Other types of middleware would respond immediately, without calling the next
 component in the pipeline, such as for an authorization module.
 
 ```
@@ -157,28 +157,99 @@ using MidFunc = Func<
 The following example is a middleware logging the request and response headers.
 
 ```csharp
-   // MidFunc
-   public static AppFunc Compose(AppFunc nextMiddleware)
-   {
-      AppFunc composedApplication = environment => {
+  // MidFunc
+  public static AppFunc LogMiddleware(AppFunc nextMiddleware)
+  {
+    AppFunc composedApplication = environment => {
 
-        // log the request headers
-        Log.RequestHeaders(environment["owin.RequestHeaders"]);
+      // log the request headers
+      Log.RequestHeaders(environment["owin.RequestHeaders"]);
 
-        // pass the request to the next middleware
-        next(environment);
+      // pass the request to the next middleware
+      next(environment);
 
-        // log the response headers
-        Log.RequestHeaders(environment["owin.ResponseHeaders"]);
+      // log the response headers
+      Log.RequestHeaders(environment["owin.ResponseHeaders"]);
 
-      }
+    }
 
-
-      return composedApplication;
-   }
+  return composedApplication;
+  }
 ```
 
-## 7. Versioning
+> **Note**
+>
+This specification does not preclude alternative modelings from being provided
+by vendors, but they MUST provide a way to expose such alternate representations
+as a MidFunc-compatible function.
+
+## 4. Registration of middleware components
+
+For the final application to be composed, a component need to be aware of all the middlewares in a system.
+
+This specification defines a builder function that receives middlewares to compose, typically at the start of the application.
+
+In order to provide for capability discovery, configuration and shared initialisation, the parameter to the builder is a function taking the startup properties as defined by the owin specification.
+
+
+### 4.1. Signature
+
+
+```csharp
+using BuildFunc = Action<
+        Func<
+             IDictionary<string, object>, // startup properties
+             MidFunc // Middleware to use
+             >;
+```
+
+#### 4.1.1. Registration sample
+
+The following example adds the `LogMiddleware` component defined earlier and registers it with the builder.
+```csharp
+  public static AppFunc LogMiddleware(AppFunc next) { /*  ... */ }
+  public static void ConfigureWebApplication(BuildFunc builder)
+  {
+    builder(startupProperties => LogMiddleware);
+  }
+```
+
+### 4.2. Startup properties
+
+
+
+### 4.2. Discovery of middlewares
+
+A common requirement for middleware authors is to enable users to discover middlewares after installing a software package in their solution.
+
+In order to deliver this functionality, a middleware MUST implement an extension method on the builder function.
+
+Integrated development environments tend to provide API discovery in the form of graphical navigators. As functions usually have a few other memers defined, and to allow easier navigation, a middleware SHOULD prefix the extension method with `Use`, and SHOULDN'T include the word middleware.
+
+As an application is often composed of many middlewares, authors SHOULD return the BuildFunc in their extension method, to allow for easy chaining.
+
+#### 4.2.1. Extension method sample
+
+```csharp
+  // definition
+  public static BuildFunc UseHeaderLogging(this BuildFunc builder)
+  {
+    builder(settings => LogMiddleware);
+  }
+
+  // usage
+  public static void ConfigureWebApplication(BuildFunc builder)
+  {
+    builder.UseHeaderLogging();
+  }
+}
+```
+
+## 5. Versioning
+
+This document specifies version 1.0.0 of this specification.
+
+todo: add link to semver, what major means and what minor revisions would entail, see discussions on the value of owin 1.0.1.
 
 ----
 [FieldingLayering]: http://www.ics.uci.edu/~fielding/pubs/dissertation/net_arch_styles.htm#sec_3_4_2
