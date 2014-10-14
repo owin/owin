@@ -47,11 +47,14 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
   3.2. [Middleware Operation](#32-middleware-operation)  
   3.3. [Signature](#33-signature)  
   3.4. [Code Sample](#34-code-sample)
-
+4. [Registration of middleware components](#4-Registration-of-middleware components)  
+  4.1. [Signature](#41-signature)  
+    4.1.1. [Registration sample](#411-registration-sample)  
+  4.2. [Discovery of middlewares](#42-discovery-of-middlewares)  
+    4.2.1. [Extension method sample](#421-extension-method-sample)  
+5. [Versioning](#5-versioning)
 
 ## 1. Introduction
-
-This document presents
 
 The [OWIN] specification was created to decouple web servers and web
 applications on .NET platforms by creating a standardised abstract signature
@@ -71,7 +74,6 @@ dependency on external libraries.
 
 
 ### 1.1 Requirements Notation
-
 
  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
@@ -206,6 +208,7 @@ using BuildFunc = Action<
 #### 4.1.1. Registration sample
 
 The following example adds the `LogMiddleware` component defined earlier and registers it with the builder.
+
 ```csharp
   public static AppFunc LogMiddleware(AppFunc next) { /*  ... */ }
   public static void ConfigureWebApplication(BuildFunc builder)
@@ -213,10 +216,6 @@ The following example adds the `LogMiddleware` component defined earlier and reg
     builder(startupProperties => LogMiddleware);
   }
 ```
-
-### 4.2. Startup properties
-
-
 
 ### 4.2. Discovery of middlewares
 
