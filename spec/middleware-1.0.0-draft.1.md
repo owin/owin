@@ -10,7 +10,7 @@ Sebastien Lambla (Caffeine IT)
 [Creative Commons Attribution 3.0 Unported License][CCLicense]
 
 **Last updated**
-07 October 2014
+14 October 2014
 
 
 ## Abstract
@@ -28,7 +28,7 @@ period of six months and may be updated, replaced, or obsoleted by other
 documents at any time. It is inappropriate to use working drafts as reference
 material or to cite them other than as "work in progress"
 
-This working draft will expire on April 5th, 2015.
+This working draft will expire on INSERT DATE HERE ON PULL REQUEST.
 
 ## Copyright
 
@@ -36,7 +36,7 @@ Copyright (c) 2014 the persons identified as the document authors. The work
 is licensed as per the [Creative Commons Attribution 3.0 Unported License]
 [CCLicense] in effect on the date of publication of this document.
 
-## Table of Content ##
+## Table of Content
 
 
 1. [Introduction](#1-introduction)  
@@ -71,7 +71,6 @@ OWIN ecosystem, hereby referred to as `middlewares`.
 OWIN middlewares are defined in terms of a delegate structure building upon the
 OWIN: Open Web Server Interface for .NET [Owin 1.0], with no
 dependency on external libraries.
-
 
 ### 1.1 Requirements Notation
 
