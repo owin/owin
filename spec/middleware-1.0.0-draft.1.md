@@ -233,6 +233,7 @@ As an application is often composed of many middlewares, authors SHOULD return t
   public static BuildFunc UseHeaderLogging(this BuildFunc builder)
   {
     builder(settings => LogMiddleware);
+    return builder;
   }
 
   // usage
