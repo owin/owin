@@ -104,7 +104,8 @@ In addition to these keys, the host, server, middleware, application, etc. may a
 | **Yes**  | `owin.RequestProtocol`    | A `string` containing the protocol name and version (e.g. `"HTTP/1.0"` or `"HTTP/1.1"`). |
 | **Yes**  | `owin.RequestQueryString` | A `string` containing the query string component of the HTTP request URI, without the leading "?" (e.g., `"foo=bar&amp;baz=quux"`). The value may be an empty string. |
 | **Yes**  | `owin.RequestScheme`      | A `string` containing the URI scheme used for the request (e.g., `"http"`, `"https"`); see [URI Scheme][sec-uri-scheme]. |
-| **No**   | `owin.RequestId `          | An optional `string` that uniquely identifies a request. The value is opaque and SHOULD have some level of uniqueness. A Host MAY specify this value. If it is not specified, middleware MAY set it. Once set, it SHOULD NOT be modified. |
+| **No**   | `owin.RequestId `         | An optional `string` that uniquely identifies a request. The value is opaque and SHOULD have some level of uniqueness. A Host MAY specify this value. If it is not specified, middleware MAY set it. Once set, it SHOULD NOT be modified. |
+| **No** | `owin.RequestUser`          | An optional identity that represents the user associated with a request. The identity MUST be a `ClaimsPrincipal`. Middleware MAY specify this value. If it is not specified, middleware MAY set it. Once set, it MAY BE modified. |
 
 ### 3.2.2 Response Data
 
