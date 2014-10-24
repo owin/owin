@@ -1,7 +1,7 @@
 # OWIN: Open Web Server Interface for .NET
 
 **Version**  
-1.1.0-draft  
+1.0.1-draft  
 **Author**  
 [OWIN working group][WGForum]  
 **Copyright**  
@@ -9,7 +9,7 @@ OWIN contributors
 **License**  
 [Creative Commons Attribution 3.0 Unported License][CCLicense]  
 **Last updated**  
-05 June 2014  
+24 October 2014  
 
 ---
 
