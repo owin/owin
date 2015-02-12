@@ -201,7 +201,7 @@ The Properties dictionary may be used to read or set any configuration parameter
 |----------|----------------|-------------------|
 | **Yes**  | `owin.Version` | A `string` indicating the OWIN version. Added by the server in step 2 above. See [Versioning][sec-versioning]. |
 
-In addition to these keys the host, server, middleware, application, etc. may add arbitrary data associated with the application configuration to the properties dictionary. Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][CommonKeys] to this spec.
+In addition to these keys the host, server, middleware, application, etc. may add arbitrary data associated with the application configuration to the properties dictionary. Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][spec/CommonKeys] to this spec.
 
 ## 5. URI Reconstruction
 
@@ -294,7 +294,7 @@ Future updates to this standard may contain breaking changes (e.g. signature cha
 
 * All implementers SHOULD clearly document the full version number(s) of the OWIN standard they support.
 
-* The keys listed in the [CommonKeys addendum][CommonKeys] to this spec are strictly optional. Additions may be made there without directly affecting the OWIN standard or version number.
+* The keys listed in the [CommonKeys addendum][spec/CommonKeys] to this spec are strictly optional. Additions may be made there without directly affecting the OWIN standard or version number.
 
 ----
 
