@@ -90,7 +90,7 @@ The Environment dictionary stores information about the request, the response, a
 
 In addition to these keys, the host, server, middleware, application, etc. may add arbitrary data associated with the request or response to the environment dictionary
 
- Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][CommonKeys] to this spec.
+ Guidelines for additional keys and a list of commonly defined keys can be found in the [CommonKeys addendum][/html/spec/CommonKeys] to this spec.
 
 ### 3.2.1 Request Data
 
@@ -294,7 +294,7 @@ Future updates to this standard may contain breaking changes (e.g. signature cha
 
 * All implementers SHOULD clearly document the full version number(s) of the OWIN standard they support.
 
-* The keys listed in the [CommonKeys addendum][spec/CommonKeys] to this spec are strictly optional. Additions may be made there without directly affecting the OWIN standard or version number.
+* The keys listed in the [CommonKeys addendum][/html/spec/CommonKeys] to this spec are strictly optional. Additions may be made there without directly affecting the OWIN standard or version number.
 
 ----
 
