@@ -186,11 +186,11 @@ as a MidFunc-compatible function.
 
 ## 4. Registration of middleware components
 
-For the final application to be composed, a component need to be aware of all the middlewares in a system.
+For the final application to be composed, a component need to be aware of all middleware in a system.
 
-This specification defines a builder function that receives middlewares to compose, typically at the start of the application.
+This specification defines a builder function that receives middleware to compose, typically at the start of the application.
 
-In order to provide for capability discovery, configuration and shared initialisation, the parameter to the builder is a function taking the startup properties as defined by the owin specification.
+In order to provide for capability discovery, configuration and shared initialisation, the parameter to the builder is a function taking the Startup properties as defined by the owin specification.
 
 
 ### 4.1. Signature
@@ -218,13 +218,13 @@ The following example adds the `LogMiddleware` component defined earlier and reg
 
 ### 4.2. Discovery of middlewares
 
-A common requirement for middleware authors is to enable users to discover middlewares after installing a software package in their solution.
+A common requirement for middleware authors is to enable users to discover middleware after installing a software package in their application.
 
 In order to deliver this functionality, a middleware MUST implement an extension method on the builder function.
 
-Integrated development environments tend to provide API discovery in the form of graphical navigators. As functions usually have a few other memers defined, and to allow easier navigation, a middleware SHOULD prefix the extension method with `Use`, and SHOULDN'T include the word middleware.
+Integrated development environments tend to provide API discovery in the form of graphical navigators. As functions usually have a few other members defined, and to allow easier navigation, a middleware SHOULD prefix the extension method with `Use`, and SHOULDN'T include the word middleware.
 
-As an application is often composed of many middlewares, authors SHOULD return the BuildFunc in their extension method, to allow for easy chaining.
+As an application is often composed of many middleware components, authors SHOULD return the BuildFunc in their extension method, to allow for easy chaining.
 
 #### 4.2.1. Extension method sample
 
