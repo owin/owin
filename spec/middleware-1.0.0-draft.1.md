@@ -99,7 +99,8 @@ This document refers to the following terms:
  - **Builder**: The extension point lambda used by developers to add Middleware
    components to a pipeline.
 
- - **Server**: xxx
+ - **Server**: As per the OWIN specification, an HTTP server that directly
+   communicates with the client, and uses OWIN semantics to process requests.
 
 ## 3. Middleware
 
