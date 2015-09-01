@@ -33,8 +33,9 @@ This working draft will expire on INSERT DATE HERE ON PULL REQUEST.
 ## Copyright
 
 Copyright (c) 2014 the persons identified as the document authors. The work
-is licensed as per the [Creative Commons Attribution 3.0 Unported License]
-[CCLicense] in effect on the date of publication of this document.
+is licensed as per the
+[Creative Commons Attribution 3.0 Unported License][CCLicense] in effect on the
+date of publication of this document.
 
 ## Table of Content
 
@@ -53,6 +54,8 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
   4.2. [Discovery and Registration of Middleware](#42-discovery-of-Middlewares)  
     4.2.1. [Extension Method Sample](#421-extension-method-sample)  
 5. [Versioning](#5-versioning)
+6. [Acknowledgements](#6-A
+  acknowledgements)
 
 ## 1. Introduction
 
@@ -289,6 +292,10 @@ update to the documentation, the minor number will be revised for any addition
 of optional and backward and forward compatible changes to this standard,
 and the major number will be revised for any breaking change to the protocol
 defined in this standard.
+
+## 6. Acknowledgements
+
+Thanks to Kristian Hellang (@khellang) for his valuable feedback.
 
 ----
 [FieldingLayering]: http://www.ics.uci.edu/~fielding/pubs/dissertation/net_arch_styles.htm#sec_3_4_2
