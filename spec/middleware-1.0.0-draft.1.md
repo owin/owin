@@ -41,19 +41,18 @@ date of publication of this document.
 1. [Introduction](#1-introduction)  
   1.1. [Requirements Notation](#11-requirements-notation)
 2. [Definitions](#2-definitions)
-3. [Middleware](#3-Middleware)  
+3. [Middleware](#3-middleware)  
   3.1. [Examples](#31-examples)  
-  3.2. [Middleware Operation](#32-Middleware-operation)  
+  3.2. [Middleware Operation](#32-middleware-operation)  
   3.3. [Signature](#33-signature)  
   3.4. [Code Sample](#34-code-sample)
-4. [Middleware Registration](#4-Registration-of-Middleware components)  
+4. [Middleware Registration](#4-middleware-registration)  
   4.1. [Signature](#41-signature)  
     4.1.1. [Registration Sample](#411-registration-sample)  
-  4.2. [Discovery and Registration of Middleware](#42-discovery-of-Middlewares)  
+  4.2. [Discovery and Registration of Middleware](#42-discovery-and-registration-of-middleware)  
     4.2.1. [Extension Method Sample](#421-extension-method-sample)  
 5. [Versioning](#5-versioning)
-6. [Acknowledgements](#6-A
-  acknowledgements)
+6. [Acknowledgements](#6-acknowledgements)
 
 ## 1. Introduction
 
