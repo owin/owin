@@ -10,7 +10,7 @@ Sebastien Lambla (Caffeine IT)
 [Creative Commons Attribution 3.0 Unported License][CCLicense]
 
 **Last updated**
-1 March 2016
+1 October 2015
 
 ## Abstract
 
@@ -27,7 +27,7 @@ period of six months and may be updated, replaced, or obsoleted by other
 documents at any time. It is inappropriate to use working drafts as reference
 material or to cite them other than as "work in progress"
 
-This working draft will expire on INSERT DATE HERE ON PULL REQUEST.
+This working draft will expire on 1 March 2016.
 
 ## Copyright
 
