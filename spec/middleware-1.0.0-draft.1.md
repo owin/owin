@@ -58,7 +58,7 @@ is licensed as per the [Creative Commons Attribution 3.0 Unported License]
 
 The [OWIN] specification was created to decouple web servers and web
 applications on .NET platforms by creating a standardised abstract signature
-that can be implemented in a vendor-neutral fashion.
+that can be implemented by applications and servers in a vendor-neutral fashion.
 
 [Layering][FieldingLayering] components conforming to a uniform interface
 is a natural architectural style for HTTP-based application, and many
@@ -66,9 +66,9 @@ application frameworks provide such abstractions in the form of reusable
 software components.
 
 This specification provides a standardised signature for such components in the
-OWIN ecosystem, hereby referred to as `middlewares`.
+OWIN ecosystem, hereby referred to as `middleware`.
 
-OWIN middlewares are defined in terms of a delegate structure building upon the
+OWIN middleware is defined in terms of a delegate structure building upon the
 OWIN: Open Web Server Interface for .NET [Owin 1.0], with no
 dependency on external libraries.
 
@@ -88,15 +88,16 @@ This document refers to the following terms:
  - **Application**: a process or operation inspecting, modifying or otherwise
    accessing HTTP messages, as an AppFunc signature.
 
- - **Middleware**: Pass through components that form a pipeline between a server
-   and a terminating application to mediate request and response messages.
+ - **Middleware**: Pass through components, capable of mediating request and
+   response messages, in a pipeline model which, when
+   composed, forms an Application.
 
- - **Builder**: The extension point used by developers to add middleware
+ - **Builder**: The extension point lambda used by developers to add middleware
    components to a pipeline.
 
 ## 3. Middleware components
 
-An OWIN application (as defined by an AppFunc) can be modelled as a set of
+An OWIN application (as defined by an AppFunc) can be modeled as
 middleware components layered in a pipeline.
 
 Each middleware receiving a request may perform some processing on the request,
@@ -121,7 +122,8 @@ SERVER =============== LOGGER ============= WEB APPLICATION
 ```
 
 Other types of middleware would respond immediately, without calling the next
-component in the pipeline, such as for an authorization module.
+component in the pipeline, such as for an authorization module denying a request
+before a web application can respond.
 
 ```
         request      > (authenticate)
@@ -131,16 +133,17 @@ SERVER =============== LOGGER ------X------ WEB APPLICATION
 
 ### 3.2. Middleware Operation
 
-Middlewares are first chained together in a pipeline in a composition phase. The
-result of middelware composition is an application (OWIN AppFunc).
+The whole set of middleware composing an application are first chained together
+in a pipeline in a composition phase. The result of middleware composition is an
+Application (OWIN AppFunc).
 
-A server as defined by OWIN will call the resulting application, unaware of the
+A Server as defined by OWIN will call the resulting application, unaware of the
 composition of the pipeline it is calling.
 
 At compose time, each middleware is passed a reference to the next middleware in
 the chain, and should return an application.
 
-At run time, middlewares can inspect and manipulate HTTP messages using the
+At run time, a middleware can inspect and manipulate HTTP messages using the
 usual environment dictionary, and in by doing so leverages existing knowledge in
 building OWIN-compliant components.
 
@@ -180,18 +183,23 @@ The following example is a middleware logging the request and response headers.
 
 > **Note**
 >
-This specification does not preclude alternative modelings from being provided
-by vendors, but they MUST provide a way to expose such alternate representations
+This specification does not preclude alternative modeling of the middleware
+functionality from being provided
+by vendors (e.g. object-oriented model, procedural, or separate before/after
+functions), but they MUST provide a way to expose such alternate representations
 as a MidFunc-compatible function.
 
 ## 4. Registration of middleware components
 
-For the final application to be composed, a component need to be aware of all middleware in a system.
+For the final Application to be composed, a component need to be aware of all
+middleware in a system.
 
-This specification defines a builder function that receives middleware to compose, typically at the start of the application.
+This specification defines a builder function that receives as an argument a
+middleware to compose, typically at the start of the application.
 
-In order to provide for capability discovery, configuration and shared initialisation, the parameter to the builder is a function taking the Startup properties as defined by the owin specification.
-
+In order to provide for capability discovery, configuration and shared
+initialisation, the parameter to the builder is a function taking the Startup
+properties as defined by the OWIN specification.
 
 ### 4.1. Signature
 
@@ -218,13 +226,20 @@ The following example adds the `LogMiddleware` component defined earlier and reg
 
 ### 4.2. Discovery of middlewares
 
-A common requirement for middleware authors is to enable users to discover middleware after installing a software package in their application.
+A common requirement for middleware authors is to enable users to discover
+Middleware after installing a software package in their application.
 
-In order to deliver this functionality, a middleware MUST implement an extension method on the builder function.
+In order to deliver this functionality, a middleware MUST implement an extension
+method on the builder function.
 
-Integrated development environments tend to provide API discovery in the form of graphical navigators. As functions usually have a few other members defined, and to allow easier navigation, a middleware SHOULD prefix the extension method with `Use`, and SHOULDN'T include the word middleware.
+Integrated development environments tend to provide API discovery in the form of
+graphical navigators. As functions usually have a few other members defined, and
+to allow easier navigation, a middleware SHOULD prefix the extension method with
+`Use`, and SHOULDN'T include the word middleware.
 
-As an application is often composed of many middleware components, authors SHOULD return the BuildFunc in their extension method, to allow for easy chaining.
+As an application is often composed of many middleware components, authors
+SHOULD return the BuildFunc in their extension method, to allow for easy
+chaining.
 
 #### 4.2.1. Extension method sample
 
