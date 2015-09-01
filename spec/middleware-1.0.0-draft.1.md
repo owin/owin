@@ -12,7 +12,6 @@ Sebastien Lambla (Caffeine IT)
 **Last updated**
 1 March 2016
 
-
 ## Abstract
 
 The [OWIN Specification][owin-spec] defines a standard interface between .NET web servers
@@ -23,7 +22,7 @@ for reusable OWIN Middleware components.
 
 This is a working draft.
 
-This document is a submission to the  OWIN Working Group and is valid for a
+This document is a submission to the OWIN Working Group and is valid for a
 period of six months and may be updated, replaced, or obsoleted by other
 documents at any time. It is inappropriate to use working drafts as reference
 material or to cite them other than as "work in progress"
@@ -38,7 +37,6 @@ is licensed as per the
 date of publication of this document.
 
 ## Table of Content
-
 
 1. [Introduction](#1-introduction)  
   1.1. [Requirements Notation](#11-requirements-notation)
@@ -69,7 +67,7 @@ application frameworks provide such abstractions in the form of reusable
 software components.
 
 This specification provides a standardised signature for such components in the
-OWIN ecosystem, hereby referred to as `Middleware`.
+OWIN ecosystem, hereby referred to as **Middleware**.
 
 OWIN Middleware is defined in terms of a delegate structure building upon the
 OWIN: Open Web Server Interface for .NET [Owin 1.0], with no
@@ -104,10 +102,9 @@ This document refers to the following terms:
 
  - **Server**: xxx
 
-
 ## 3. Middleware
 
-An OWIN Application (as defined by an AppFunc) can be modeled as
+An OWIN Application (as defined by an AppFunc) can be modelled as
 Middleware components layered in a pipeline.
 
 Each Middleware receiving a request may perform some processing on the request,
@@ -174,13 +171,13 @@ The following example is a Middleware logging the request and response headers.
 // MidFunc
 public static AppFunc LogMiddleware(AppFunc nextMiddleware)
 {
-  AppFunc composedApplication = environment => {
+  AppFunc composedApplication = async environment => {
 
     // log the request headers
     Log.RequestHeaders(environment["owin.RequestHeaders"]);
 
     // pass the request to the next Middleware
-    next(environment);
+    await next(environment);
 
     // log the response headers
     Log.RequestHeaders(environment["owin.ResponseHeaders"]);
@@ -193,12 +190,11 @@ public static AppFunc LogMiddleware(AppFunc nextMiddleware)
 
 > **Note**
 >
-This specification does not preclude alternative modeling of the Middleware
-functionality from being provided
-by vendors (e.g. object-oriented model, procedural, or separate before/after
-functions), but they MUST provide a way to expose such alternate representations
-as a MidFunc-compatible function.
-
+> This specification does not preclude alternative modeling of the Middleware
+> functionality from being provided
+> by vendors (e.g. object-oriented model, procedural, or separate before/after
+> functions), but they MUST provide a way to expose such alternate representations
+> as a MidFunc-compatible function.
 
 ## 4. Middleware Registration
 
@@ -212,7 +208,6 @@ parameter the Startup properties as defined by the
 as a parameter.
 
 ### 4.1. Signature
-
 
 ```csharp
 using MidFactory = Func<
@@ -234,7 +229,7 @@ registers it with the Builder.
 public static AppFunc LogMiddleware(AppFunc next) { /*  ... */ }
 
 // Definition of the factory
-public static MidFunc ConfigureLogMiddleware(IDictionary<string,object> startupProperties)
+public static MidFunc ConfigureLogMiddleware(IDictionary<string, object> startupProperties)
 {
   // optionally read and write to the startup properties
   return LogMiddleware;
@@ -262,10 +257,11 @@ chaining.
 
 Building on previous examples, the following defines the extension method for
 the logging Middleware.
+
 ```csharp
 // as previously defined
 public static AppFunc LogMiddleware(AppFunc next) { /*  ... */ }
-public static MidFunc ConfigureLogMiddleware(IDictionary<string,object> startupProperties) { /* ... */ }
+public static MidFunc ConfigureLogMiddleware(IDictionary<string, object> startupProperties) { /* ... */ }
 
 // definition of the Builder extension method
 public static BuildFunc UseHeaderLogging(this BuildFunc builder)
