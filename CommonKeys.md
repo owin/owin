@@ -121,9 +121,9 @@ Keys and values listed here are those that are anticipated to be common across m
 | opaque.*                |                                      | X       |          | X       | See the Opaque extension. |
  
 
-[1]: http://owin.org#Overview
-[2]: http://owin.org#_2._Key_usage
-[3]: http://owin.org#_3._Naming_conventions
-[4]: http://owin.org#_4._Value_conventions
-[5]: http://owin.org#_5._Capabilities_announcement
-[6]: http://owin.org#_6._Common_keys
+[1]: #Overview
+[2]: #_2._Key_usage
+[3]: #_3._Naming_conventions
+[4]: #_4._Value_conventions
+[5]: #_5._Capabilities_announcement
+[6]: #_6._Common_keys
