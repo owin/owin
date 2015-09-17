@@ -121,9 +121,9 @@ Keys and values listed here are those that are anticipated to be common across m
 | opaque.*                |                                      | X       |          | X       | See the Opaque extension. |
  
 
-[1]: #Overview
-[2]: #_2._Key_usage
-[3]: #_3._Naming_conventions
-[4]: #_4._Value_conventions
-[5]: #_5._Capabilities_announcement
-[6]: #_6._Common_keys
+[1]: #1-overview
+[2]: #2-key-usage
+[3]: #3-naming-conventions
+[4]: #4-value-conventions
+[5]: #5-capabilities-announcement
+[6]: #6-common-keys

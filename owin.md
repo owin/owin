@@ -16,22 +16,22 @@ OWIN contributors
 1. [Overview](#1-overview)
 2. [Definitions](#2-definitions)
 3. [Request Execution](#3-request-execution)
-  3.1. [Application Delegate](#31-application-delegate)
-  3.2. [Environment](#3-2-environment)
-  3.3. [Headers][sec-headers]
-  3.4. [Request Body][sec-req-body]
-  3.5. [Response Body][sec-res-body]
-  3.6. [Request Lifetime](#3-6-request-lifetime)
+  1. [Application Delegate](#3-1-application-delegate)
+  2. [Environment](#3-2-environment)
+  3. [Headers][sec-headers]
+  4. [Request Body][sec-req-body]
+  5. [Response Body][sec-res-body]
+  6. [Request Lifetime](#3-6-request-lifetime)
 4. [Application Startup](#4-application-startup)
 5. [URI Reconstruction](#5-uri-reconstruction)
-  5.1. [URI Scheme][sec-uri-scheme]
-  5.2. [Hostname][sec-hostname]
-  5.3. [Paths][sec-paths]
-  5.4. [URI Reconstruction Algorithm](#5-4-uri-reconstruction-algorithm)
-  5.5. [Percent-encoding](#5-5-percent-encoding)
+  1. [URI Scheme][sec-uri-scheme]
+  2. [Hostname][sec-hostname]
+  3. [Paths][sec-paths]
+  4. [URI Reconstruction Algorithm](#5-4-uri-reconstruction-algorithm)
+  5. [Percent-encoding](#5-5-percent-encoding)
 6. [Error Handling](#6-error-handling)
-  6.1. [Application Errors](#6-1-application-errors)
-  6.2. [Server Errors](#6-2-server-errors)
+  1. [Application Errors](#6-1-application-errors)
+  2. [Server Errors](#6-2-server-errors)
 7. [Versioning][sec-versioning]
 
 ---
