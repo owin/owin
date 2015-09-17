@@ -15,23 +15,23 @@ OWIN contributors
 
 1. [Overview](#1-overview)
 2. [Definitions](#2-definitions)
-3. [Request Execution](#3-request-execution)  
-  3.1. [Application Delegate](#31-application-delegate)  
-  3.2. [Environment](#32-environment)  
-  3.3. [Headers][sec-headers]  
-  3.4. [Request Body][sec-req-body]  
-  3.5. [Response Body][sec-res-body]  
-  3.6. [Request Lifetime](#36-request-lifetime)  
+3. [Request Execution](#3-request-execution)
+  3.1. [Application Delegate](#31-application-delegate)
+  3.2. [Environment](#3-2-environment)
+  3.3. [Headers][sec-headers]
+  3.4. [Request Body][sec-req-body]
+  3.5. [Response Body][sec-res-body]
+  3.6. [Request Lifetime](#3-6-request-lifetime)
 4. [Application Startup](#4-application-startup)
-5. [URI Reconstruction](#5-uri-reconstruction)  
-  5.1. [URI Scheme][sec-uri-scheme]  
-  5.2. [Hostname][sec-hostname]  
-  5.3. [Paths][sec-paths]  
-  5.4. [URI Reconstruction Algorithm](#54-uri-reconstruction-algorithm)  
-  5.5. [Percent-encoding](#55-percent-encoding)  
-6. [Error Handling](#6-error-handling)  
-  6.1. [Application Errors](#61-application-errors)  
-  6.2. [Server Errors](#62-server-errors)  
+5. [URI Reconstruction](#5-uri-reconstruction)
+  5.1. [URI Scheme][sec-uri-scheme]
+  5.2. [Hostname][sec-hostname]
+  5.3. [Paths][sec-paths]
+  5.4. [URI Reconstruction Algorithm](#5-4-uri-reconstruction-algorithm)
+  5.5. [Percent-encoding](#5-5-percent-encoding)
+6. [Error Handling](#6-error-handling)
+  6.1. [Application Errors](#6-1-application-errors)
+  6.2. [Server Errors](#6-2-server-errors)
 7. [Versioning][sec-versioning]
 
 ---
@@ -302,12 +302,12 @@ Future updates to this standard may contain breaking changes (e.g. signature cha
 [WGForum]: https://github.com/owin/owin.github.com/issues
 [CCLicense]: http://creativecommons.org/licenses/by/3.0/deed.en_US
 [CommonKeys]: http://owin.org/spec/CommonKeys.html
-[sec-req-body]: #34-request-body-100-continue-and-completed-semantics
-[sec-res-body]: #35-response-body
-[sec-headers]: #33-headers
-[sec-paths]: #53-paths
-[sec-uri-scheme]: #51-uri-scheme
-[sec-hostname]: #52-hostname
+[sec-headers]: #3-3-headers
+[sec-req-body]: #3-4-request-body-100-continue-and-completed-semantics
+[sec-res-body]: #3-5-response-body
+[sec-paths]: #5-3-paths
+[sec-uri-scheme]: #5-1-uri-scheme
+[sec-hostname]: #5-2-hostname
 [sec-versioning]: #7-versioning
 [semver]: http://semver.org/
 [rfc2119]: http://www.ietf.org/rfc/rfc2119.txt
