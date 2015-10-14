@@ -110,7 +110,7 @@ This document refers to the following terms:
 
 ## 3. Middleware
 
-An OWIN Application (as defined by an AppFunc) can be modelled as
+An OWIN Application (see [AppFunc](owin-spec-appfunc)) can be modelled as
 Middleware components layered in a pipeline.
 
 Each Middleware receiving a request may perform some processing on the request,
@@ -305,6 +305,7 @@ Thanks to Kristian Hellang (@khellang) for his valuable feedback.
 [CCLicense]: http://creativecommons.org/licenses/by/3.0/deed.en_US
 [CommonKeys]: http://owin.org/spec/CommonKeys.html
 [owin-spec]: http://owin.org/spec/owin-1.0.1-draft.1.md
+[owin-spec-appfunc]: http://owin.org/spec/owin-1.0.1-draft.1.md#TBD
 [semver]: http://semver.org/
 [rfc2119]: http://www.ietf.org/rfc/rfc2119.txt
 [rfc2616]: http://www.ietf.org/rfc/rfc2616.txt
