@@ -102,6 +102,12 @@ This document refers to the following terms:
  - **Server**: As per the OWIN specification, an HTTP server that directly
    communicates with the client, and uses OWIN semantics to process requests.
 
+> **Note**
+> Versions previous to owin 1.0.1 made a distinction between server and host
+> components. This was later merged as the separation in responsibility was not
+> relevant to the owin specifications. **Host** and **Server** are considered
+> equivalent. See [the Owin Specification 1.0.1](owin-spec)
+
 ## 3. Middleware
 
 An OWIN Application (as defined by an AppFunc) can be modelled as
