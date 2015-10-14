@@ -10,7 +10,7 @@ Sebastien Lambla (Caffeine IT)
 [Creative Commons Attribution 3.0 Unported License][CCLicense]
 
 **Last updated**
-1 October 2015
+14 October 2015
 
 ## Abstract
 
@@ -31,7 +31,7 @@ This working draft will expire on 1 March 2016.
 
 ## Copyright
 
-Copyright (c) 2014 the persons identified as the document authors. The work
+Copyright (c) 2014-2015 the persons identified as the document authors. The work
 is licensed as per the
 [Creative Commons Attribution 3.0 Unported License][CCLicense] in effect on the
 date of publication of this document.
